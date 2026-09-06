@@ -1,6 +1,10 @@
+# Godot 4.2+ specific ignores
+~*.dll
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
+/android/
 
 # Godot-specific ignores
 .import/
@@ -15,3 +19,12 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# addons
+addons/*
+
+# vscode
+.vscode/*
+
+# third parties
+third_party/*
