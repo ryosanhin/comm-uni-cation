@@ -1,4 +1,5 @@
-extends Refcounted
+class_name MorseCode
+extends RefCounted
 
 
 const MORSE_TABLE: Dictionary[int, String] = {
@@ -46,3 +47,19 @@ const MORSE_TABLE: Dictionary[int, String] = {
 	0b1_11100: "8",
 	0b1_11110: "9",
 }
+
+
+static func decode(code: int) -> String:
+	return MORSE_TABLE.get(code, "")
+
+
+static func can_encode(character: String) -> bool:
+	return MORSE_TABLE.values().has(character.to_upper())
+
+
+static func encode(character: String) -> int:
+	var normalized := character.to_upper()
+	for code: int in MORSE_TABLE:
+		if MORSE_TABLE[code] == normalized:
+			return code
+	return 0
