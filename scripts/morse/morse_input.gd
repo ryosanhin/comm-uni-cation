@@ -35,7 +35,7 @@ func _ready() -> void:
 	add_child(_character_timer)
 
 
-## タッチまたは [member input_action] の入力状態を入力元ごとに処理する。
+## タッチまたは [member input_action] の入力状態を入力元ごとに処理する。[br]
 ## キーリピートは無視し、処理したイベントを入力済みとしてマークする。
 func _input(event: InputEvent) -> void:
 	if not input_enabled:
@@ -59,16 +59,19 @@ func reset() -> void:
 		_character_timer.stop()
 
 
-## 入力受付状態を [param value] に変更する。
-## 無効化する場合は入力途中の状態もリセットする。
+## 入力受付状態をに変更する。[br]
+## 無効化する場合は入力途中の状態もリセットする。[br]
+## [param value]: 変更先
 func set_input_enabled(value: bool) -> void:
 	input_enabled = value
 	if not value:
 		reset()
 
 
-## [param source] の押下状態を更新し、全入力元をまとめた押下開始・終了を処理する。
-## 押下終了時は押下時間から短点または長点を判定し、文字確定タイマーを開始する。
+## 指定された入力種の押下状態を更新し、全入力元をまとめた押下開始・終了を処理する。[br]
+## 押下終了時は押下時間から短点または長点を判定し、文字確定タイマーを開始する。[br]
+## [param source]: 入力種[br]
+## [param pressed]: 押されているか
 func _set_source(source: String, pressed: bool) -> void:
 	var was_pressed := not _active_sources.is_empty()
 	if pressed:
@@ -97,7 +100,7 @@ func _source_id(event: InputEvent) -> String:
 	return "action:%d" % event.device
 
 
-## 入力途中の符号を1文字として確定し、復号結果とともに通知する。
+## 入力途中の符号を1文字として確定し、復号結果とともに通知する。[br]
 ## 符号が空、または入力が無効な場合は何もしない。
 func _complete_character() -> void:
 	if _current_code == 1 or not input_enabled:

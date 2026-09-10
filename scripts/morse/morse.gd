@@ -50,19 +50,22 @@ const MORSE_TABLE: Dictionary[int, String] = {
 }
 
 
-## [param code] のモールス符号に対応する英数字を返す。
-## 対応する文字がない場合は空文字を返す。
+## 対象のモールス符号に対応する英数字を返す。[br]
+## 対応する文字がない場合は空文字を返す。[br]
+## [param code]: 対象
 static func decode(code: int) -> String:
 	return MORSE_TABLE.get(code, "")
 
 
-## [param character] を大文字の英数字としてモールス符号化できるかを返す。
+## 対象をモールス符号化できるかを返す。[br]
+## [param character]: 対象
 static func can_encode(character: String) -> bool:
 	return MORSE_TABLE.values().has(character.to_upper())
 
 
-## [param character] を大文字として扱い、対応するモールス符号へ変換する。
+## 対象に対応するモールス符号へ変換する。[br]
 ## 対応する符号が存在しない場合は0を返す。
+## [param character]: 対象
 static func encode(character: String) -> int:
 	var normalized := character.to_upper()
 	for code: int in MORSE_TABLE:
