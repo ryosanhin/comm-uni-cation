@@ -49,14 +49,19 @@ const MORSE_TABLE: Dictionary[int, String] = {
 }
 
 
+## 符号を文字化する。[br]
+## 出来ない場合は空文字を返す。
 static func decode(code: int) -> String:
 	return MORSE_TABLE.get(code, "")
 
 
+## 文字を符号化可能か。
 static func can_encode(character: String) -> bool:
 	return MORSE_TABLE.values().has(character.to_upper())
 
 
+## 文字を符号化。[br]
+## 存在しない場合、0を返す。
 static func encode(character: String) -> int:
 	var normalized := character.to_upper()
 	for code: int in MORSE_TABLE:
