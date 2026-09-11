@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cevvem7pd2v6o"]
+[gd_scene format=3 uid="uid://cevvem7pd2v6o"]
 
 [ext_resource type="Texture2D" uid="uid://2t1mn2teqqdn" path="res://sprites/bubble.png" id="1_534hg"]
 
@@ -9,17 +9,19 @@ texture_margin_top = 32.0
 texture_margin_right = 32.0
 texture_margin_bottom = 32.0
 
-[node name="MorseTable" type="CanvasLayer" unique_id=1150681954]
-
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1627944515]
+[node name="MorseTable" type="PanelContainer" unique_id=1627944515]
 self_modulate = Color(0.25, 0.25, 0.25, 1)
+offset_right = 566.0
+offset_bottom = 321.0
 theme_override_styles/panel = SubResource("StyleBoxTexture_morse_table")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=37052581]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=37052581]
 layout_mode = 2
+theme_override_constants/separation = 32
 
-[node name="Label" type="Label" parent="PanelContainer/HBoxContainer" unique_id=1327481103]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1327481103]
 layout_mode = 2
+size_flags_vertical = 5
 text = "A: ・ ―
 B: ― ・ ・ ・
 C: ― ・ ― ・
@@ -28,20 +30,25 @@ E: ・
 F: ・ ・ ― ・
 G: ― ― ・
 H: ・ ・ ・ ・
-I: ・ ・
-J: ・ ― ― ―
+I: ・ ・"
+
+[node name="Label2" type="Label" parent="HBoxContainer" unique_id=2002290382]
+layout_mode = 2
+size_flags_vertical = 5
+text = "J: ・ ― ― ―
 K: ― ・ ―
 L: ・ ― ・ ・
-M: ― ―"
-
-[node name="Label2" type="Label" parent="PanelContainer/HBoxContainer" unique_id=2002290382]
-layout_mode = 2
-text = "N: ― ・
+M: ― ―
+N: ― ・
 O: ― ― ―
 P: ・ ― ― ・
 Q: ― ― ・ ―
-R: ・ ― ・
-S: ・ ・ ・
+R: ・ ― ・"
+
+[node name="Label3" type="Label" parent="HBoxContainer" unique_id=2105301150]
+layout_mode = 2
+size_flags_vertical = 5
+text = "S: ・ ・ ・
 T: ―
 U: ・ ・ ―
 V: ・ ・ ・ ―
@@ -50,7 +57,7 @@ X: ― ・ ・ ―
 Y: ― ・ ― ―
 Z: ― ― ・ ・"
 
-[node name="Label3" type="Label" parent="PanelContainer/HBoxContainer" unique_id=2105301150]
+[node name="Label4" type="Label" parent="HBoxContainer" unique_id=1652088328]
 layout_mode = 2
 text = "1: ・ ― ― ― ―
 2: ・ ・ ― ― ―
