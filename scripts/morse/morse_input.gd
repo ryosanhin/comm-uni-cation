@@ -50,9 +50,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		_handle_key(event)
-
 	elif event is InputEventMouseButton:
 		_handle_mouse(event)
+	elif event is InputEventScreenTouch:
+		_handle_touch(event)
 
 
 ## 押下中の入力元、計測時刻、入力途中の符号、文字確定タイマーを初期状態へ戻す。
@@ -109,8 +110,7 @@ func _is_allowed_key(key: Key) -> bool:
 	)
 
 
-## マウスからの入力を処理する。[br]
-## スクリーンのタッチもマウス入力としてエミュレートしているはずなのでスマホなども対応している？[br]
+## マウスからの入力を処理する。
 func _handle_mouse(event: InputEventMouseButton) -> void:
 	if event.button_index != MOUSE_BUTTON_LEFT:
 		return
@@ -123,9 +123,22 @@ func _handle_mouse(event: InputEventMouseButton) -> void:
 		_release_input(id)
 
 
-## 指定したIDの入力が開始したときの処理。[br]
-##
+## タッチ入力を処理する。
+func _handle_touch(event: InputEventScreenTouch) -> void:
+	# 複数指を区別する
+	var id := StringName("touch:%d" % event.index)
+
+	if event.pressed:
+		_press_input(id)
+	else:
+		_release_input(id)
+
+
+## 指定したIDの入力が開始したときの処理。
 func _press_input(id: StringName) -> void:
+	if not input_enabled:
+		return
+
 	if _active_sources.has(id):
 		return
 
