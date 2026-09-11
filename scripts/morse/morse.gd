@@ -1,6 +1,8 @@
-extends Refcounted
+class_name MorseCode
+extends RefCounted
 
 
+## 先頭の番兵ビットに短点を0、長点を1として連結した符号と英数字の対応表。
 const MORSE_TABLE: Dictionary[int, String] = {
 	0b1_0: "E",
 	0b1_1: "T",
@@ -46,3 +48,27 @@ const MORSE_TABLE: Dictionary[int, String] = {
 	0b1_11100: "8",
 	0b1_11110: "9",
 }
+
+
+## 対象のモールス符号に対応する英数字を返す。[br]
+## 対応する文字がない場合は空文字を返す。[br]
+## [param code]: 対象
+static func decode(code: int) -> String:
+	return MORSE_TABLE.get(code, "")
+
+
+## 対象をモールス符号化できるかを返す。[br]
+## [param character]: 対象
+static func can_encode(character: String) -> bool:
+	return MORSE_TABLE.values().has(character.to_upper())
+
+
+## 対象に対応するモールス符号へ変換する。[br]
+## 対応する符号が存在しない場合は0を返す。
+## [param character]: 対象
+static func encode(character: String) -> int:
+	var normalized := character.to_upper()
+	for code: int in MORSE_TABLE:
+		if MORSE_TABLE[code] == normalized:
+			return code
+	return 0
