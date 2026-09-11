@@ -22,6 +22,7 @@ extends Control
 ## 進行状況と制限時間を管理する [MorseGame] ノード。
 @onready var game: MorseGame = $MorseGame
 
+var phrase_length: int
 
 ## テクスチャと初期フレーズを画面へ反映し、ゲームおよび入力のシグナルを接続する。
 func _ready() -> void:
@@ -29,6 +30,7 @@ func _ready() -> void:
 	%Tail.texture = tail_texture
 	%KeyHandle.texture = key_handle_texture
 	%PhraseLabel.text = game.phrase
+	phrase_length = _get_phrase_length(game.phrase)
 	game.remaining_time_changed.connect(_on_remaining_time_changed)
 	game.character_succeeded.connect(_on_character_succeeded)
 	game.character_failed.connect(_on_character_failed)
@@ -45,7 +47,7 @@ func _on_remaining_time_changed(seconds: int) -> void:
 
 ## 正解した文字数を進捗表示へ反映する。
 func _on_character_succeeded(index: int, _expected: String, _code: int) -> void:
-	%StatusLabel.text = "OK  %d / %d" % [index + 1, game.phrase.length()]
+	%StatusLabel.text = "OK  %d / %d" % [index + 1, phrase_length]
 
 
 ## 入力失敗を通知し、次に期待する [param expected] を表示する。
@@ -73,3 +75,12 @@ func _on_key_pressed() -> void:
 ## モールスキーの解放に合わせてハンドルを通常位置へ戻す。
 func _on_key_released(_duration: float, _is_dash: bool) -> void:
 	%KeyHandle.position.y = 0.0
+
+
+## 文字列の空白文字を除いた長さを取得。[br]
+## TODO: 空白文字を除外するのでなく、モールス表と対応させる。
+func _get_phrase_length(phrase: String) -> int:
+	var regex = RegEx.new()
+	regex.compile(r"\s+")
+	var result = regex.sub(phrase, "", true)
+	return result.length()

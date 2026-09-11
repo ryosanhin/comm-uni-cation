@@ -3,34 +3,46 @@ extends Node
 
 ## 文字の入力に成功したとき、対象位置・期待した文字・モールス符号を通知する。
 signal character_succeeded(index: int, expected: String, code: int)
+
 ## 文字の入力に失敗したとき、対象位置・期待値・入力値・モールス符号を通知する。
 signal character_failed(index: int, expected: String, actual: String, code: int)
+
 ## フレーズ全体の入力に成功したことを通知する。
 signal phrase_succeeded(phrase: String)
+
 ## 制限時間が切れたことを通知する。
 signal timed_out
+
 ## 画面に表示する残り秒数が変化したことを通知する。
 signal remaining_time_changed(seconds: int)
 
 ## プレイヤーが入力する正解フレーズ。
 @export var phrase := "HELLO"
+
 ## フレーズ入力に使用できる制限時間（秒）。
 @export_range(1.0, 600.0, 1.0, "suffix:s") var time_limit := 30.0
+
 ## ノードの準備完了時に [member phrase] のゲームを開始するかどうか。
 @export var start_automatically := true
+
 ## 入力を受け取る [MorseInput] ノードへのパス。
 @export_node_path("MorseInput") var morse_input_path: NodePath
 
 ## 現在の残り時間（秒）。
 var remaining_time := 0.0
+
 ## 次に入力すべき [member phrase] 内の文字位置。
 var current_character_index := 0
+
 ## 正解として受理したモールス符号を入力順に保持する。
 var _accepted_codes := PackedByteArray()
+
 ## フレーズの受付中かどうか。
 var _running := false
+
 ## 最後に [signal remaining_time_changed] で通知した秒数。
 var _last_displayed_second := -1
+
 ## 入力イベントを受け取る [MorseInput] ノード。
 @onready var _morse_input: MorseInput = get_node(morse_input_path)
 
