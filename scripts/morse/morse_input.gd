@@ -4,8 +4,11 @@ extends Node
 ## いずれかの入力元でモールスキーが押されたことを通知する。
 signal key_pressed
 
-## モールスキーが離されたとき、押下時間と長点判定を通知する。
-signal key_released(duration_seconds: float, is_dash: bool)
+## モールスキーが離されたときの長点判定を通知する。
+signal key_released(is_dash: bool)
+
+## 押下が継続し、現在の入力が長点として扱われる時間へ到達したことを通知する。
+signal dash_threshold_reached
 
 ## 文字間の待機時間が経過し、1文字分の符号が確定したことを通知する。
 signal character_completed(code: int, character: String)
@@ -16,6 +19,10 @@ signal character_completed(code: int, character: String)
 ## キーを離してから1文字分の入力を確定するまでの待機時間（秒）。
 @export_range(0.05, 2.0, 0.01, "suffix:s") var character_gap := 0.45
 
+@onready var _dash_threshold_timer: Timer = $DashThresholdTimer
+
+@onready var _completion_timer: Timer = $CompletionTimer
+
 ## モールス入力を受け付けるかどうか。
 var input_enabled := true
 
@@ -23,17 +30,11 @@ var input_enabled := true
 ## Set系の代替として[Dictionary]を使用
 var _active_sources: Dictionary[StringName, bool] = {}
 
-## 最初の入力元が押された時刻（ミリ秒）。
-var _pressed_at_msec := 0
+## 長点判定になっているか。
+var _is_reached_dash_threshold := false
 
 ## 先頭の番兵ビットを含む、入力途中のモールス符号。
 var _current_code: int
-
-## 文字間の無入力時間を計測するワンショットタイマー。
-var _character_timer: Timer
-
-## ミリ秒を秒に戻す用の値
-const MSEC_UNIT := 0.001
 
 ## 番兵ビット
 const INIT_BIT := 1
@@ -41,10 +42,16 @@ const INIT_BIT := 1
 ## 文字確定用タイマーを生成し、タイムアウト時の処理を接続する。
 func _ready() -> void:
 	_current_code = INIT_BIT
-	_character_timer = Timer.new()
-	_character_timer.one_shot = true
-	_character_timer.timeout.connect(_complete_character)
-	add_child(_character_timer)
+
+	# 長点閾値到達タイマーとの接続
+	_dash_threshold_timer.wait_time = dash_threshold
+	_dash_threshold_timer.one_shot = true
+	_dash_threshold_timer.timeout.connect(_reach_dash_threshold)
+
+	# 文字判定閾値到達タイマーとの接続
+	_completion_timer.wait_time = character_gap
+	_completion_timer.one_shot = true
+	_completion_timer.timeout.connect(_complete_character)
 
 
 func _input(event: InputEvent) -> void:
@@ -56,13 +63,15 @@ func _input(event: InputEvent) -> void:
 		_handle_touch(event)
 
 
-## 押下中の入力元、計測時刻、入力途中の符号、文字確定タイマーを初期状態へ戻す。
+## 押下中の入力元、計測時刻、入力途中の符号、タイマーを初期状態へ戻す。
 func reset() -> void:
 	_active_sources.clear()
-	_pressed_at_msec = 0
-	_current_code = 1
-	if is_instance_valid(_character_timer):
-		_character_timer.stop()
+
+	_current_code = INIT_BIT
+	if is_instance_valid(_dash_threshold_timer):
+		_dash_threshold_timer.stop()
+	if is_instance_valid(_completion_timer):
+		_completion_timer.stop()
 
 
 ## 入力受付状態をに変更する。[br]
@@ -72,16 +81,6 @@ func set_input_enabled(value: bool) -> void:
 	input_enabled = value
 	if not value:
 		reset()
-
-
-## 入力途中の符号を1文字として確定し、復号結果とともに通知する。[br]
-## 符号が空、または入力が無効な場合は何もしない。
-func _complete_character() -> void:
-	if _current_code == INIT_BIT or not input_enabled:
-		return
-	var completed_code := _current_code
-	_current_code = INIT_BIT
-	character_completed.emit(completed_code, MorseCode.decode(completed_code))
 
 
 ## 許可されたキーボードからの入力を処理する。
@@ -147,8 +146,8 @@ func _press_input(id: StringName) -> void:
 
 	# 新規入力開始時の処理
 	if was_empty:
-		_character_timer.stop()
-		_pressed_at_msec = Time.get_ticks_msec()
+		_dash_threshold_timer.start()
+		_completion_timer.stop()
 		key_pressed.emit()
 
 
@@ -162,8 +161,24 @@ func _release_input(id: StringName) -> void:
 
 	# 全ての入力が無くなったときの処理
 	if _active_sources.is_empty():
-		var duration := float(Time.get_ticks_msec() - _pressed_at_msec) * MSEC_UNIT
-		var is_dash := duration >= dash_threshold
-		_current_code = (_current_code << 1) | int(is_dash)
-		key_released.emit(duration, is_dash)
-		_character_timer.start(character_gap)
+		key_released.emit(_is_reached_dash_threshold)
+		
+		# ここで参照したのでfalseに戻す
+		_is_reached_dash_threshold = false
+		_dash_threshold_timer.stop()
+		_completion_timer.start(character_gap)
+
+
+## 入力途中の符号を1文字として確定し、復号結果とともに通知する。[br]
+## 符号が空、または入力が無効な場合は何もしない。
+func _complete_character() -> void:
+	if _current_code == INIT_BIT or not input_enabled:
+		return
+	var completed_code := _current_code
+	_current_code = INIT_BIT
+	character_completed.emit(completed_code, MorseCode.decode(completed_code))
+
+
+func _reach_dash_threshold() -> void:
+	_is_reached_dash_threshold = true
+	dash_threshold_reached.emit()
