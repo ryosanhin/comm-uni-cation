@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cfh6ogww242u6" path="res://scripts/ui/game_ui.gd" id="1_ui"]
 [ext_resource type="Script" uid="uid://cs7f7bvjmb22y" path="res://scripts/morse/morse_input.gd" id="2_input"]
-[ext_resource type="Texture2D" uid="uid://2t1mn2teqqdn" path="res://sprites/bubble.png" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://bnc685xo3i2rq" path="res://scripts/game/morse_game.gd" id="3_game"]
+[ext_resource type="PackedScene" uid="uid://b2pgn0tpo4j3r" path="res://prefabs/ui/neo_uni_face/neo_uni_face.tscn" id="4_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/phrase_bubble.tscn" id="5_gee14"]
+[ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="7_vtaks"]
 
 [node name="Game" type="Control" unique_id=1098155860]
 layout_mode = 3
@@ -14,74 +17,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ui")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1448017535]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -150.0
-offset_right = 240.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=339797598]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="TimeLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1397724797]
+[node name="TimeLabel" type="Label" parent="." unique_id=1397724797]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
+offset_left = 720.0
+offset_top = 390.0
+offset_right = 1200.0
+offset_bottom = 413.0
 text = "TIME 30"
 horizontal_alignment = 1
 
-[node name="BubbleContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=1017489585]
-custom_minimum_size = Vector2(320, 96)
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 20
-
-[node name="Bubble" type="NinePatchRect" parent="MarginContainer/VBoxContainer/BubbleContainer" unique_id=1239961930]
+[node name="StatusLabel" type="Label" parent="." unique_id=773280269]
 unique_name_in_owner = true
-layout_mode = 2
-texture = ExtResource("2_lbhrr")
-patch_margin_left = 32
-patch_margin_top = 32
-patch_margin_right = 32
-patch_margin_bottom = 32
-
-[node name="PhraseLabel" type="Label" parent="MarginContainer/VBoxContainer/BubbleContainer" unique_id=689149204]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "HELLO"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="Tail" type="TextureRect" parent="MarginContainer/VBoxContainer/BubbleContainer" unique_id=296658748]
-unique_name_in_owner = true
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=773280269]
-unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
+offset_left = 720.0
+offset_top = 510.0
+offset_right = 1200.0
+offset_bottom = 533.0
 text = "INPUT MORSE"
 horizontal_alignment = 1
-
-[node name="KeyHandle" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=984851561]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 64)
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
 
 [node name="MorseInput" type="Node" parent="." unique_id=487473541]
 script = ExtResource("2_input")
@@ -89,3 +43,33 @@ script = ExtResource("2_input")
 [node name="MorseGame" type="Node" parent="." unique_id=849013333]
 script = ExtResource("3_game")
 morse_input_path = NodePath("../MorseInput")
+
+[node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("4_u5sy4")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1080.0
+offset_top = -1080.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="PhraseBubble" parent="." unique_id=1824503117 instance=ExtResource("5_gee14")]
+layout_mode = 0
+offset_left = 953.0
+offset_top = 453.0
+offset_right = 1128.0
+offset_bottom = 611.0
+
+[node name="MorseTable" parent="." unique_id=1627944515 instance=ExtResource("7_vtaks")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -321.0
+offset_bottom = 0.0
+grow_vertical = 0
+
+[node name="Ufo" parent="." unique_id=827773567 instance=ExtResource("7_u5sy4")]
