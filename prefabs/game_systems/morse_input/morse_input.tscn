@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://13m2uuo6p6fn"]
 
-[ext_resource type="Script" uid="uid://cs7f7bvjmb22y" path="res://scripts/morse/morse_input.gd" id="1_k2jeh"]
+[ext_resource type="Script" uid="uid://cs7f7bvjmb22y" path="res://prefabs/game_systems/morse_input/morse_input.gd" id="1_k2jeh"]
 
 [node name="MorseInput" type="Node" unique_id=1485249355]
 script = ExtResource("1_k2jeh")

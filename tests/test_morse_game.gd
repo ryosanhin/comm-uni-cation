@@ -6,7 +6,7 @@ func _initialize() -> void:
 	assert(MorseCode.decode(0b1_01) == "A")
 	assert(MorseCode.decode(0b111_111_1) == "")
 
-	var input_scene := load("res://prefabs/game_systems/morse_input.tscn") as PackedScene
+	var input_scene := load("res://prefabs/game_systems/morse_input/morse_input.tscn") as PackedScene
 	var input := input_scene.instantiate() as MorseInput
 	root.add_child(input)
 	var game := MorseGame.new()
