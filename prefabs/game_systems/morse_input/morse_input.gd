@@ -68,6 +68,7 @@ func reset() -> void:
 	_active_sources.clear()
 
 	_current_code = INIT_BIT
+	_is_reached_dash_threshold = false
 	if is_instance_valid(_dash_threshold_timer):
 		_dash_threshold_timer.stop()
 	if is_instance_valid(_completion_timer):
@@ -161,12 +162,13 @@ func _release_input(id: StringName) -> void:
 
 	# 全ての入力が無くなったときの処理
 	if _active_sources.is_empty():
+		_current_code = (_current_code << 1) | int(_is_reached_dash_threshold)
 		key_released.emit(_is_reached_dash_threshold)
 		
 		# ここで参照したのでfalseに戻す
 		_is_reached_dash_threshold = false
 		_dash_threshold_timer.stop()
-		_completion_timer.start(character_gap)
+		_completion_timer.start()
 
 
 ## 入力途中の符号を1文字として確定し、復号結果とともに通知する。[br]
