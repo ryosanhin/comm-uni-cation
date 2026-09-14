@@ -16,5 +16,6 @@ func _change_to_dash() -> void:
 	preview_line.text = " ".join(_preview_codes)
 
 
-func _clear() -> void:
+func _clear(_code: int, _character: String) -> void:
 	_preview_codes.clear()
+	preview_line.text = ""

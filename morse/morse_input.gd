@@ -1,6 +1,7 @@
 class_name MorseInput
 extends Node
 
+const Morse := preload("morse.gd")
 
 ## いずれかの入力元でモールスキーが押されたことを通知する。
 signal key_pressed
@@ -16,10 +17,10 @@ signal character_completed(code: int, character: String)
 
 
 ## この秒数以上の押下を長点として判定するしきい値。
-@export_range(0.05, 0.5, 0.01, "suffix:s") var _dash_threshold := 0.25
+@export_range(0.05, 0.5, 0.01, "suffix:s") var _dash_threshold := 0.15
 
 ## キーを離してから1文字分の入力を確定するまでの待機時間（秒）。
-@export_range(0.05, 1.0, 0.01, "suffix:s") var _character_gap := 0.45
+@export_range(0.05, 1.0, 0.01, "suffix:s") var _character_gap := 0.35
 
 @onready var _dash_threshold_timer: Timer = $DashThresholdTimer
 
@@ -185,7 +186,7 @@ func _complete_character() -> void:
 		return
 	var completed_code := _current_code
 	_current_code = INIT_BIT
-	character_completed.emit(completed_code, MorseCode.decode(completed_code))
+	character_completed.emit(completed_code, Morse.decode(completed_code))
 
 
 func _reach_dash_threshold() -> void:
