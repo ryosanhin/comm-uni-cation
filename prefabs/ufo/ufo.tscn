@@ -6,7 +6,3 @@
 [node name="Ufo" type="Sprite2D" unique_id=827773567]
 texture = ExtResource("1_uibld")
 script = ExtResource("2_o7jyb")
-main_position = Vector2(256, 256)
-exit_position = Vector2(-256, 256)
-entering_time = 1.0
-exiting_time = 1.0
