@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2t1mn2teqqdn"
-path="res://.godot/imported/bubble.png-9420a568ad05d69837d71d8650b91269.ctex"
+uid="uid://c2hg4b423lqt7"
+path="res://.godot/imported/uni_success.png-d56d1f1eda711a2ceb0a0fc8ae45d843.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/bubble.png"
-dest_files=["res://.godot/imported/bubble.png-9420a568ad05d69837d71d8650b91269.ctex"]
+source_file="res://umamusume/neo_universe/uni_success.png"
+dest_files=["res://.godot/imported/uni_success.png-d56d1f1eda711a2ceb0a0fc8ae45d843.ctex"]
 
 [params]
 

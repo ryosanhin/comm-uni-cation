@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://dfr0rerref50d"]
+
+[ext_resource type="Script" uid="uid://bnc685xo3i2rq" path="res://scripts/game/morse_game.gd" id="2_m6dsl"]
+[ext_resource type="PackedScene" uid="uid://b2pgn0tpo4j3r" path="res://prefabs/ui/neo_uni_face.tscn" id="3_g0u26"]
+[ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/phrase_bubble.tscn" id="4_fnns2"]
+[ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="5_7sepi"]
+[ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="6_qbkti"]
+[ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://morse/morse_input.tscn" id="7_el6ob"]
+[ext_resource type="PackedScene" uid="uid://dhulmwgboiadd" path="res://prefabs/ui/morse_preview.tscn" id="8_m6dsl"]
+
+[node name="Game" type="Control" unique_id=1098155860]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MorseGame" type="Node" parent="." unique_id=849013333]
+script = ExtResource("2_m6dsl")
+morse_input_path = NodePath("../MorseInput")
+
+[node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1080.0
+offset_top = -1080.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="PhraseBubble" parent="." unique_id=1824503117 instance=ExtResource("4_fnns2")]
+layout_mode = 0
+offset_left = 427.0
+offset_top = 118.0
+offset_right = 979.0
+offset_bottom = 286.0
+
+[node name="MorseTable" parent="." unique_id=1627944515 instance=ExtResource("5_7sepi")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 73.0
+offset_top = -567.0
+offset_right = 1042.0
+offset_bottom = -36.0
+grow_vertical = 0
+
+[node name="Ufo" parent="." unique_id=827773567 instance=ExtResource("6_qbkti")]
+position = Vector2(256, 192)
+main_position = Vector2(256, 192)
+exit_position = Vector2(-256, 192)
+entering_time = 1.0
+exiting_time = 1.0
+
+[node name="MorseInput" parent="." unique_id=1485249355 instance=ExtResource("7_el6ob")]
+
+[node name="MorsePreview" parent="." unique_id=1434449222 instance=ExtResource("8_m6dsl")]
+layout_mode = 0
+offset_left = 408.0
+offset_top = 412.0
+offset_right = 660.0
+offset_bottom = 469.0
+
+[connection signal="character_completed" from="MorseInput" to="MorsePreview" method="_clear"]
+[connection signal="dash_threshold_reached" from="MorseInput" to="MorsePreview" method="_change_to_dash"]
+[connection signal="key_pressed" from="MorseInput" to="MorsePreview" method="_append_dot"]
