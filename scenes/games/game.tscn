@@ -53,7 +53,6 @@ grow_vertical = 0
 
 [node name="Ufo" parent="." unique_id=827773567 instance=ExtResource("6_qbkti")]
 position = Vector2(256, 192)
-init_position = Vector2(2176, 192)
 main_position = Vector2(256, 192)
 exit_position = Vector2(-256, 192)
 entering_time = 1.0
@@ -68,7 +67,6 @@ offset_top = 412.0
 offset_right = 660.0
 offset_bottom = 469.0
 
-[connection signal="character_completed" from="MorseInput" to="MorsePreview" method="_clear"]
 [connection signal="character_failed" from="MorseGame" to="NeoUniFace" method="_on_character_failed"]
 [connection signal="character_failed" from="MorseGame" to="PhraseBubble" method="_on_character_failed"]
 [connection signal="character_succeeded" from="MorseGame" to="PhraseBubble" method="_on_character_succeeded"]
@@ -77,6 +75,7 @@ offset_bottom = 469.0
 [connection signal="phrase_started" from="MorseGame" to="Ufo" method="_enter_anima"]
 [connection signal="phrase_succeeded" from="MorseGame" to="NeoUniFace" method="_on_phrase_succeeded"]
 [connection signal="phrase_succeeded" from="MorseGame" to="Ufo" method="_exit_anima"]
+[connection signal="character_completed" from="MorseInput" to="MorsePreview" method="_clear"]
 [connection signal="dash_threshold_reached" from="MorseInput" to="MorsePreview" method="_change_to_dash"]
 [connection signal="key_pressed" from="MorseInput" to="NeoUniFace" method="_on_key_pressed"]
 [connection signal="key_pressed" from="MorseInput" to="MorsePreview" method="_append_dot"]
