@@ -28,6 +28,10 @@ func _initialize() -> void:
 
 	game.start_phrase("a b!")
 	assert(counts[3] == 1)
+	# UFO入場前の入力は受け付けない。
+	input.character_completed.emit(MorseCode.encode("A"), "A")
+	assert(counts[0] == 0 and game.current_character_index == 0)
+	game._on_ufo_entered()
 	input.character_completed.emit(MorseCode.encode("T"), "T")
 	assert(counts[1] == 1 and game.current_character_index == 0)
 	input.character_completed.emit(MorseCode.encode("A"), "A")
@@ -56,7 +60,7 @@ func _test_game_scene_presentation() -> void:
 	var scene_game: MorseGame = game_scene.get_node("MorseGame")
 	var scene_input: MorseInput = game_scene.get_node("MorseInput")
 	var label: RichTextLabel = game_scene.get_node(
-		"PhraseBubble/MarginContainer/VBoxContainer/RichTextLabel"
+		"QuestionBubble/MarginContainer/VBoxContainer/RichTextLabel"
 	)
 	var face: TextureRect = game_scene.get_node("NeoUniFace")
 	var ufo: Sprite2D = game_scene.get_node("Ufo")
@@ -65,6 +69,10 @@ func _test_game_scene_presentation() -> void:
 	assert(label.text.contains("[font_size=72]A[/font_size]"))
 	assert(label.text.contains("[color=#808080]B[/color]"))
 	assert((ufo.get("_animation") as Tween).is_valid())
+	# 入場アニメーション中の入力は無視し、entered後に受付を開始する。
+	scene_input.character_completed.emit(MorseCode.encode("A"), "A")
+	assert(scene_game.current_character_index == 0)
+	ufo.entered.emit()
 
 	var idle_texture := face.texture
 	scene_input.key_pressed.emit()
@@ -81,3 +89,9 @@ func _test_game_scene_presentation() -> void:
 	scene_input.character_completed.emit(MorseCode.encode("B"), "B")
 	assert(face.texture != failed_texture)
 	assert((ufo.get("_animation") as Tween).is_valid())
+	# 退場後はJSONから次の問題を出題し、再入場までは入力を止める。
+	ufo.exited.emit()
+	assert(scene_game.phrase in ["HI", "TU", "GJ"])
+	var next_index := scene_game.current_character_index
+	scene_input.character_completed.emit(MorseCode.encode("T"), "T")
+	assert(scene_game.current_character_index == next_index)
