@@ -1,6 +1,7 @@
 class_name MorseInput
 extends Node
 
+
 ## いずれかの入力元でモールスキーが押されたことを通知する。
 signal key_pressed
 
@@ -13,15 +14,17 @@ signal dash_threshold_reached
 ## 文字間の待機時間が経過し、1文字分の符号が確定したことを通知する。
 signal character_completed(code: int, character: String)
 
+
 ## この秒数以上の押下を長点として判定するしきい値。
-@export_range(0.05, 2.0, 0.01, "suffix:s") var dash_threshold := 0.25
+@export_range(0.05, 0.5, 0.01, "suffix:s") var dash_threshold := 0.25
 
 ## キーを離してから1文字分の入力を確定するまでの待機時間（秒）。
-@export_range(0.05, 2.0, 0.01, "suffix:s") var character_gap := 0.45
+@export_range(0.05, 1.0, 0.01, "suffix:s") var character_gap := 0.45
 
 @onready var _dash_threshold_timer: Timer = $DashThresholdTimer
 
 @onready var _completion_timer: Timer = $CompletionTimer
+
 
 ## モールス入力を受け付けるかどうか。
 var input_enabled := true
@@ -30,14 +33,19 @@ var input_enabled := true
 ## Set系の代替として[Dictionary]を使用
 var _active_sources: Dictionary[StringName, bool] = {}
 
-## 長点判定になっているか。
-var _is_reached_dash_threshold := false
+## 最初の入力元が押された時刻（ミリ秒）。
+var _pressed_at_msec := 0
 
 ## 先頭の番兵ビットを含む、入力途中のモールス符号。
 var _current_code: int
 
+
 ## 番兵ビット
 const INIT_BIT := 1
+
+## ミリ秒を秒に戻す用の値
+const MSEC_UNIT := 0.001
+
 
 ## 文字確定用タイマーを生成し、タイムアウト時の処理を接続する。
 func _ready() -> void:
@@ -68,7 +76,6 @@ func reset() -> void:
 	_active_sources.clear()
 
 	_current_code = INIT_BIT
-	_is_reached_dash_threshold = false
 	if is_instance_valid(_dash_threshold_timer):
 		_dash_threshold_timer.stop()
 	if is_instance_valid(_completion_timer):
@@ -147,6 +154,7 @@ func _press_input(id: StringName) -> void:
 
 	# 新規入力開始時の処理
 	if was_empty:
+		_pressed_at_msec = Time.get_ticks_msec()
 		_dash_threshold_timer.start()
 		_completion_timer.stop()
 		key_pressed.emit()
@@ -162,11 +170,10 @@ func _release_input(id: StringName) -> void:
 
 	# 全ての入力が無くなったときの処理
 	if _active_sources.is_empty():
-		_current_code = (_current_code << 1) | int(_is_reached_dash_threshold)
-		key_released.emit(_is_reached_dash_threshold)
-		
-		# ここで参照したのでfalseに戻す
-		_is_reached_dash_threshold = false
+		var duration := float(Time.get_ticks_msec() - _pressed_at_msec) * MSEC_UNIT
+		var is_dash := duration >= dash_threshold
+		_current_code = (_current_code << 1) | int(is_dash)
+		key_released.emit(is_dash)
 		_dash_threshold_timer.stop()
 		_completion_timer.start()
 
@@ -182,5 +189,4 @@ func _complete_character() -> void:
 
 
 func _reach_dash_threshold() -> void:
-	_is_reached_dash_threshold = true
 	dash_threshold_reached.emit()
