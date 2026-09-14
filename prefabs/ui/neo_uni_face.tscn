@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b2pgn0tpo4j3r"]
 
 [ext_resource type="Texture2D" uid="uid://cl37vfsnckpif" path="res://umamusume/neo_universe/uni_idle.png" id="1_60vb6"]
-[ext_resource type="Script" uid="uid://bou3d1405i6qg" path="res://prefabs/ui/neo_uni_face/neo_uni_face.gd" id="2_c85bu"]
+[ext_resource type="Script" uid="uid://bou3d1405i6qg" path="res://prefabs/ui/neo_uni_face.gd" id="2_c85bu"]
 [ext_resource type="Texture2D" uid="uid://bk2ee8c8kl4vu" path="res://umamusume/neo_universe/uni_pressed.png" id="3_k5aqu"]
 [ext_resource type="Texture2D" uid="uid://c2hg4b423lqt7" path="res://umamusume/neo_universe/uni_success.png" id="4_lsb50"]
 [ext_resource type="Texture2D" uid="uid://dwfdmi2c71y4c" path="res://umamusume/neo_universe/uni_failed.png" id="5_4g23j"]
