@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c0k15ylu03oqn"]
 
-[ext_resource type="Script" path="res://prefabs/ui/phrase_bubble.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bmj02tdjvtth0" path="res://prefabs/ui/question_bubble.gd" id="1_7aud0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lltub"]
 bg_color = Color(0, 0, 0, 1)
@@ -14,9 +14,9 @@ corner_radius_top_right = 32
 corner_radius_bottom_right = 32
 corner_radius_bottom_left = 32
 
-[node name="PhraseBubble" type="PanelContainer" unique_id=1824503117]
+[node name="QuestionBubble" type="PanelContainer" unique_id=1824503117]
 theme_override_styles/panel = SubResource("StyleBoxFlat_lltub")
-script = ExtResource("1_script")
+script = ExtResource("1_7aud0")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1562274970]
 layout_mode = 2
@@ -32,8 +32,8 @@ layout_mode = 2
 custom_minimum_size = Vector2(512, 128)
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 48
-text = "TEXT"
 bbcode_enabled = true
+text = "TEXT"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

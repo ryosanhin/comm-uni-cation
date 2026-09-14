@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bnc685xo3i2rq" path="res://scripts/game/morse_game.gd" id="2_m6dsl"]
 [ext_resource type="PackedScene" uid="uid://b2pgn0tpo4j3r" path="res://prefabs/ui/neo_uni_face.tscn" id="3_g0u26"]
-[ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/phrase_bubble.tscn" id="4_fnns2"]
+[ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/question_bubble.tscn" id="4_fnns2"]
 [ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="5_7sepi"]
 [ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="6_qbkti"]
 [ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://morse/morse_input.tscn" id="7_el6ob"]
@@ -32,7 +32,7 @@ offset_top = -1080.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="PhraseBubble" parent="." unique_id=1824503117 instance=ExtResource("4_fnns2")]
+[node name="QuestionBubble" parent="." unique_id=1824503117 instance=ExtResource("4_fnns2")]
 layout_mode = 0
 offset_left = 427.0
 offset_top = 118.0
@@ -68,10 +68,10 @@ offset_right = 660.0
 offset_bottom = 469.0
 
 [connection signal="character_failed" from="MorseGame" to="NeoUniFace" method="_on_character_failed"]
-[connection signal="character_failed" from="MorseGame" to="PhraseBubble" method="_on_character_failed"]
-[connection signal="character_succeeded" from="MorseGame" to="PhraseBubble" method="_on_character_succeeded"]
+[connection signal="character_failed" from="MorseGame" to="QuestionBubble" method="_on_character_failed"]
+[connection signal="character_succeeded" from="MorseGame" to="QuestionBubble" method="_on_character_succeeded"]
 [connection signal="phrase_started" from="MorseGame" to="NeoUniFace" method="_on_phrase_started"]
-[connection signal="phrase_started" from="MorseGame" to="PhraseBubble" method="_on_phrase_started"]
+[connection signal="phrase_started" from="MorseGame" to="QuestionBubble" method="_on_phrase_started"]
 [connection signal="phrase_started" from="MorseGame" to="Ufo" method="_enter_anima"]
 [connection signal="phrase_succeeded" from="MorseGame" to="NeoUniFace" method="_on_phrase_succeeded"]
 [connection signal="phrase_succeeded" from="MorseGame" to="Ufo" method="_exit_anima"]
