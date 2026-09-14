@@ -73,7 +73,7 @@ func _on_key_pressed() -> void:
 
 
 ## モールスキーの解放に合わせてハンドルを通常位置へ戻す。
-func _on_key_released(_duration: float, _is_dash: bool) -> void:
+func _on_key_released(_is_dash: bool) -> void:
 	%KeyHandle.position.y = 0.0
 
 
