@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/phrase_bubble.tscn" id="4_fnns2"]
 [ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="5_7sepi"]
 [ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="6_qbkti"]
-[ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://prefabs/game_systems/morse_input/morse_input.tscn" id="7_el6ob"]
+[ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://morse/morse_input.tscn" id="7_el6ob"]
 [ext_resource type="PackedScene" uid="uid://dhulmwgboiadd" path="res://prefabs/ui/morse_preview.tscn" id="8_m6dsl"]
 
 [node name="Game" type="Control" unique_id=1098155860]

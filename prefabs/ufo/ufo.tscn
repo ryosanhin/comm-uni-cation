@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlo1g5mkhinq8"]
 
-[ext_resource type="Texture2D" uid="uid://cfoq7jn7i7f86" path="res://sprites/ufo.png" id="1_uibld"]
+[ext_resource type="Texture2D" uid="uid://cfoq7jn7i7f86" path="res://prefabs/ufo/ufo.png" id="1_uibld"]
 [ext_resource type="Script" uid="uid://h7p1vbnf3bab" path="res://prefabs/ufo/ufo.gd" id="2_o7jyb"]
 
 [node name="Ufo" type="Sprite2D" unique_id=827773567]
