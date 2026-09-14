@@ -1,6 +1,9 @@
 class_name MorseGame
 extends Node
 
+## 新しい問題の入力受付を開始したことを通知する。
+signal phrase_started(phrase: String)
+
 ## 文字の入力に成功したとき、対象位置・期待した文字・モールス符号を通知する。
 signal character_succeeded(index: int, expected: String, code: int)
 
@@ -82,6 +85,7 @@ func start_phrase(new_phrase: String) -> void:
 	_running = true
 	remaining_time_changed.emit(_last_displayed_second)
 	_skip_unmapped_characters()
+	phrase_started.emit(phrase)
 	if current_character_index >= phrase.length():
 		_finish_phrase()
 
