@@ -38,6 +38,7 @@ offset_left = 427.0
 offset_top = 118.0
 offset_right = 979.0
 offset_bottom = 286.0
+game_path = NodePath("../MorseGame")
 
 [node name="MorseTable" parent="." unique_id=1627944515 instance=ExtResource("5_7sepi")]
 layout_mode = 1
@@ -66,6 +67,16 @@ offset_top = 412.0
 offset_right = 660.0
 offset_bottom = 469.0
 
+[connection signal="character_failed" from="MorseGame" to="NeoUniFace" method="_on_character_failed"]
+[connection signal="character_failed" from="MorseGame" to="PhraseBubble" method="_on_character_failed"]
+[connection signal="character_succeeded" from="MorseGame" to="PhraseBubble" method="_on_character_succeeded"]
+[connection signal="phrase_started" from="MorseGame" to="NeoUniFace" method="_on_phrase_started"]
+[connection signal="phrase_started" from="MorseGame" to="PhraseBubble" method="_on_phrase_started"]
+[connection signal="phrase_started" from="MorseGame" to="Ufo" method="_enter_anima"]
+[connection signal="phrase_succeeded" from="MorseGame" to="NeoUniFace" method="_on_phrase_succeeded"]
+[connection signal="phrase_succeeded" from="MorseGame" to="Ufo" method="_exit_anima"]
 [connection signal="character_completed" from="MorseInput" to="MorsePreview" method="_clear"]
 [connection signal="dash_threshold_reached" from="MorseInput" to="MorsePreview" method="_change_to_dash"]
+[connection signal="key_pressed" from="MorseInput" to="NeoUniFace" method="_on_key_pressed"]
 [connection signal="key_pressed" from="MorseInput" to="MorsePreview" method="_append_dot"]
+[connection signal="key_released" from="MorseInput" to="NeoUniFace" method="_on_key_released"]
