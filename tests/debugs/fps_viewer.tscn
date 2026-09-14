@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://bc4n0pp6tcdlm"]
+
+[ext_resource type="Script" uid="uid://ddiitcupixilf" path="res://tests/debugs/fps_viewer.gd" id="1_e878i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e878i"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="FpsViewer" type="Label" unique_id=1631645786]
+theme_override_styles/normal = SubResource("StyleBoxFlat_e878i")
+text = "fps: 123"
+script = ExtResource("1_e878i")
