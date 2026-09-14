@@ -74,7 +74,7 @@ func _input(event: InputEvent) -> void:
 ## 押下中の入力元、計測時刻、入力途中の符号、タイマーを初期状態へ戻す。
 func reset() -> void:
 	_active_sources.clear()
-
+	_pressed_at_msec = 0
 	_current_code = INIT_BIT
 	if is_instance_valid(_dash_threshold_timer):
 		_dash_threshold_timer.stop()
