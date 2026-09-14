@@ -16,10 +16,10 @@ signal character_completed(code: int, character: String)
 
 
 ## この秒数以上の押下を長点として判定するしきい値。
-@export_range(0.05, 0.5, 0.01, "suffix:s") var dash_threshold := 0.25
+@export_range(0.05, 0.5, 0.01, "suffix:s") var _dash_threshold := 0.25
 
 ## キーを離してから1文字分の入力を確定するまでの待機時間（秒）。
-@export_range(0.05, 1.0, 0.01, "suffix:s") var character_gap := 0.45
+@export_range(0.05, 1.0, 0.01, "suffix:s") var _character_gap := 0.45
 
 @onready var _dash_threshold_timer: Timer = $DashThresholdTimer
 
@@ -27,7 +27,7 @@ signal character_completed(code: int, character: String)
 
 
 ## モールス入力を受け付けるかどうか。
-var input_enabled := true
+var _input_enabled := true
 
 ## 現在押されている入力元を識別子ごとに保持する。[br]
 ## Set系の代替として[Dictionary]を使用
@@ -52,12 +52,12 @@ func _ready() -> void:
 	_current_code = INIT_BIT
 
 	# 長点閾値到達タイマーとの接続
-	_dash_threshold_timer.wait_time = dash_threshold
+	_dash_threshold_timer.wait_time = _dash_threshold
 	_dash_threshold_timer.one_shot = true
 	_dash_threshold_timer.timeout.connect(_reach_dash_threshold)
 
 	# 文字判定閾値到達タイマーとの接続
-	_completion_timer.wait_time = character_gap
+	_completion_timer.wait_time = _character_gap
 	_completion_timer.one_shot = true
 	_completion_timer.timeout.connect(_complete_character)
 
@@ -86,7 +86,7 @@ func reset() -> void:
 ## 無効化する場合は入力途中の状態もリセットする。[br]
 ## [param value]: 変更先
 func set_input_enabled(value: bool) -> void:
-	input_enabled = value
+	_input_enabled = value
 	if not value:
 		reset()
 
@@ -143,7 +143,7 @@ func _handle_touch(event: InputEventScreenTouch) -> void:
 
 ## 指定したIDの入力が開始したときの処理。
 func _press_input(id: StringName) -> void:
-	if not input_enabled:
+	if not _input_enabled:
 		return
 
 	if _active_sources.has(id):
@@ -171,7 +171,7 @@ func _release_input(id: StringName) -> void:
 	# 全ての入力が無くなったときの処理
 	if _active_sources.is_empty():
 		var duration := float(Time.get_ticks_msec() - _pressed_at_msec) * MSEC_UNIT
-		var is_dash := duration >= dash_threshold
+		var is_dash := duration >= _dash_threshold
 		_current_code = (_current_code << 1) | int(is_dash)
 		key_released.emit(is_dash)
 		_dash_threshold_timer.stop()
@@ -181,7 +181,7 @@ func _release_input(id: StringName) -> void:
 ## 入力途中の符号を1文字として確定し、復号結果とともに通知する。[br]
 ## 符号が空、または入力が無効な場合は何もしない。
 func _complete_character() -> void:
-	if _current_code == INIT_BIT or not input_enabled:
+	if _current_code == INIT_BIT or not _input_enabled:
 		return
 	var completed_code := _current_code
 	_current_code = INIT_BIT
