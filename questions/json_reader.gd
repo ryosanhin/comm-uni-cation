@@ -61,6 +61,23 @@ func _load_file() -> void:
 		_questions.append(question)
 
 
+## 全部の問題を取得
+func get_all_questions() -> PackedStringArray:
+	return _questions
+
+
+## 全ての問題からランダムに一つ取得
+func get_random_question() -> String:
+	if _questions.is_empty():
+		push_warning(
+			"問題が読み込まれていません"
+		)
+		return ""
+	var index := randi_range(0, _questions.size() - 1)
+	return _questions[index].text
+
+
+## 該当する難易度の問題を取得
 func get_questions_by_difficulty(difficulty: int) -> PackedStringArray:
 	var questions: PackedStringArray = []
 
@@ -70,7 +87,7 @@ func get_questions_by_difficulty(difficulty: int) -> PackedStringArray:
 
 	return questions
 
-
+## 該当する難易度の問題からランダムに一つ取得
 func get_random_question_by_difficulty(difficulty: int) -> String:
 	var candidates := get_questions_by_difficulty(difficulty)
 

@@ -1,18 +1,14 @@
 [
   {
-    "question": "test",
+    "question": "hi",
     "difficulty": 1
   },
   {
-    "question": "hoge",
+    "question": "tu",
     "difficulty": 1
   },
   {
-    "question": "fuga",
-    "difficulty": 2
-  },
-  {
-    "question": "piyo",
-    "difficulty": 3
+    "question": "gj",
+    "difficulty": 1
   }
 ]
