@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="5_7sepi"]
 [ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="6_qbkti"]
 [ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://prefabs/game_systems/morse_input/morse_input.tscn" id="7_el6ob"]
+[ext_resource type="PackedScene" uid="uid://dhulmwgboiadd" path="res://prefabs/ui/morse_preview.tscn" id="8_m6dsl"]
 
 [node name="Game" type="Control" unique_id=1098155860]
 layout_mode = 3
@@ -65,10 +66,19 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -321.0
-offset_bottom = 0.0
+offset_left = 73.0
+offset_top = -567.0
+offset_right = 1042.0
+offset_bottom = -36.0
 grow_vertical = 0
 
 [node name="Ufo" parent="." unique_id=827773567 instance=ExtResource("6_qbkti")]
 
 [node name="MorseInput" parent="." unique_id=1485249355 instance=ExtResource("7_el6ob")]
+
+[node name="MorsePreview" parent="." unique_id=1434449222 instance=ExtResource("8_m6dsl")]
+layout_mode = 0
+offset_left = 408.0
+offset_top = 412.0
+offset_right = 660.0
+offset_bottom = 469.0

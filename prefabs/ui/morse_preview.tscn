@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dhulmwgboiadd"]
+
+[ext_resource type="Script" uid="uid://cktfujm0w7a0m" path="res://prefabs/ui/morse_preview.gd" id="1_a3t86"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mnqji"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[node name="MorsePreview" type="PanelContainer" unique_id=1434449222]
+offset_right = 72.5
+offset_bottom = 35.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_mnqji")
+script = ExtResource("1_a3t86")
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=972896410]
+layout_mode = 2
+theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
+theme_override_constants/minimum_character_width = 8
+theme_override_font_sizes/font_size = 32
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false

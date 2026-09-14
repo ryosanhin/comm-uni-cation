@@ -1,0 +1,20 @@
+extends PanelContainer
+
+@onready var preview_line: LineEdit = $LineEdit
+
+var _preview_codes: PackedStringArray = []
+
+func _append_dot() -> void:
+	_preview_codes.append("・")
+	preview_line.text = " ".join(_preview_codes)
+
+
+func _change_to_dash() -> void:
+	if _preview_codes.is_empty():
+		return
+	_preview_codes[-1] = "―"
+	preview_line.text = " ".join(_preview_codes)
+
+
+func _clear() -> void:
+	_preview_codes.clear()
