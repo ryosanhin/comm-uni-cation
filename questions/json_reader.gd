@@ -63,7 +63,12 @@ func _load_file() -> void:
 
 ## 全部の問題を取得
 func get_all_questions() -> PackedStringArray:
-	return _questions
+	var tmp := _questions.map(
+			func(question: QuestionData) -> String:
+				return question.text
+	)
+	
+	return PackedStringArray(tmp)
 
 
 ## 全ての問題からランダムに一つ取得
