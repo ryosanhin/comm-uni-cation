@@ -17,10 +17,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_timer_viewer")]
+[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer")]
 script = ExtResource("2_m6dsl")
 _morse_input = NodePath("../MorseInput")
 _ufo = NodePath("../Ufo")
+_neo_uni_face = NodePath("../NeoUniFace")
+_question_bubble = NodePath("../QuestionBubble")
+_morse_preview = NodePath("../MorsePreview")
 _timer_viewer = NodePath("../TimerViewer")
 
 [node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
@@ -77,19 +80,3 @@ offset_top = 425.0
 offset_right = 2016.0
 offset_bottom = 553.0
 scale = Vector2(0.5, 0.5)
-
-[connection signal="character_failed" from="MorseGame" to="NeoUniFace" method="_on_character_failed"]
-[connection signal="character_failed" from="MorseGame" to="QuestionBubble" method="_on_character_failed"]
-[connection signal="character_succeeded" from="MorseGame" to="QuestionBubble" method="_on_character_succeeded"]
-[connection signal="phrase_started" from="MorseGame" to="NeoUniFace" method="_on_phrase_started"]
-[connection signal="phrase_started" from="MorseGame" to="QuestionBubble" method="_on_phrase_started"]
-[connection signal="phrase_started" from="MorseGame" to="Ufo" method="_enter_anima"]
-[connection signal="phrase_succeeded" from="MorseGame" to="NeoUniFace" method="_on_phrase_succeeded"]
-[connection signal="phrase_succeeded" from="MorseGame" to="Ufo" method="_exit_anima"]
-[connection signal="entered" from="Ufo" to="MorseGame" method="_on_ufo_entered"]
-[connection signal="exited" from="Ufo" to="MorseGame" method="_on_ufo_exited"]
-[connection signal="character_completed" from="MorseInput" to="MorsePreview" method="_clear"]
-[connection signal="dash_threshold_reached" from="MorseInput" to="MorsePreview" method="_change_to_dash"]
-[connection signal="key_pressed" from="MorseInput" to="NeoUniFace" method="_on_key_pressed"]
-[connection signal="key_pressed" from="MorseInput" to="MorsePreview" method="_append_dot"]
-[connection signal="key_released" from="MorseInput" to="NeoUniFace" method="_on_key_released"]

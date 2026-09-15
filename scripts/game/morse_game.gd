@@ -11,6 +11,10 @@ const TimerViewer := preload("res://prefabs/ui/timer_viewer.gd")
 
 const QuestionBubble := preload("res://prefabs/ui/question_bubble.gd")
 
+const NeoUniFace := preload("res://prefabs/ui/neo_uni_face.gd")
+
+const MorsePreview := preload("res://prefabs/ui/morse_preview.gd")
+
 const QUESTIONS_PATH := "res://questions/questions.json"
 
 ## 新しい問題を開始したことを通知する。
@@ -65,13 +69,49 @@ var _last_displayed_second := -1
 
 @export var _ufo: Ufo
 
+@export var _neo_uni_face: NeoUniFace
+
+@export var _question_bubble: QuestionBubble
+
+@export var _morse_preview: MorsePreview
+
 @export var _timer_viewer: TimerViewer
 
-## 入力完了シグナルを接続し、設定に応じて最初のフレーズを開始する。
+## ゲーム画面を構成する各ノードのシグナルを接続し、最初のフレーズを開始する。
 func _ready() -> void:
-	_morse_input.character_completed.connect(_on_character_completed)
+	_connect_game_signals()
+	_connect_input_signals()
+	_connect_ufo_signals()
 	if start_automatically:
 		start_random_question()
+
+
+## ゲーム進行シグナルを、対応する画面演出へ接続する。
+func _connect_game_signals() -> void:
+	phrase_started.connect(_neo_uni_face._on_phrase_started)
+	phrase_started.connect(_question_bubble._on_phrase_started)
+	phrase_started.connect(_ufo._enter_anima)
+	character_succeeded.connect(_question_bubble._on_character_succeeded)
+	character_failed.connect(_neo_uni_face._on_character_failed)
+	character_failed.connect(_question_bubble._on_character_failed)
+	phrase_succeeded.connect(_neo_uni_face._on_phrase_succeeded)
+	phrase_succeeded.connect(_ufo._exit_anima)
+
+
+## モールス入力シグナルを、ゲーム進行と入力中の画面演出へ接続する。
+func _connect_input_signals() -> void:
+	_morse_input.character_completed.connect(_on_character_completed)
+	_morse_input.character_completed.connect(_morse_preview._clear)
+	_morse_input.dash_threshold_reached.connect(_morse_preview._change_to_dash)
+	_morse_input.key_pressed.connect(_neo_uni_face._on_key_pressed)
+	_morse_input.key_pressed.connect(_morse_preview._append_dot)
+	_morse_input.key_released.connect(_neo_uni_face._on_key_released)
+
+
+## UFOの入退場完了シグナルをゲーム進行へ接続する。
+func _connect_ufo_signals() -> void:
+	_ufo.entered.connect(_on_ufo_entered)
+	_ufo.exited.connect(_on_ufo_exited)
 
 
 ## ゲーム中の残り時間を更新し、表示秒数の変更やタイムアウトを通知する。
