@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bc57yj6qhmrl7"]
+
+[ext_resource type="Texture2D" uid="uid://cpmxmifm5fcqh" path="res://textures/ProgressBarBackground.png" id="1_1xplh"]
+[ext_resource type="Texture2D" uid="uid://cninm40fjbp81" path="res://textures/ProgressBarFIll.png" id="2_oqqui"]
+[ext_resource type="Script" uid="uid://xfen1ck2lunc" path="res://prefabs/ui/timer_viewer.gd" id="3_oqqui"]
+
+[sub_resource type="Gradient" id="Gradient_oqqui"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1)
+metadata/_snap_enabled = true
+
+[node name="TimerViewer" type="TextureProgressBar" unique_id=2117653685]
+offset_right = 1024.0
+offset_bottom = 128.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+nine_patch_stretch = true
+stretch_margin_left = 64
+stretch_margin_top = 64
+stretch_margin_right = 64
+stretch_margin_bottom = 64
+texture_under = ExtResource("1_1xplh")
+texture_progress = ExtResource("2_oqqui")
+script = ExtResource("3_oqqui")
+gradient = SubResource("Gradient_oqqui")

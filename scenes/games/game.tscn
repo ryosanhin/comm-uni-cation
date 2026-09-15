@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cevvem7pd2v6o" path="res://prefabs/ui/morse_table.tscn" id="5_7sepi"]
 [ext_resource type="PackedScene" uid="uid://dlo1g5mkhinq8" path="res://prefabs/ufo/ufo.tscn" id="6_qbkti"]
 [ext_resource type="PackedScene" uid="uid://13m2uuo6p6fn" path="res://morse/morse_input.tscn" id="7_el6ob"]
+[ext_resource type="PackedScene" uid="uid://bc57yj6qhmrl7" path="res://prefabs/ui/timer_viewer.tscn" id="8_g0u26"]
 [ext_resource type="PackedScene" uid="uid://dhulmwgboiadd" path="res://prefabs/ui/morse_preview.tscn" id="8_m6dsl"]
 
 [node name="Game" type="Control" unique_id=1098155860]
@@ -16,9 +17,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MorseGame" type="Node" parent="." unique_id=849013333]
+[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_timer_viewer")]
 script = ExtResource("2_m6dsl")
-morse_input_path = NodePath("../MorseInput")
+_morse_input = NodePath("../MorseInput")
+_ufo = NodePath("../Ufo")
+_timer_viewer = NodePath("../TimerViewer")
 
 [node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
 layout_mode = 1
@@ -45,9 +48,9 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 73.0
+offset_left = 96.0
 offset_top = -567.0
-offset_right = 1042.0
+offset_right = 1065.0
 offset_bottom = -36.0
 grow_vertical = 0
 
@@ -62,10 +65,18 @@ exiting_time = 1.0
 
 [node name="MorsePreview" parent="." unique_id=1434449222 instance=ExtResource("8_m6dsl")]
 layout_mode = 0
-offset_left = 408.0
-offset_top = 412.0
-offset_right = 660.0
-offset_bottom = 469.0
+offset_left = 96.0
+offset_top = 343.0
+offset_right = 348.0
+offset_bottom = 400.0
+
+[node name="TimerViewer" parent="." unique_id=2117653685 instance=ExtResource("8_g0u26")]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 425.0
+offset_right = 2016.0
+offset_bottom = 553.0
+scale = Vector2(0.5, 0.5)
 
 [connection signal="character_failed" from="MorseGame" to="NeoUniFace" method="_on_character_failed"]
 [connection signal="character_failed" from="MorseGame" to="QuestionBubble" method="_on_character_failed"]

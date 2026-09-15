@@ -2,6 +2,15 @@ class_name MorseGame
 extends Node
 
 const JsonReader := preload("res://questions/json_reader.gd")
+
+const Ufo := preload("res://prefabs/ufo/ufo.gd")
+
+const MorseInput := preload("res://morse/morse_input.gd")
+
+const TimerViewer := preload("res://prefabs/ui/timer_viewer.gd")
+
+const QuestionBubble := preload("res://prefabs/ui/question_bubble.gd")
+
 const QUESTIONS_PATH := "res://questions/questions.json"
 
 ## 新しい問題を開始したことを通知する。
@@ -31,9 +40,6 @@ signal remaining_time_changed(seconds: int)
 ## ノードの準備完了時に問題ファイルからランダムに出題するかどうか。
 @export var start_automatically := true
 
-## 入力を受け取る [MorseInput] ノードへのパス。
-@export_node_path("MorseInput") var morse_input_path: NodePath
-
 ## 現在の残り時間（秒）。
 var remaining_time := 0.0
 
@@ -55,9 +61,11 @@ var _question_reader := JsonReader.new(QUESTIONS_PATH)
 ## 最後に [signal remaining_time_changed] で通知した秒数。
 var _last_displayed_second := -1
 
-## 入力イベントを受け取る [MorseInput] ノード。
-@onready var _morse_input: MorseInput = get_node(morse_input_path)
+@export var _morse_input: MorseInput
 
+@export var _ufo: Ufo
+
+@export var _timer_viewer: TimerViewer
 
 ## 入力完了シグナルを接続し、設定に応じて最初のフレーズを開始する。
 func _ready() -> void:
