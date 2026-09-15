@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://yn33odljy8sf"]
+
+[ext_resource type="Script" uid="uid://dc1o7t4yxkgtd" path="res://prefabs/game_timer.gd" id="1_xdx3f"]
+
+[node name="GameTimer" type="Timer" unique_id=323313515]
+one_shot = true
+script = ExtResource("1_xdx3f")
