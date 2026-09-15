@@ -6,14 +6,13 @@ func _initialize() -> void:
 	assert(MorseCode.decode(0b1_01) == "A")
 	assert(MorseCode.decode(0b111_111_1) == "")
 
-	var input_scene := load("res://morse/morse_input.tscn") as PackedScene
-	var input := input_scene.instantiate() as MorseInput
-	root.add_child(input)
-	var game := MorseGame.new()
-	game.name = "MorseGame"
-	game.morse_input_path = NodePath("../MorseInput")
+	var game_scene := (
+		load("res://scenes/games/game.tscn") as PackedScene
+	).instantiate()
+	var game: MorseGame = game_scene.get_node("MorseGame")
+	var input: MorseInput = game_scene.get_node("MorseInput")
 	game.start_automatically = false
-	root.add_child(game)
+	root.add_child(game_scene)
 	await process_frame
 
 	var counts := [0, 0, 0, 0]
@@ -64,6 +63,7 @@ func _test_game_scene_presentation() -> void:
 	)
 	var face: TextureRect = game_scene.get_node("NeoUniFace")
 	var ufo: Sprite2D = game_scene.get_node("Ufo")
+	var preview: LineEdit = game_scene.get_node("MorsePreview/LineEdit")
 
 	scene_game.start_phrase("AB")
 	assert(label.text.contains("[font_size=72]A[/font_size]"))
@@ -77,10 +77,14 @@ func _test_game_scene_presentation() -> void:
 	var idle_texture := face.texture
 	scene_input.key_pressed.emit()
 	assert(face.texture != idle_texture)
+	assert(preview.text == "・")
+	scene_input.dash_threshold_reached.emit()
+	assert(preview.text == "―")
 	scene_input.key_released.emit(false)
 	assert(face.texture == idle_texture)
 
 	scene_input.character_completed.emit(MorseCode.encode("A"), "A")
+	assert(preview.text.is_empty())
 	await process_frame
 	assert(label.text.contains("A[font_size=72]B[/font_size]"))
 	scene_input.character_completed.emit(MorseCode.encode("T"), "T")
