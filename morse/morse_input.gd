@@ -1,7 +1,6 @@
 class_name MorseInput
 extends Node
 
-const Morse := preload("morse.gd")
 
 ## いずれかの入力元でモールスキーが押されたことを通知する。
 signal key_pressed
@@ -186,7 +185,7 @@ func _complete_character() -> void:
 		return
 	var completed_code := _current_code
 	_current_code = INIT_BIT
-	character_completed.emit(completed_code, Morse.decode(completed_code))
+	character_completed.emit(completed_code, MorseCode.decode(completed_code))
 
 
 func _reach_dash_threshold() -> void:
