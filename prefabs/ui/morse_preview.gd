@@ -1,6 +1,6 @@
 extends PanelContainer
 
-@onready var preview_line: LineEdit = $LineEdit
+@onready var preview_line: LineEdit = $MarginContainer/LineEdit
 
 var _preview_codes: PackedStringArray = []
 
