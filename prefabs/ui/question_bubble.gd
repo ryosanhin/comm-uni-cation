@@ -19,7 +19,7 @@ func _ready() -> void:
 
 
 ## 新しい問題文を表示する。
-func _on_phrase_started(_new_phrase: String) -> void:
+func on_phrase_started(_new_phrase: String) -> void:
 	# MorseGame は兄弟ノードより先に ready になるため、初回は _ready に表示を任せる。
 	if not is_node_ready():
 		return
@@ -27,17 +27,10 @@ func _on_phrase_started(_new_phrase: String) -> void:
 
 
 ## 正解後、読み飛ばした記号を含む最新位置で表示を更新する。
-func _on_character_succeeded(
+func advance_character(
 	_index: int, _expected: String, _code: int
 ) -> void:
 	call_deferred("_refresh_from_game")
-
-
-## 入力ミス時も現在の文字を強調したまま表示する。
-func _on_character_failed(
-	_index: int, _expected: String, _actual: String, _code: int
-) -> void:
-	_refresh_from_game()
 
 
 func _refresh_from_game() -> void:

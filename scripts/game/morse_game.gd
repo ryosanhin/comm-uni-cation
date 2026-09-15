@@ -5,8 +5,6 @@ const JsonReader := preload("res://questions/json_reader.gd")
 
 const Ufo := preload("res://prefabs/ufo/ufo.gd")
 
-const MorseInput := preload("res://morse/morse_input.gd")
-
 const TimerViewer := preload("res://prefabs/ui/timer_viewer.gd")
 
 const QuestionBubble := preload("res://prefabs/ui/question_bubble.gd")
@@ -39,13 +37,13 @@ signal remaining_time_changed(seconds: int)
 @export var phrase := "HELLO"
 
 ## フレーズ入力に使用できる制限時間（秒）。
-@export_range(1.0, 600.0, 1.0, "suffix:s") var time_limit := 30.0
+@export_range(1.0, 600.0, 1.0, "suffix:s") var _time_limit := 30.0
 
 ## ノードの準備完了時に問題ファイルからランダムに出題するかどうか。
 @export var start_automatically := true
 
 ## 現在の残り時間（秒）。
-var remaining_time := 0.0
+var _remaining_time := 0.0
 
 ## 次に入力すべき [member phrase] 内の文字位置。
 var current_character_index := 0
@@ -82,35 +80,42 @@ func _ready() -> void:
 	_connect_game_signals()
 	_connect_input_signals()
 	_connect_ufo_signals()
+	_timer_viewer.set_time_limit(_time_limit)
 	if start_automatically:
 		start_random_question()
 
 
 ## ゲーム進行シグナルを、対応する画面演出へ接続する。
 func _connect_game_signals() -> void:
-	phrase_started.connect(_neo_uni_face._on_phrase_started)
-	phrase_started.connect(_question_bubble._on_phrase_started)
-	phrase_started.connect(_ufo._enter_anima)
-	character_succeeded.connect(_question_bubble._on_character_succeeded)
-	character_failed.connect(_neo_uni_face._on_character_failed)
-	character_failed.connect(_question_bubble._on_character_failed)
-	phrase_succeeded.connect(_neo_uni_face._on_phrase_succeeded)
-	phrase_succeeded.connect(_ufo._exit_anima)
+	phrase_started.connect(_neo_uni_face.set_idle_expression)
+	phrase_started.connect(_question_bubble.on_phrase_started)
+	phrase_started.connect(_ufo.enter_anima)
+
+	character_succeeded.connect(_question_bubble.advance_character)
+	
+	character_failed.connect(_neo_uni_face.set_failed_expression)
+	
+	phrase_succeeded.connect(_neo_uni_face.set_succeeded_expression)
+	phrase_succeeded.connect(_ufo.exit_anima)
 
 
 ## モールス入力シグナルを、ゲーム進行と入力中の画面演出へ接続する。
 func _connect_input_signals() -> void:
 	_morse_input.character_completed.connect(_on_character_completed)
-	_morse_input.character_completed.connect(_morse_preview._clear)
-	_morse_input.dash_threshold_reached.connect(_morse_preview._change_to_dash)
-	_morse_input.key_pressed.connect(_neo_uni_face._on_key_pressed)
-	_morse_input.key_pressed.connect(_morse_preview._append_dot)
-	_morse_input.key_released.connect(_neo_uni_face._on_key_released)
+	_morse_input.character_completed.connect(_morse_preview.clear)
+	
+	_morse_input.dash_threshold_reached.connect(_morse_preview.change_to_dash)
+	
+	_morse_input.key_pressed.connect(_neo_uni_face.set_pressed_expression)
+	_morse_input.key_pressed.connect(_morse_preview.append_dot)
+	
+	_morse_input.key_released.connect(_neo_uni_face.set_released_expression)
 
 
 ## UFOの入退場完了シグナルをゲーム進行へ接続する。
 func _connect_ufo_signals() -> void:
 	_ufo.entered.connect(_on_ufo_entered)
+
 	_ufo.exited.connect(_on_ufo_exited)
 
 
@@ -118,12 +123,13 @@ func _connect_ufo_signals() -> void:
 func _process(delta: float) -> void:
 	if not _running:
 		return
-	remaining_time = maxf(remaining_time - delta, 0.0)
-	var displayed_second := ceili(remaining_time)
+	_remaining_time = maxf(_remaining_time - delta, 0.0)
+	_timer_viewer.update_progress(_remaining_time)
+	var displayed_second := ceili(_remaining_time)
 	if displayed_second != _last_displayed_second:
 		_last_displayed_second = displayed_second
 		remaining_time_changed.emit(displayed_second)
-	if remaining_time <= 0.0:
+	if _remaining_time <= 0.0:
 		_running = false
 		_set_input_enabled(false)
 		timed_out.emit()
@@ -135,8 +141,8 @@ func start_phrase(new_phrase: String) -> void:
 	phrase = new_phrase.to_upper()
 	current_character_index = 0
 	_accepted_codes.clear()
-	remaining_time = time_limit
-	_last_displayed_second = ceili(remaining_time)
+	_remaining_time = _time_limit
+	_last_displayed_second = ceili(_remaining_time)
 	_morse_input.reset()
 	_set_input_enabled(false)
 	_running = true

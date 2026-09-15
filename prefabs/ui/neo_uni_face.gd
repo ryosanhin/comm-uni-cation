@@ -23,27 +23,27 @@ func _switch_to_failed() -> void:
 
 
 ## 問題開始時は通常の表情に戻す。
-func _on_phrase_started(_phrase: String) -> void:
+func set_idle_expression(_phrase: String) -> void:
 	_switch_to_idle()
 
 
 ## モールスキーを押している間は入力中の表情にする。
-func _on_key_pressed() -> void:
+func set_pressed_expression() -> void:
 	_switch_to_pressed()
 
 
 ## モールスキーを離したら通常の表情に戻す。
-func _on_key_released(_is_dash: bool) -> void:
+func set_released_expression(_is_dash: bool) -> void:
 	_switch_to_idle()
 
 
 ## 1文字の入力ミスを失敗の表情で知らせる。
-func _on_character_failed(
+func set_failed_expression(
 	_index: int, _expected: String, _actual: String, _code: int
 ) -> void:
 	_switch_to_failed()
 
 
 ## 問題への正解を成功の表情で知らせる。
-func _on_phrase_succeeded(_phrase: String) -> void:
+func set_succeeded_expression(_phrase: String) -> void:
 	_switch_to_success()

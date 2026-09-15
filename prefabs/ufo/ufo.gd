@@ -17,7 +17,7 @@ signal exited
 var _animation: Tween
 
 
-func _enter_anima(_phrase: String = "") -> void:
+func enter_anima(_phrase: String) -> void:
 	_stop_animation()
 	visible = true
 	scale = Vector2.ZERO
@@ -41,7 +41,7 @@ func _enter_anima(_phrase: String = "") -> void:
 	)
 
 
-func _exit_anima(_phrase: String = "") -> void:
+func exit_anima(_phrase: String) -> void:
 	_stop_animation()
 	position = main_position
 	_animation = create_tween()
