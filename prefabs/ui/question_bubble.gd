@@ -34,7 +34,7 @@ func advance_character(
 
 
 func _refresh_from_game() -> void:
-	_render_phrase(_game.phrase, _game.current_character_index)
+	_render_phrase(_game._question, _game._current_character_index)
 
 
 ## 入力済み・入力中・未入力の3領域に分けてBBCodeを組み立てる。

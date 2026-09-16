@@ -54,7 +54,7 @@ func _load_file() -> void:
 			continue
 
 		var question := QuestionData.new(
-				data["question"].to_upper(),
+				data["question"],
 				int(data["difficulty"])
 		)
 

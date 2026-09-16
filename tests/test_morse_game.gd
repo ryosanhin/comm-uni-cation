@@ -16,25 +16,25 @@ func _initialize() -> void:
 	await process_frame
 
 	var counts := [0, 0, 0, 0]
-	game.phrase_started.connect(func(_p: String) -> void: counts[3] += 1)
+	game.question_started.connect(func(_p: String) -> void: counts[3] += 1)
 	game.character_succeeded.connect(
 		func(_i: int, _e: String, _c: int) -> void: counts[0] += 1
 	)
 	game.character_failed.connect(
 		func(_i: int, _e: String, _a: String, _c: int) -> void: counts[1] += 1
 	)
-	game.phrase_succeeded.connect(func(_p: String) -> void: counts[2] += 1)
+	game.question_succeeded.connect(func(_p: String) -> void: counts[2] += 1)
 
 	game.start_phrase("a b!")
 	assert(counts[3] == 1)
 	# UFO入場前の入力は受け付けない。
 	input.character_completed.emit(MorseCode.encode("A"), "A")
-	assert(counts[0] == 0 and game.current_character_index == 0)
+	assert(counts[0] == 0 and game._current_character_index == 0)
 	game._on_ufo_entered()
 	input.character_completed.emit(MorseCode.encode("T"), "T")
-	assert(counts[1] == 1 and game.current_character_index == 0)
+	assert(counts[1] == 1 and game._current_character_index == 0)
 	input.character_completed.emit(MorseCode.encode("A"), "A")
-	assert(counts[0] == 1 and game.current_character_index == 2)
+	assert(counts[0] == 1 and game._current_character_index == 2)
 	input.character_completed.emit(MorseCode.encode("B"), "B")
 	assert(counts[2] == 1)
 	assert(
@@ -71,7 +71,7 @@ func _test_game_scene_presentation() -> void:
 	assert((ufo.get("_animation") as Tween).is_valid())
 	# 入場アニメーション中の入力は無視し、entered後に受付を開始する。
 	scene_input.character_completed.emit(MorseCode.encode("A"), "A")
-	assert(scene_game.current_character_index == 0)
+	assert(scene_game._current_character_index == 0)
 	ufo.entered.emit()
 
 	var idle_texture := face.texture
@@ -95,7 +95,7 @@ func _test_game_scene_presentation() -> void:
 	assert((ufo.get("_animation") as Tween).is_valid())
 	# 退場後はJSONから次の問題を出題し、再入場までは入力を止める。
 	ufo.exited.emit()
-	assert(scene_game.phrase in ["HI", "TU", "GJ"])
-	var next_index := scene_game.current_character_index
+	assert(scene_game._question in ["HI", "TU", "GJ"])
+	var next_index := scene_game._current_character_index
 	scene_input.character_completed.emit(MorseCode.encode("T"), "T")
-	assert(scene_game.current_character_index == next_index)
+	assert(scene_game._current_character_index == next_index)

@@ -1,7 +1,7 @@
 class_name MorseGame
 extends Node
 
-const JsonReader := preload("res://questions/json_reader.gd")
+const QuestionLoader := preload("res://questions/question_loader.gd")
 
 const Ufo := preload("res://prefabs/ufo/ufo.gd")
 
@@ -13,10 +13,12 @@ const NeoUniFace := preload("res://prefabs/ui/neo_uni_face.gd")
 
 const MorsePreview := preload("res://prefabs/ui/morse_preview.gd")
 
+const GameTimer := preload("res://prefabs/game_timer.gd")
+
 const QUESTIONS_PATH := "res://questions/questions.json"
 
 ## 新しい問題を開始したことを通知する。
-signal phrase_started(phrase: String)
+signal question_started(question: String)
 
 ## 文字の入力に成功したとき、対象位置・期待した文字・モールス符号を通知する。
 signal character_succeeded(index: int, expected: String, code: int)
@@ -25,28 +27,16 @@ signal character_succeeded(index: int, expected: String, code: int)
 signal character_failed(index: int, expected: String, actual: String, code: int)
 
 ## フレーズ全体の入力に成功したことを通知する。
-signal phrase_succeeded(phrase: String)
-
-## 制限時間が切れたことを通知する。
-signal timed_out
-
-## 画面に表示する残り秒数が変化したことを通知する。
-signal remaining_time_changed(seconds: int)
+signal question_succeeded(question: String)
 
 ## プレイヤーが入力する現在の問題文。
-@export var phrase := "HELLO"
-
-## フレーズ入力に使用できる制限時間（秒）。
-@export_range(1.0, 600.0, 1.0, "suffix:s") var _time_limit := 30.0
+@export var _question := "HELLO"
 
 ## ノードの準備完了時に問題ファイルからランダムに出題するかどうか。
 @export var start_automatically := true
 
-## 現在の残り時間（秒）。
-var _remaining_time := 0.0
-
-## 次に入力すべき [member phrase] 内の文字位置。
-var current_character_index := 0
+## 次に入力すべき [member _question] 内の文字位置。
+var _current_character_index := 0
 
 ## 正解として受理したモールス符号を入力順に保持する。
 var _accepted_codes := PackedByteArray()
@@ -58,10 +48,7 @@ var _running := false
 var _accepting_input := false
 
 ## JSONファイルから問題を取得するリーダー。
-var _question_reader := JsonReader.new(QUESTIONS_PATH)
-
-## 最後に [signal remaining_time_changed] で通知した秒数。
-var _last_displayed_second := -1
+var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
 @export var _morse_input: MorseInput
 
@@ -75,28 +62,32 @@ var _last_displayed_second := -1
 
 @export var _timer_viewer: TimerViewer
 
+@export var _game_timer: GameTimer
+
 ## ゲーム画面を構成する各ノードのシグナルを接続し、最初のフレーズを開始する。
 func _ready() -> void:
 	_connect_game_signals()
 	_connect_input_signals()
 	_connect_ufo_signals()
-	_timer_viewer.set_time_limit(_time_limit)
+	_connect_timer_signals()
+
 	if start_automatically:
 		start_random_question()
+		_game_timer.start()
 
 
 ## ゲーム進行シグナルを、対応する画面演出へ接続する。
 func _connect_game_signals() -> void:
-	phrase_started.connect(_neo_uni_face.set_idle_expression)
-	phrase_started.connect(_question_bubble.on_phrase_started)
-	phrase_started.connect(_ufo.enter_anima)
+	question_started.connect(_neo_uni_face.set_idle_expression)
+	question_started.connect(_question_bubble.on_phrase_started)
+	question_started.connect(_ufo.enter_anima)
 
 	character_succeeded.connect(_question_bubble.advance_character)
 	
 	character_failed.connect(_neo_uni_face.set_failed_expression)
 	
-	phrase_succeeded.connect(_neo_uni_face.set_succeeded_expression)
-	phrase_succeeded.connect(_ufo.exit_anima)
+	question_succeeded.connect(_neo_uni_face.set_succeeded_expression)
+	question_succeeded.connect(_ufo.exit_anima)
 
 
 ## モールス入力シグナルを、ゲーム進行と入力中の画面演出へ接続する。
@@ -119,43 +110,39 @@ func _connect_ufo_signals() -> void:
 	_ufo.exited.connect(_on_ufo_exited)
 
 
-## ゲーム中の残り時間を更新し、表示秒数の変更やタイムアウトを通知する。
-func _process(delta: float) -> void:
-	if not _running:
-		return
-	_remaining_time = maxf(_remaining_time - delta, 0.0)
-	_timer_viewer.update_progress(_remaining_time)
-	var displayed_second := ceili(_remaining_time)
-	if displayed_second != _last_displayed_second:
-		_last_displayed_second = displayed_second
-		remaining_time_changed.emit(displayed_second)
-	if _remaining_time <= 0.0:
-		_running = false
-		_set_input_enabled(false)
-		timed_out.emit()
+## ゲーム内タイマーとのシグナル接続。
+func _connect_timer_signals() -> void:
+	_game_timer.remained_rate_changed.connect(_timer_viewer.update_progress)
+
+	_game_timer.timeout.connect(_on_timed_out)
 
 
-## [param new_phrase] を大文字に正規化し、制限時間と入力状態を初期化してゲームを開始する。
+## 問題文を大文字に正規化し、制限時間と入力状態を初期化してゲームを開始する。
 ## モールス符号へ変換できない文字は入力対象から除外する。
-func start_phrase(new_phrase: String) -> void:
-	phrase = new_phrase.to_upper()
-	current_character_index = 0
+func start_phrase(new_question: String) -> void:
+	_question = new_question.to_upper()
+
+	_current_character_index = 0
+	
 	_accepted_codes.clear()
-	_remaining_time = _time_limit
-	_last_displayed_second = ceili(_remaining_time)
+	
 	_morse_input.reset()
+
 	_set_input_enabled(false)
+
 	_running = true
-	remaining_time_changed.emit(_last_displayed_second)
+	
 	_skip_unmapped_characters()
-	phrase_started.emit(phrase)
-	if current_character_index >= phrase.length():
+	
+	question_started.emit(_question)
+
+	if _current_character_index >= _question.length():
 		_finish_phrase()
 
 
 ## 問題ファイルからランダムに1問取得して開始する。
 func start_random_question() -> void:
-	var question: String = _question_reader.get_random_question()
+	var question := _question_loader.get_random_question()
 	if question.is_empty():
 		return
 	start_phrase(question)
@@ -173,6 +160,12 @@ func _on_ufo_exited() -> void:
 	start_random_question()
 
 
+## ゲーム終了時の処理。
+func _on_timed_out() -> void:
+	_running = false
+	_set_input_enabled(false)
+
+
 ## 正解として受理済みのモールス符号のコピーを返す。
 ## 戻り値を変更しても内部の記録には影響しない。
 func get_accepted_codes() -> PackedByteArray:
@@ -183,25 +176,25 @@ func get_accepted_codes() -> PackedByteArray:
 func _on_character_completed(code: int, actual: String) -> void:
 	if not _running or not _accepting_input:
 		return
-	var expected := phrase.substr(current_character_index, 1)
+	var expected := _question.substr(_current_character_index, 1)
 	if actual == expected:
-		var completed_index := current_character_index
+		var completed_index := _current_character_index
 		_accepted_codes.append(code)
-		current_character_index += 1
+		_current_character_index += 1
 		character_succeeded.emit(completed_index, expected, code)
 		_skip_unmapped_characters()
-		if current_character_index >= phrase.length():
+		if _current_character_index >= _question.length():
 			_finish_phrase()
 	else:
-		character_failed.emit(current_character_index, expected, actual, code)
+		character_failed.emit(_current_character_index, expected, actual, code)
 
 
 ## 現在位置から、モールス符号へ変換可能な次の文字まで読み飛ばす。
 func _skip_unmapped_characters() -> void:
-	while current_character_index < phrase.length():
-		if MorseCode.can_encode(phrase.substr(current_character_index, 1)):
+	while _current_character_index < _question.length():
+		if MorseCode.can_encode(_question.substr(_current_character_index, 1)):
 			break
-		current_character_index += 1
+		_current_character_index += 1
 
 
 ## 入力受付を終了し、フレーズ全体の成功を通知する。
@@ -210,7 +203,7 @@ func _finish_phrase() -> void:
 		return
 	_running = false
 	_set_input_enabled(false)
-	phrase_succeeded.emit(phrase)
+	question_succeeded.emit(_question)
 
 
 ## モールス入力ノードとゲーム側の入力受付状態を同時に更新する。
