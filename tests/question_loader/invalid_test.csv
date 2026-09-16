@@ -1,0 +1,6 @@
+question, difficulty
+"valid", 1
+"too", 2, "many"
+"", 1
+"not integer", hard
+"also valid", 2
