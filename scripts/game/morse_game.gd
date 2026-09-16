@@ -1,7 +1,7 @@
 class_name MorseGame
 extends Node
 
-const JsonReader := preload("res://questions/json_reader.gd")
+const QuestionLoader := preload("res://questions/question_loader.gd")
 
 const Ufo := preload("res://prefabs/ufo/ufo.gd")
 
@@ -48,7 +48,7 @@ var _running := false
 var _accepting_input := false
 
 ## JSONファイルから問題を取得するリーダー。
-var _question_reader := JsonReader.new(QUESTIONS_PATH)
+var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
 @export var _morse_input: MorseInput
 
@@ -142,7 +142,7 @@ func start_phrase(new_question: String) -> void:
 
 ## 問題ファイルからランダムに1問取得して開始する。
 func start_random_question() -> void:
-	var question := _question_reader.get_random_question()
+	var question := _question_loader.get_random_question()
 	if question.is_empty():
 		return
 	start_phrase(question)
