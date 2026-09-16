@@ -4,15 +4,15 @@ extends SceneTree
 const QuestionLoader := preload("res://questions/question_loader.gd")
 
 
-const JSON_PATH := "res://tests/question_loader/test.json"
+const CSV_PATH := "res://tests/question_loader/test.csv"
 
 
 func _init() -> void:
 	var runner := TestRunner.new(true)
 
-	runner.change_test_name("json read test")
+	runner.change_test_name("csv read test")
 
-	var question_loader := QuestionLoader.new(JSON_PATH)
+	var question_loader := QuestionLoader.new(CSV_PATH)
 
 	var level_1_questions := question_loader.get_questions_by_difficulty(1)
 	runner.assert_equal(level_1_questions.size(), 2, "読み込み数が一致することを確認")

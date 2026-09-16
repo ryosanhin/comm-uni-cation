@@ -19,46 +19,30 @@ func _load_file() -> void:
 	var file := FileAccess.open(_path, FileAccess.READ)
 
 	if file == null:
-		push_error("問題文ファイルを開けませんでした: %s" % _path)
-		return
-
-	var json_text := file.get_as_text()
-	var parsed: Variant = JSON.parse_string(json_text)
-
-	if parsed == null:
-		push_error("JSONの解析に失敗しました: %s" % _path)
-		return
-
-	if not parsed is Array:
-		push_error("JSONのルートは配列である必要があります")
-		return
-	
-	for item: Variant in parsed:
-		if not item is Dictionary:
-			push_warning("Dictionaryではないデータを無視しました")
-			continue
-
-		var data: Dictionary = item
-
-		if not data.has("question") or not data.has("difficulty"):
-			push_warning("必要な項目がないデータを無視しました")
-			continue
-
-		if not data["question"] is String:
-			push_warning("textがStringではないデータを無視しました")
-			continue
-
-		# String.to_float() を利用してパースしているらしいのでflaotで受ける
-		if not data["difficulty"] is float:
-			push_warning("difficultyが数値ではないデータを無視しました")
-			continue
-
-		var question := QuestionData.new(
-				data["question"],
-				int(data["difficulty"])
+		push_error(
+				"問題文ファイル %s を開けませんでした: %s"
+				% [
+						_path,
+						FileAccess.get_open_error(),
+				]
 		)
+		return
 
-		_questions.append(question)
+	_load_csv(file, true)
+
+
+func _load_csv(csv_file: FileAccess, skip_header: bool) -> void:
+	var length := csv_file.get_length()
+
+	# ヘッダー行をここで読み込み
+	if skip_header:
+		csv_file.get_csv_line()
+
+	while csv_file.get_position() < length:
+		var elements := csv_file.get_csv_line()
+		_questions.append(
+				QuestionData.new(elements[0], int(elements[1]))
+		)
 
 
 ## 全部の問題を取得
