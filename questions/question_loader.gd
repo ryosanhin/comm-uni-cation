@@ -60,19 +60,19 @@ func _load_csv(csv_file: FileAccess, skip_header: bool) -> void:
 func _is_valid_row(elements: PackedStringArray, line_number: int) -> bool:
 	if elements.size() != 2:
 		push_warning(
-				"問題文ファイルの%d行目は列数が2ではないため、スキップします" % line_number
+				"%s %d行目は列数が2ではないため、スキップします" % [_path, line_number]
 		)
 		return false
 
 	if elements[0].strip_edges().is_empty():
 		push_warning(
-				"問題文ファイルの%d行目は問題文が空のため、スキップします" % line_number
+				"%s %d行目は問題文が空のため、スキップします" % [_path, line_number]
 		)
 		return false
 
 	if not elements[1].strip_edges().is_valid_int():
 		push_warning(
-				"問題文ファイルの%d行目は難易度が整数ではないため、スキップします" % line_number
+				"%s %d行目は難易度が整数ではないため、スキップします" % [_path, line_number]
 		)
 		return false
 
