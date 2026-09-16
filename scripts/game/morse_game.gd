@@ -120,7 +120,7 @@ func _connect_timer_signals() -> void:
 ## 問題文を大文字に正規化し、制限時間と入力状態を初期化してゲームを開始する。
 ## モールス符号へ変換できない文字は入力対象から除外する。
 func start_phrase(new_question: String) -> void:
-	_question = new_question
+	_question = new_question.to_upper()
 
 	_current_character_index = 0
 	
