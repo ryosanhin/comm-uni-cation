@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://dblrjcv0o5yug" path="res://prefabs/ui/morse_table_theme.tres" id="1_534hg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_534hg"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0, 0, 0, 0.6)
 corner_radius_top_left = 32
 corner_radius_top_right = 32
 corner_radius_bottom_right = 32

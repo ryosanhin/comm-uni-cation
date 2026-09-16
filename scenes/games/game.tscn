@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dfr0rerref50d"]
 
+[ext_resource type="PackedScene" uid="uid://0pcndmf2cb17" path="res://prefabs/background_effects.tscn" id="1_fnns2"]
 [ext_resource type="Script" uid="uid://bnc685xo3i2rq" path="res://scripts/game/morse_game.gd" id="2_m6dsl"]
 [ext_resource type="PackedScene" uid="uid://b2pgn0tpo4j3r" path="res://prefabs/ui/neo_uni_face.tscn" id="3_g0u26"]
 [ext_resource type="PackedScene" uid="uid://c0k15ylu03oqn" path="res://prefabs/ui/question_bubble.tscn" id="4_fnns2"]
@@ -17,6 +18,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=418659351]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.065, 0.076666676, 0.1, 1)
+
+[node name="BackgroundEffects" parent="." unique_id=1314752437 instance=ExtResource("1_fnns2")]
+position = Vector2(960, -270)
+rotation = 0.2617994
+scale = Vector2(0.99999994, 0.99999994)
+visibility_rect = Rect2(-100, -100, 200, 480)
 
 [node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer")]
 script = ExtResource("2_m6dsl")

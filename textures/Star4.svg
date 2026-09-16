@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     stroke-linecap="round"
+     id="レイヤー_2">
+    <path
+       d="M 128,0 144,112 256,128 144,144 128,256 112,144 0,128 112,112 Z"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="1"
+       stroke-opacity="1"
+       stroke-linejoin="miter"
+       id="path1"
+       style="fill:#ffffff;fill-opacity:1" />
+  </g>
+</svg>
