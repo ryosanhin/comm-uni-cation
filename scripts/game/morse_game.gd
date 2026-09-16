@@ -15,7 +15,7 @@ const MorsePreview := preload("res://prefabs/ui/morse_preview.gd")
 
 const GameTimer := preload("res://prefabs/game_timer.gd")
 
-const QUESTIONS_PATH := "res://questions/questions.json"
+const QUESTIONS_PATH := "res://questions/questions.csv"
 
 ## 新しい問題を開始したことを通知する。
 signal question_started(question: String)
