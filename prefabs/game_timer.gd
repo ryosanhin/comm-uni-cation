@@ -11,6 +11,7 @@ var _reciprocal: float
 
 func _ready() -> void:
 	_reciprocal = 1.0 / wait_time
+	timeout.connect(_on_timeout)
 
 
 func _process(delta: float) -> void:
@@ -26,3 +27,8 @@ func start_timer() -> void:
 
 func stop_timer() -> void:
 	stop()
+
+
+func _on_timeout() -> void:
+	remained_time_changed.emit(0.0)
+	remained_rate_changed.emit(0.0)
