@@ -4,7 +4,7 @@ extends SceneTree
 const QuestionLoader := preload("res://questions/question_loader.gd")
 
 
-const JSON_PATH := "res://tests/json_reader/test.json"
+const JSON_PATH := "res://tests/question_loader/test.json"
 
 
 func _init() -> void:
