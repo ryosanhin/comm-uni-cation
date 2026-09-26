@@ -1,6 +1,8 @@
 extends CanvasLayer
 class_name TransitionController
 
+const TransitionEnums := preload("transition_enums.gd")
+
 @export var _transition_database: TransitionDatabase
 
 @onready var _transition_rect: CanvasItem = $Screen

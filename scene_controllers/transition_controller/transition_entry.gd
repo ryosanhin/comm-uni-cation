@@ -1,5 +1,4 @@
 extends Resource
-class_name TransitionData
 
 @export var _transition_texture: Texture2D
 var transition_texture: Texture2D:

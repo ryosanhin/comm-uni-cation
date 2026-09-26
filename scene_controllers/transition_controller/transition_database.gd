@@ -1,10 +1,13 @@
 extends Resource
-class_name TransitionDatabase
 
-@export var _data_dict: Dictionary[TransitionEnums.Id, TransitionData] = {}
+const TransitionEntry := preload("transition_entry.gd")
+const TransitionEnums := preload("transition_enums.gd")
 
-func get_transition_data(id: TransitionEnums.Id) -> TransitionData:
+@export var _data_dict: Dictionary[TransitionEnums.Id, TransitionEntry] = {}
+
+
+func get_transition_data(id: TransitionEnums.Id) -> TransitionEntry:
 	if not _data_dict.has(id):
-		push_error("TransitionDataが登録されていません:", id)
+		push_error("TransitionEntryが登録されていません:", id)
 		return null
 	return _data_dict[id]
