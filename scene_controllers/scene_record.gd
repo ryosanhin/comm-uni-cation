@@ -1,6 +1,6 @@
 extends Resource
-class_name SceneDatabase
 
+const SceneEntry := preload("scene_entry.gd")
 const SceneEnums := preload("scene_enums.gd")
 
 @export var _data_dict: Dictionary[SceneEnums.Id, SceneData] = {}

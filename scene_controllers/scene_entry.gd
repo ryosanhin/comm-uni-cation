@@ -1,5 +1,4 @@
 extends Resource
-class_name SceneData
 
 @export var scene: PackedScene
 
