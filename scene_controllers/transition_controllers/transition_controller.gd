@@ -2,8 +2,9 @@ extends CanvasLayer
 class_name TransitionController
 
 const TransitionEnums := preload("transition_enums.gd")
+const TransitionRecord := preload("transition_record.gd")
 
-@export var _transition_database: TransitionDatabase
+@export var _transition_record: TransitionRecord
 
 @onready var _transition_rect: CanvasItem = $Screen
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	_set_value(0.0)
 	_transition_rect.hide()
 	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 
 ## 画面を覆う
 func fade_in(
@@ -47,15 +49,15 @@ func fade_out(
 
 
 func _try_apply_transition(transition_id: TransitionEnums.Id) -> bool:
-	var data := _transition_database.get_transition_data(transition_id)
+	var entry := _transition_record.get_transition_data(transition_id)
 
-	if data == null:
+	if entry == null:
 		return false
 
-	_transition_rect.color = data.color
+	_transition_rect.color = entry.color
 	_material.set_shader_parameter(
 		TEXTURE_PARAMETER,
-		data.transition_texture,
+		entry.transition_texture,
 	)
 
 	return true
