@@ -1,4 +1,5 @@
 extends Resource
+class_name TransitionEntry
 
 @export var transition_texture: Texture2D
 
