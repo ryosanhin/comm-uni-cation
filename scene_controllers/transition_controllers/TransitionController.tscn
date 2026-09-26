@@ -22,9 +22,9 @@ metadata/_custom_type_script = "uid://dtbr6b2s0s0ni"
 layer = 10
 script = ExtResource("1_ttngc")
 _transition_database = SubResource("Resource_3lbhi")
-_material = ExtResource("5_komds")
 
 [node name="Screen" type="ColorRect" parent="." unique_id=1588009999]
+material = ExtResource("5_komds")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

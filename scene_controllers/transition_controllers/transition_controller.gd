@@ -8,13 +8,29 @@ const TransitionRecord := preload("transition_record.gd")
 
 @onready var _transition_rect: CanvasItem = $Screen
 
-@export var _material: ShaderMaterial
+var _material: ShaderMaterial
 
 const VALUE_PARAMETER := &"Value"
 const TEXTURE_PARAMETER := &"Texture"
 
 
 func _ready() -> void:
+	var screen_material := _transition_rect.material
+
+	if screen_material == null:
+		push_error("Transition material is not set on node: %s" % _transition_rect.get_path())
+		return
+
+	if not screen_material is ShaderMaterial:
+		push_error("Transition material on node %s must be a ShaderMaterial, but is %s." % [
+			_transition_rect.get_path(),
+			screen_material.get_class(),
+		])
+		return
+
+	_material = screen_material.duplicate() as ShaderMaterial
+	_transition_rect.material = _material
+
 	_set_value(0.0)
 	_transition_rect.hide()
 	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
