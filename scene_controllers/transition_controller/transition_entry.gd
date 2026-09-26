@@ -1,11 +1,5 @@
 extends Resource
 
-@export var _transition_texture: Texture2D
-var transition_texture: Texture2D:
-	get:
-		return _transition_texture
+@export var transition_texture: Texture2D
 
-@export var _color: Color = Color.BLACK
-var color: Color = Color.BLACK:
-	get:
-		return _color
+@export var color: Color = Color.BLACK
