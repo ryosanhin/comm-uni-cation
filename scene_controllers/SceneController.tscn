@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://c6ojebng4wh2q"]
 
 [ext_resource type="Script" uid="uid://ckf2nysesvg0n" path="res://scene_controllers/scene_controller.gd" id="1_8ud1m"]
-[ext_resource type="Resource" uid="uid://bxrwuj80pqpyk" path="res://scene_controllers/scene_registry.tres" id="2_nm7ms"]
 [ext_resource type="PackedScene" uid="uid://5g76jo52k41h" path="res://scene_controllers/transition_controllers/TransitionController.tscn" id="5_u6fx1"]
 
 [node name="SceneController" type="Node" unique_id=399287393 node_paths=PackedStringArray("_transition_controller")]
