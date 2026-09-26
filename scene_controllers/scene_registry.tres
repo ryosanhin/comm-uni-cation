@@ -1,0 +1,7 @@
+[gd_resource type="Resource" format=3 uid="uid://bxrwuj80pqpyk"]
+
+[ext_resource type="Script" uid="uid://cj45pwnltmtx2" path="res://scene_controllers/scene_entry.gd" id="1_mq74y"]
+[ext_resource type="Script" uid="uid://b7l1p8ihxm55s" path="res://scene_controllers/scene_registry.gd" id="2_qqkfr"]
+
+[resource]
+script = ExtResource("2_qqkfr")
