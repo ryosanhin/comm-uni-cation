@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b64b7st4u7wb6"]
+
+[ext_resource type="Shader" uid="uid://c3k46pck7wpp6" path="res://managers/scene_controllers/materials/transition_shader.tres" id="1_kfklf"]
+
+[resource]
+shader = ExtResource("1_kfklf")
+shader_parameter/Value = 0.0
