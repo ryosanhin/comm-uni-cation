@@ -1,4 +1,7 @@
 extends Resource
+class_name SceneEntry
+
+const SceneEnums := preload("scene_enums.gd")
 
 @export var scene: PackedScene
 
