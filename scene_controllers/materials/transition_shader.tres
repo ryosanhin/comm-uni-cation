@@ -30,10 +30,11 @@ operator = 1
 [resource]
 mode = 1
 flags/light_only = false
+preview_params/Value = "0.0"
 nodes/vertex/0/position = Vector2(1066.6666, 493.33334)
 nodes/fragment/0/position = Vector2(840, 213.33333)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_m2uxm")
-nodes/fragment/2/position = Vector2(-373.33334, 573.3333)
+nodes/fragment/2/position = Vector2(-426.66666, 573.3333)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatOp_a21q6")
 nodes/fragment/3/position = Vector2(-64.33817, 604.2045)
 nodes/fragment/4/node = SubResource("VisualShaderNodeVectorDecompose_dyxr3")

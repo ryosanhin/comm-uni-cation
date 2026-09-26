@@ -7,8 +7,8 @@ class_name TransitionController
 
 @export var _material: ShaderMaterial
 
-const VALUE_PARAMETER: StringName = &"Value"
-const TEXTURE_PARAMETER: StringName = &"Texture"
+const VALUE_PARAMETER := &"Value"
+const TEXTURE_PARAMETER := &"Texture"
 
 
 func _ready() -> void:

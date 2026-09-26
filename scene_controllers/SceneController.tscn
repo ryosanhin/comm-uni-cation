@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://c6ojebng4wh2q"]
 
-[ext_resource type="Script" uid="uid://ckf2nysesvg0n" path="res://managers/scene_controllers/scene_controller.gd" id="1_8ud1m"]
-[ext_resource type="Resource" uid="uid://dh4taq0d4dtjd" path="res://resoureces_scripts/scene_datas/scene_database.tres" id="2_tycre"]
-[ext_resource type="PackedScene" uid="uid://5g76jo52k41h" path="res://managers/scene_controllers/transition_controller/TransitionController.tscn" id="5_u6fx1"]
+[ext_resource type="Script" uid="uid://ckf2nysesvg0n" path="res://scene_controllers/scene_controller.gd" id="1_8ud1m"]
+[ext_resource type="PackedScene" uid="uid://5g76jo52k41h" path="res://scene_controllers/transition_controller/TransitionController.tscn" id="5_u6fx1"]
 
 [node name="SceneController" type="Node" unique_id=399287393]
 script = ExtResource("1_8ud1m")
-_scene_database = ExtResource("2_tycre")
 
 [node name="TransitionController" parent="." unique_id=864892429 instance=ExtResource("5_u6fx1")]
