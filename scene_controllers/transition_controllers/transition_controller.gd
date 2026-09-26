@@ -22,10 +22,13 @@ func _ready() -> void:
 		return
 
 	if not screen_material is ShaderMaterial:
-		push_error("Transition material on node %s must be a ShaderMaterial, but is %s." % [
-			_transition_rect.get_path(),
-			screen_material.get_class(),
-		])
+		push_error(
+				"Transition material on node %s must be a ShaderMaterial, but is %s."
+				% [
+					_transition_rect.get_path(),
+					screen_material.get_class(),
+				]
+		)
 		return
 
 	_material = screen_material.duplicate() as ShaderMaterial
