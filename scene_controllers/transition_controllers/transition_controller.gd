@@ -2,9 +2,9 @@ extends CanvasLayer
 class_name TransitionController
 
 const TransitionEnums := preload("transition_enums.gd")
-const TransitionRecord := preload("transition_record.gd")
+const TransitionRegistry := preload("transition_registry.gd")
 
-@export var _transition_record: TransitionRecord
+@export var _transition_registry: TransitionRegistry
 
 @onready var _transition_rect: CanvasItem = $Screen
 
@@ -68,7 +68,7 @@ func fade_out(
 
 
 func _try_apply_transition(transition_id: TransitionEnums.Id) -> bool:
-	var entry := _transition_record.get_entry(transition_id)
+	var entry := _transition_registry.get_entry(transition_id)
 
 	if entry == null:
 		return false
