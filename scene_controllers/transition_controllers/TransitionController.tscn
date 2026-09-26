@@ -1,27 +1,12 @@
 [gd_scene format=3 uid="uid://5g76jo52k41h"]
 
-[ext_resource type="Script" uid="uid://t2ov1eh6fxf4" path="res://scene_controllers/transition_controller/transition_controller.gd" id="1_ttngc"]
-[ext_resource type="Script" uid="uid://dp3l4t1cd1kto" path="res://scene_controllers/transition_controller/transition_data.gd" id="2_f2hgp"]
-[ext_resource type="Texture2D" uid="uid://b5di8i75ivcao" path="res://scene_controllers/materials/circle_fade.png" id="3_cxgyg"]
-[ext_resource type="Script" uid="uid://dtbr6b2s0s0ni" path="res://scene_controllers/transition_controller/transition_database.gd" id="3_lksta"]
+[ext_resource type="Script" uid="uid://t2ov1eh6fxf4" path="res://scene_controllers/transition_controllers/transition_controller.gd" id="1_ttngc"]
 [ext_resource type="Material" uid="uid://b64b7st4u7wb6" path="res://scene_controllers/materials/transition.tres" id="5_komds"]
 
-[sub_resource type="Resource" id="Resource_53k3j"]
-script = ExtResource("2_f2hgp")
-_transition_texture = ExtResource("3_cxgyg")
-metadata/_custom_type_script = "uid://dp3l4t1cd1kto"
-
-[sub_resource type="Resource" id="Resource_3lbhi"]
-script = ExtResource("3_lksta")
-_data_dict = Dictionary[int, ExtResource("2_f2hgp")]({
-0: SubResource("Resource_53k3j")
-})
-metadata/_custom_type_script = "uid://dtbr6b2s0s0ni"
-
-[node name="TransitionController" type="CanvasLayer" unique_id=864892429]
+[node name="TransitionController" type="CanvasLayer" unique_id=864892429 node_paths=PackedStringArray("_transition_rect")]
 layer = 10
 script = ExtResource("1_ttngc")
-_transition_database = SubResource("Resource_3lbhi")
+_transition_rect = NodePath("Screen")
 
 [node name="Screen" type="ColorRect" parent="." unique_id=1588009999]
 material = ExtResource("5_komds")

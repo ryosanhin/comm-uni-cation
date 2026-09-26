@@ -6,7 +6,7 @@ const TransitionRegistry := preload("transition_registry.gd")
 
 @export var _transition_registry: TransitionRegistry
 
-@onready var _transition_rect: CanvasItem = $Screen
+@export var _transition_rect: CanvasItem
 
 var _material: ShaderMaterial
 
@@ -16,20 +16,6 @@ const TEXTURE_PARAMETER := &"Texture"
 
 func _ready() -> void:
 	var screen_material := _transition_rect.material
-
-	if screen_material == null:
-		push_error("Transition material is not set on node: %s" % _transition_rect.get_path())
-		return
-
-	if not screen_material is ShaderMaterial:
-		push_error(
-				"Transition material on node %s must be a ShaderMaterial, but is %s."
-				% [
-					_transition_rect.get_path(),
-					screen_material.get_class(),
-				]
-		)
-		return
 
 	_material = screen_material.duplicate() as ShaderMaterial
 	_transition_rect.material = _material
@@ -41,8 +27,8 @@ func _ready() -> void:
 
 ## 画面を覆う
 func fade_in(
-	transition_id: TransitionEnums.Id,
-	duration: float,
+		transition_id: TransitionEnums.Id,
+		duration: float,
 ) -> void:
 	if not _try_apply_transition(transition_id):
 		return
@@ -55,8 +41,8 @@ func fade_in(
 
 ## 画面を表示状態へ戻す
 func fade_out(
-	transition_id: TransitionEnums.Id,
-	duration: float,
+		transition_id: TransitionEnums.Id,
+		duration: float,
 ) -> void:
 	if not _try_apply_transition(transition_id):
 		return
@@ -75,17 +61,17 @@ func _try_apply_transition(transition_id: TransitionEnums.Id) -> bool:
 
 	_transition_rect.color = entry.color
 	_material.set_shader_parameter(
-		TEXTURE_PARAMETER,
-		entry.transition_texture,
+			TEXTURE_PARAMETER,
+			entry.transition_texture,
 	)
 
 	return true
 
 
 func _animate(
-	from_value: float,
-	to_value: float,
-	duration: float
+		from_value: float,
+		to_value: float,
+		duration: float
 ) -> void:
 	_set_value(from_value)
 
@@ -96,10 +82,10 @@ func _animate(
 	var tween := create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_method(
-		_set_value,
-		from_value,
-		to_value,
-		duration
+			_set_value,
+			from_value,
+			to_value,
+			duration
 	)
 
 	await tween.finished
@@ -107,6 +93,6 @@ func _animate(
 
 func _set_value(value: float) -> void:
 	_material.set_shader_parameter(
-		VALUE_PARAMETER,
-		clampf(value, 0.0, 1.0),
+			VALUE_PARAMETER,
+			clampf(value, 0.0, 1.0),
 	)
