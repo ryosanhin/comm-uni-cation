@@ -1,6 +1,5 @@
 extends Resource
 
-const TransitionEntry := preload("transition_entry.gd")
 const TransitionEnums := preload("transition_enums.gd")
 
 @export var _entries: Dictionary[TransitionEnums.Id, TransitionEntry] = {}
