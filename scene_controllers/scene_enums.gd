@@ -1,5 +1,4 @@
 extends RefCounted
-class_name SceneEnums
 
 enum Type {
 	PERSISTENT,

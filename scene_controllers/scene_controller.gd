@@ -1,5 +1,8 @@
 extends Node
 
+const SceneEnums := preload("scene_enums.gd")
+const TransitionEnums := preload("transition_controllers/transition_enums.gd")
+
 signal scene_change_started(scene_id: SceneEnums.Id)
 signal scene_changed(scene_id: SceneEnums.Id)
 
