@@ -68,7 +68,7 @@ func fade_out(
 
 
 func _try_apply_transition(transition_id: TransitionEnums.Id) -> bool:
-	var entry := _transition_record.get_transition_data(transition_id)
+	var entry := _transition_record.get_entry(transition_id)
 
 	if entry == null:
 		return false
