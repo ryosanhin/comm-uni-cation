@@ -47,16 +47,8 @@ func change_main_scene(
 	scene_id: SceneEnums.Id,
 	transition_id: TransitionEnums.Id
 ) -> void:
-	if _is_changing:
-		return
-
-	if is_loaded(scene_id):
-		return
-
-	var data := _scene_database.get_scene_data(scene_id)
-
-	if data == null or data.scene == null:
-		push_error("切り替え先のPackedSceneが設定されていません")
+	var entry := _validate_change_request(scene_id)
+	if entry == null:
 		return
 
 	_is_changing = true
@@ -67,19 +59,55 @@ func change_main_scene(
 		_transition_duration
 	)
 
-	var next_scene := data.scene.instantiate()
+	var next_scene := _instantiate_scene(entry)
 
 	if next_scene == null:
-		push_error("シーンの生成に失敗しました")
-
 		await _transition_controller.fade_out(
 			transition_id,
 			_transition_duration
 		)
 
-		_is_changing = false
+		_reset_change_state()
 		return
 
+	await _replace_main_scene(next_scene)
+
+	await _transition_controller.fade_out(
+		transition_id,
+		_transition_duration
+	)
+
+	_reset_change_state()
+	_complete_scene_change(scene_id, next_scene)
+
+
+## シーン切り替えリクエストを検証し、切り替え先のエントリーを返す。
+func _validate_change_request(scene_id: SceneEnums.Id) -> SceneData:
+	if _is_changing or scene_id == _current_main_scene:
+		return null
+
+	var entry := _scene_database.get_scene_data(scene_id)
+	if entry == null:
+		return null
+
+	if entry.scene == null:
+		push_error("切り替え先のPackedSceneが設定されていません")
+		return null
+
+	return entry
+
+
+## PackedSceneから切り替え先のノードを生成する。
+func _instantiate_scene(entry: SceneData) -> Node:
+	var next_scene := entry.scene.instantiate()
+	if next_scene == null:
+		push_error("シーンの生成に失敗しました")
+
+	return next_scene
+
+
+## 現在のメインシーンを解放し、切り替え先のノードに入れ替える。
+func _replace_main_scene(next_scene: Node) -> void:
 	for current_scene: Node in _main_scenes.get_children():
 		_main_scenes.remove_child(current_scene)
 		current_scene.queue_free()
@@ -89,15 +117,17 @@ func change_main_scene(
 	# add_child()によって_readyまで完了した後、次のフレームまで待って遷移を再開する。
 	await get_tree().process_frame
 
+
+## シーン切り替えの完了を記録し、通知する。
+func _complete_scene_change(scene_id: SceneEnums.Id, next_scene: Node) -> void:
+	assert(next_scene.get_parent() == _main_scenes)
 	_current_main_scene = scene_id
-
-	await _transition_controller.fade_out(
-		transition_id,
-		_transition_duration
-	)
-
-	_is_changing = false
 	scene_changed.emit(scene_id)
+
+
+## シーン切り替え中の状態を解除する。
+func _reset_change_state() -> void:
+	_is_changing = false
 
 
 ## 注入先から非同期のシーン切り替えを開始するための同期ラッパー。
