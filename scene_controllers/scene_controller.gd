@@ -40,14 +40,14 @@ func is_loaded(scene_id: SceneEnums.Id) -> bool:
 
 
 ## シーン切り替え[br]
-##[param scene_id]: シーンのID[br]
-##[param transitino_id]: 遷移エフェクトのID[br]
+## [param scene_id]: シーンのID[br]
+## [param transitino_id]: 遷移エフェクトのID[br]
 ## returns: await 可能
 func change_main_scene(
 	scene_id: SceneEnums.Id,
 	transition_id: TransitionEnums.Id
 ) -> void:
-	var entry := _validate_change_request(scene_id)
+	var entry := _resolve_scene_entry(scene_id)
 	if entry == null:
 		return
 
@@ -82,7 +82,7 @@ func change_main_scene(
 
 
 ## シーン切り替えリクエストを検証し、切り替え先のエントリーを返す。
-func _validate_change_request(scene_id: SceneEnums.Id) -> SceneData:
+func _resolve_scene_entry(scene_id: SceneEnums.Id) -> SceneData:
 	if _is_changing or scene_id == _current_main_scene:
 		return null
 
