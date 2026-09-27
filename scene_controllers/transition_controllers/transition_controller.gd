@@ -6,7 +6,7 @@ const TransitionRegistry := preload("transition_registry.gd")
 
 @export var _transition_registry: TransitionRegistry
 
-@export var _transition_rect: CanvasItem
+@export var _transition_rect: ColorRect
 
 var _material: ShaderMaterial
 

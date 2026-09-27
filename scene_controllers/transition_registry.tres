@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TransitionRegistry" format=3 uid="uid://ci8co3kqucar7"]
+[gd_resource type="Resource" format=3 uid="uid://ci8co3kqucar7"]
 
 [ext_resource type="Script" uid="uid://dp3l4t1cd1kto" path="res://scene_controllers/transition_controllers/transition_entry.gd" id="1_2fd48"]
 [ext_resource type="Script" uid="uid://dtbr6b2s0s0ni" path="res://scene_controllers/transition_controllers/transition_registry.gd" id="2_br8o3"]
