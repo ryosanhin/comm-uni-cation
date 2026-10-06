@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://rfsi4rkc2dw6"]
+
+[ext_resource type="PackedScene" uid="uid://c6ojebng4wh2q" path="res://scene_controllers/scene_controller.tscn" id="1_5634n"]
+
+[node name="Core" type="Node" unique_id=699256158]
+
+[node name="SceneController" parent="." unique_id=399287393 node_paths=PackedStringArray("_main_scenes_root") instance=ExtResource("1_5634n")]
+_main_scenes_root = NodePath("../MainScenes")
+
+[node name="MainScenes" type="Node" parent="." unique_id=2103955942]

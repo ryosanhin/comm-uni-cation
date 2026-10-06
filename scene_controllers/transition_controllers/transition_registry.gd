@@ -1,4 +1,5 @@
 extends Resource
+class_name TransitionRegistry
 
 const TransitionEnums := preload("transition_enums.gd")
 

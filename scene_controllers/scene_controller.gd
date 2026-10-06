@@ -1,7 +1,9 @@
 extends Node
+class_name SceneController
 
 const SceneEnums := preload("scene_enums.gd")
 const SceneRegistry := preload("scene_registry.gd")
+const TransitionController := preload("transition_controllers/transition_controller.gd")
 const TransitionEnums := preload("transition_controllers/transition_enums.gd")
 
 signal scene_change_started(scene_id: SceneEnums.Id)

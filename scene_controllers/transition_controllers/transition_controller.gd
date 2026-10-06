@@ -1,5 +1,4 @@
 extends CanvasLayer
-class_name TransitionController
 
 const TransitionEnums := preload("transition_enums.gd")
 const TransitionRegistry := preload("transition_registry.gd")
