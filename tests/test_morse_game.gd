@@ -53,6 +53,7 @@ func _test_game_scene_presentation() -> void:
 	var game_scene := (
 		load("res://scenes/games/game.tscn") as PackedScene
 	).instantiate()
+	game_scene.get_node("MorseGame").start_automatically = false
 	root.add_child(game_scene)
 	await process_frame
 
@@ -63,7 +64,7 @@ func _test_game_scene_presentation() -> void:
 	)
 	var face: TextureRect = game_scene.get_node("NeoUniFace")
 	var ufo: Sprite2D = game_scene.get_node("Ufo")
-	var preview: LineEdit = game_scene.get_node("MorsePreview/LineEdit")
+	var preview: LineEdit = game_scene.get_node("MorsePreview/MarginContainer/LineEdit")
 
 	scene_game.start_phrase("AB")
 	assert(label.text.contains("[font_size=72]A[/font_size]"))
@@ -93,9 +94,9 @@ func _test_game_scene_presentation() -> void:
 	scene_input.character_completed.emit(MorseCode.encode("B"), "B")
 	assert(face.texture != failed_texture)
 	assert((ufo.get("_animation") as Tween).is_valid())
-	# 退場後はJSONから次の問題を出題し、再入場までは入力を止める。
+	# 退場後はCSVから次の問題を出題し、再入場までは入力を止める。
 	ufo.exited.emit()
-	assert(scene_game._question in ["HI", "TU", "GJ"])
+	assert(scene_game._question.to_lower() in scene_game._question_loader.get_all_questions())
 	var next_index := scene_game._current_character_index
 	scene_input.character_completed.emit(MorseCode.encode("T"), "T")
 	assert(scene_game._current_character_index == next_index)

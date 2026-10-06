@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://bc57yj6qhmrl7" path="res://prefabs/ui/timer_viewer.tscn" id="8_g0u26"]
 [ext_resource type="PackedScene" uid="uid://dhulmwgboiadd" path="res://prefabs/ui/morse_preview.tscn" id="8_m6dsl"]
 [ext_resource type="PackedScene" uid="uid://yn33odljy8sf" path="res://prefabs/game_timer.tscn" id="9_g0u26"]
+[ext_resource type="PackedScene" uid="uid://duan6gdlf7ojk" path="res://prefabs/ui/count_down_animation.tscn" id="10_start"]
+[ext_resource type="PackedScene" uid="uid://bl5bvn5ntoh5i" path="res://prefabs/ui/result_panel.tscn" id="11_result"]
 
 [node name="Game" type="Control" unique_id=1098155860]
 layout_mode = 3
@@ -34,7 +36,7 @@ rotation = 0.2617994
 scale = Vector2(0.99999994, 0.99999994)
 visibility_rect = Rect2(-100, -100, 200, 480)
 
-[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer")]
+[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_count_down_animation", "_result_panel")]
 script = ExtResource("2_m6dsl")
 _morse_input = NodePath("../MorseInput")
 _ufo = NodePath("../Ufo")
@@ -43,6 +45,8 @@ _question_bubble = NodePath("../QuestionBubble")
 _morse_preview = NodePath("../MorsePreview")
 _timer_viewer = NodePath("../TimerViewer")
 _game_timer = NodePath("../GameTimer")
+_count_down_animation = NodePath("../Overlay/CountDownAnimation")
+_result_panel = NodePath("../Overlay/ResultPanel")
 
 [node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
 layout_mode = 1
@@ -101,3 +105,10 @@ scale = Vector2(0.5, 0.5)
 
 [node name="GameTimer" parent="." unique_id=323313515 instance=ExtResource("9_g0u26")]
 wait_time = 30.0
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="CountDownAnimation" parent="Overlay" instance=ExtResource("10_start")]
+
+[node name="ResultPanel" parent="Overlay" instance=ExtResource("11_result")]
