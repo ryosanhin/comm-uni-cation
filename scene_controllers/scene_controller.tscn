@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c6ojebng4wh2q"]
+
+[ext_resource type="Script" uid="uid://ckf2nysesvg0n" path="res://scene_controllers/scene_controller.gd" id="1_73nc8"]
+[ext_resource type="Resource" uid="uid://bxrwuj80pqpyk" path="res://scene_controllers/scene_registry.tres" id="2_ix407"]
+[ext_resource type="PackedScene" uid="uid://5g76jo52k41h" path="res://scene_controllers/transition_controllers/transition_controller.tscn" id="3_21wn1"]
+
+[node name="SceneController" type="Node" unique_id=399287393 node_paths=PackedStringArray("_transition_controller")]
+script = ExtResource("1_73nc8")
+_scene_registry = ExtResource("2_ix407")
+_transition_controller = NodePath("TransitionController")
+
+[node name="TransitionController" parent="." unique_id=864892429 instance=ExtResource("3_21wn1")]
