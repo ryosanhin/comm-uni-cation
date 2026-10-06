@@ -1,4 +1,4 @@
-[gd_resource type="Resource" format=3 uid="uid://bxrwuj80pqpyk"]
+[gd_resource type="Resource" script_class="SceneRegistry" format=3 uid="uid://bxrwuj80pqpyk"]
 
 [ext_resource type="Script" uid="uid://cj45pwnltmtx2" path="res://scene_controllers/scene_entry.gd" id="1_mq74y"]
 [ext_resource type="PackedScene" uid="uid://cckjxf0tp53w3" path="res://scenes/title.tscn" id="2_4u77j"]
