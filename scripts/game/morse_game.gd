@@ -15,6 +15,10 @@ const MorsePreview := preload("res://prefabs/ui/morse_preview.gd")
 
 const GameTimer := preload("res://prefabs/game_timer.gd")
 
+const CountDownAnimation := preload("res://prefabs/ui/count_down_animation.gd")
+
+const ResultPanel := preload("res://prefabs/ui/result_panel.gd")
+
 const QUESTIONS_PATH := "res://questions/questions.csv"
 
 ## 新しい問題を開始したことを通知する。
@@ -47,6 +51,12 @@ var _running := false
 ## UFOの入場が完了し、モールス入力を受け付けているかどうか。
 var _accepting_input := false
 
+## 制限時間を迎え、ゲームが終了したかどうか。
+var _game_finished := false
+
+## 交信に成功したUFOの数。
+var _completed_question_count := 0
+
 ## JSONファイルから問題を取得するリーダー。
 var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
@@ -64,14 +74,25 @@ var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
 @export var _game_timer: GameTimer
 
-## ゲーム画面を構成する各ノードのシグナルを接続し、最初のフレーズを開始する。
+@export var _count_down_animation: CountDownAnimation
+
+@export var _finish_animation: CountDownAnimation
+
+@export var _result_panel: ResultPanel
+
+
+## ゲーム画面のシグナルを接続し、開始演出が終了してからゲームを開始する。
 func _ready() -> void:
 	_connect_game_signals()
 	_connect_input_signals()
 	_connect_ufo_signals()
 	_connect_timer_signals()
+	_set_input_enabled(false)
 
 	if start_automatically:
+		if not _count_down_animation.is_node_ready():
+			await _count_down_animation.ready
+		await _count_down_animation.animation_async()
 		start_random_question()
 		_game_timer.start()
 
@@ -157,13 +178,21 @@ func _on_ufo_entered() -> void:
 ## UFOの退場完了時に入力を止め、次の問題を出題する。
 func _on_ufo_exited() -> void:
 	_set_input_enabled(false)
+	if _game_finished:
+		return
 	start_random_question()
 
 
-## ゲーム終了時の処理。
+## 入力を停止し、終了演出が完了してからリザルトを表示する。
 func _on_timed_out() -> void:
+	if _game_finished:
+		return
+	_game_finished = true
 	_running = false
 	_set_input_enabled(false)
+	_morse_preview.clear(0, "")
+	await _finish_animation.animation_async()
+	_result_panel.show_result(_completed_question_count)
 
 
 ## 正解として受理済みのモールス符号のコピーを返す。
@@ -203,6 +232,7 @@ func _finish_phrase() -> void:
 		return
 	_running = false
 	_set_input_enabled(false)
+	_completed_question_count += 1
 	question_succeeded.emit(_question)
 
 

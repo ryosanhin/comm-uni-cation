@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d1h8j26twf6y3"]
+
+[ext_resource type="PackedScene" uid="uid://duan6gdlf7ojk" path="res://prefabs/ui/count_down_animation.tscn" id="1_w5rfn"]
+
+[node name="FinishAnimation" unique_id=1680026068 instance=ExtResource("1_w5rfn")]
+
+[node name="Label" parent="." index="1" unique_id=1819331749]
+text = "FINISH"

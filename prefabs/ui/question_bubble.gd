@@ -13,11 +13,6 @@ extends PanelContainer
 @onready var _label: RichTextLabel = $MarginContainer/VBoxContainer/RichTextLabel
 
 
-## シーン準備時点の問題と進行状況を吹き出しへ反映する。
-func _ready() -> void:
-	_refresh_from_game()
-
-
 ## 新しい問題文を表示する。
 func on_phrase_started(_new_phrase: String) -> void:
 	# MorseGame は兄弟ノードより先に ready になるため、初回は _ready に表示を任せる。
