@@ -1,4 +1,4 @@
-# UMAMUSUME_ASSET_LICENSE
+# UMAMUSUME_ASSETS_LICENSE
 This document applies only to files contained in the `umamusume/` directory.  
 The assets in this directory are created for an unofficial fan-made project inspired by **Umamusume: Pretty Derby**.
 
