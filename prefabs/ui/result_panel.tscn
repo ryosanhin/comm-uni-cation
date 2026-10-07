@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://bl5bvn5ntoh5i"]
 
 [ext_resource type="Script" uid="uid://cfkprgstd28og" path="res://prefabs/ui/result_panel.gd" id="1_result"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="2_e3hj3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
-bg_color = Color(0, 0, 0, 0.5)
+bg_color = Color(0, 0, 0, 0.75000006)
 corner_radius_top_left = 64
 corner_radius_top_right = 64
 corner_radius_bottom_right = 64
@@ -21,10 +22,12 @@ script = ExtResource("1_result")
 
 [node name="ResultTitle" type="Label" parent="." unique_id=49320732]
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 0.05
 anchor_right = 0.95
 offset_top = 135.0
 offset_bottom = 300.0
+theme = ExtResource("2_e3hj3")
 theme_override_font_sizes/font_size = 96
 text = "RESULT"
 horizontal_alignment = 1
@@ -32,7 +35,9 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="ResultCount" type="Label" parent="." unique_id=1572901139]
+auto_translate_mode = 2
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 0.05
 anchor_top = 0.5
 anchor_right = 0.95
@@ -40,7 +45,7 @@ anchor_bottom = 0.5
 offset_top = -87.5
 offset_bottom = 87.5
 grow_vertical = 2
-auto_translate_mode = 2
+theme = ExtResource("2_e3hj3")
 theme_override_font_sizes/font_size = 128
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -58,6 +63,7 @@ offset_right = 200.0
 offset_bottom = -135.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = ExtResource("2_e3hj3")
 theme_override_font_sizes/font_size = 96
 text = "BACK"
 flat = true

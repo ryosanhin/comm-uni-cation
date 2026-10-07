@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://xho4udjdfqj1"]
+
+[ext_resource type="FontFile" uid="uid://tmu0m5salnx" path="res://third_party/fonts/NotoSansJP-Bold.ttf" id="1_o5chm"]
+
+[resource]
+Button/fonts/font = ExtResource("1_o5chm")
+Label/fonts/font = ExtResource("1_o5chm")
+RichTextLabel/fonts/normal_font = ExtResource("1_o5chm")

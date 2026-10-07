@@ -27,4 +27,6 @@ addons/*
 .vscode/*
 
 # third parties
-third_party/*
+third_party/**
+!third_party/**/
+!third_party/**/*.import

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dhulmwgboiadd"]
 
 [ext_resource type="Script" uid="uid://cktfujm0w7a0m" path="res://prefabs/ui/morse_preview.gd" id="1_a3t86"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="2_ndewi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mnqji"]
 bg_color = Color(0, 0, 0, 1)
@@ -25,6 +26,7 @@ theme_override_constants/margin_bottom = 8
 
 [node name="LineEdit" type="LineEdit" parent="MarginContainer" unique_id=972896410]
 layout_mode = 2
+theme = ExtResource("2_ndewi")
 theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
 theme_override_constants/minimum_character_width = 8
 theme_override_font_sizes/font_size = 32

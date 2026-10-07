@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" uid="uid://tnpsukf44m6b" path="res://prefabs/ui/count_down_animation.gd" id="1_17oxv"]
 
+[sub_resource type="Gradient" id="Gradient_663nm"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rjevm"]
+gradient = SubResource("Gradient_663nm")
+width = 1920
+
 [node name="CountDownAnimation" type="Control" unique_id=1680026068]
 visible = false
 layout_mode = 3
@@ -12,8 +20,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_17oxv")
+_move_range = 192.0
 
-[node name="StartText" type="Label" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=41465247]
+layout_mode = 0
+offset_top = 405.0
+offset_right = 1920.0
+offset_bottom = 675.0
+pivot_offset_ratio = Vector2(0, 0.5)
+texture = SubResource("GradientTexture1D_rjevm")
+
+[node name="StartText" type="Label" parent="." unique_id=1819331749]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,7 +43,6 @@ offset_right = 400.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 theme_override_font_sizes/font_size = 72
 text = "START"
 horizontal_alignment = 1

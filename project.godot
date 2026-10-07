@@ -24,7 +24,8 @@ window/stretch/aspect="expand"
 [internationalization]
 
 locale/translations=PackedStringArray("res://translations/texts.ja.translation", "res://translations/texts.en.translation")
-locale/fallback="en"
+locale/fallback="ja"
+locale/locale_filter_mode=0
 
 [physics]
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cevvem7pd2v6o"]
 
-[ext_resource type="Theme" uid="uid://dblrjcv0o5yug" path="res://prefabs/ui/morse_table_theme.tres" id="1_534hg"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="1_534hg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_534hg"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -29,6 +29,7 @@ alignment = 1
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1327481103]
 layout_mode = 2
 theme = ExtResource("1_534hg")
+theme_override_font_sizes/font_size = 32
 text = "A: ・ ―
 B: ― ・ ・ ・
 C: ― ・ ― ・
@@ -42,6 +43,7 @@ I: ・ ・"
 [node name="Label2" type="Label" parent="MarginContainer/HBoxContainer" unique_id=2002290382]
 layout_mode = 2
 theme = ExtResource("1_534hg")
+theme_override_font_sizes/font_size = 32
 text = "J: ・ ― ― ―
 K: ― ・ ―
 L: ・ ― ・ ・
@@ -55,6 +57,7 @@ R: ・ ― ・"
 [node name="Label3" type="Label" parent="MarginContainer/HBoxContainer" unique_id=2105301150]
 layout_mode = 2
 theme = ExtResource("1_534hg")
+theme_override_font_sizes/font_size = 32
 text = "S: ・ ・ ・
 T: ―
 U: ・ ・ ―
@@ -67,6 +70,7 @@ Z: ― ― ・ ・"
 [node name="Label4" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1652088328]
 layout_mode = 2
 theme = ExtResource("1_534hg")
+theme_override_font_sizes/font_size = 32
 text = "1: ・ ― ― ― ―
 2: ・ ・ ― ― ―
 3: ・ ・ ・ ― ―

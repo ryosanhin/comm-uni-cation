@@ -14,7 +14,7 @@ func start_animation_async() -> void:
 	_start_text.text = "START"
 	show()
 	var center_position := _start_text.position
-	var move_distance := size.x + _move_range
+	var move_distance := _move_range
 	_start_text.position.x = center_position.x + move_distance
 	_start_text.self_modulate = Color.TRANSPARENT
 
