@@ -5,4 +5,5 @@
 [resource]
 Button/fonts/font = ExtResource("1_o5chm")
 Label/fonts/font = ExtResource("1_o5chm")
+LineEdit/fonts/font = ExtResource("1_o5chm")
 RichTextLabel/fonts/normal_font = ExtResource("1_o5chm")
