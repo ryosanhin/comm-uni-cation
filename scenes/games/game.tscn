@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://yn33odljy8sf" path="res://prefabs/game_timer.tscn" id="9_g0u26"]
 [ext_resource type="PackedScene" uid="uid://duan6gdlf7ojk" path="res://prefabs/ui/count_down_animation.tscn" id="10_start"]
 [ext_resource type="PackedScene" uid="uid://bl5bvn5ntoh5i" path="res://prefabs/ui/result_panel.tscn" id="11_result"]
+[ext_resource type="PackedScene" uid="uid://d1h8j26twf6y3" path="res://prefabs/ui/finish_animation.tscn" id="12_el6ob"]
 
 [node name="Game" type="Control" unique_id=1098155860]
 layout_mode = 3
@@ -80,7 +81,7 @@ offset_bottom = -36.0
 grow_vertical = 0
 
 [node name="Ufo" parent="." unique_id=827773567 instance=ExtResource("6_qbkti")]
-position = Vector2(256, 192)
+position = Vector2(-256, 192)
 main_position = Vector2(256, 192)
 exit_position = Vector2(-256, 192)
 entering_time = 1.0
@@ -107,7 +108,10 @@ scale = Vector2(0.5, 0.5)
 wait_time = 30.0
 
 [node name="Overlay" type="CanvasLayer" parent="." unique_id=909724856]
+layer = 2
 
 [node name="CountDownAnimation" parent="Overlay" unique_id=2110159560 instance=ExtResource("10_start")]
+
+[node name="FinishAnimation" parent="Overlay" unique_id=1680026068 instance=ExtResource("12_el6ob")]
 
 [node name="ResultPanel" parent="Overlay" unique_id=1827263328 instance=ExtResource("11_result")]

@@ -90,7 +90,7 @@ func _ready() -> void:
 	if start_automatically:
 		if not _count_down_animation.is_node_ready():
 			await _count_down_animation.ready
-		await _count_down_animation.start_animation_async()
+		await _count_down_animation.animation_async()
 		start_random_question()
 		_game_timer.start()
 

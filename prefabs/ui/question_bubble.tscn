@@ -35,7 +35,6 @@ layout_mode = 2
 theme = ExtResource("2_1gvon")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "TEXT"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
