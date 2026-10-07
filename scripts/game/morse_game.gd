@@ -76,6 +76,8 @@ var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
 @export var _count_down_animation: CountDownAnimation
 
+@export var _finish_animation: CountDownAnimation
+
 @export var _result_panel: ResultPanel
 
 
@@ -181,12 +183,15 @@ func _on_ufo_exited() -> void:
 	start_random_question()
 
 
-## ゲーム終了時の処理。
+## 入力を停止し、終了演出が完了してからリザルトを表示する。
 func _on_timed_out() -> void:
+	if _game_finished:
+		return
 	_game_finished = true
 	_running = false
 	_set_input_enabled(false)
 	_morse_preview.clear(0, "")
+	await _finish_animation.animation_async()
 	_result_panel.show_result(_completed_question_count)
 
 

@@ -22,7 +22,7 @@ func _test_start_animation() -> void:
 	var game: MorseGame = scene.get_node("MorseGame")
 	var timer: Timer = scene.get_node("GameTimer")
 	var animation: Control = scene.get_node("Overlay/CountDownAnimation")
-	var label: Label = animation.get_node("StartText")
+	var label: Label = animation.get_node("Label")
 	animation._animation_duration = 0.05
 	animation._pause_duration = 0.2
 	var started := [0]
@@ -69,6 +69,10 @@ func _test_result(
 	var timer: Timer = scene.get_node("GameTimer")
 	var ufo: Sprite2D = scene.get_node("Ufo")
 	var panel: Panel = scene.get_node("Overlay/ResultPanel")
+	var finish_animation: Control = scene.get_node("Overlay/FinishAnimation")
+	finish_animation._animation_duration = 0.05
+	finish_animation._pause_duration = 0.2
+	panel._pause_duration = 0.05
 	game.start_automatically = false
 	root.add_child(scene)
 	await process_frame
@@ -80,7 +84,20 @@ func _test_result(
 		input.character_completed.emit(MorseCode.encode("A"), "A")
 	timer.start(0.05)
 	await timer.timeout
-	_runner.assert_true(panel.visible, "実際の時間切れでオーバーレイを表示する")
+	_runner.assert_true(finish_animation.visible, "時間切れで終了演出をオーバーレイ表示する")
+	_runner.assert_false(panel.visible, "終了演出中はリザルトを表示しない")
+	_runner.assert_false(game._accepting_input, "終了演出中は入力を受け付けない")
+	_runner.assert_equal(
+			finish_animation.tr(finish_animation.get_node("Label").text),
+			"終了" if locale == "ja" else "Finish", "FINISHの翻訳を表示する"
+	)
+	# 重複した時間切れ通知で演出を再生しない。
+	game._on_timed_out()
+	await create_timer(0.15).timeout
+	_runner.assert_false(panel.visible, "終了文字の中央停止中もリザルトを隠す")
+	await create_timer(0.25).timeout
+	_runner.assert_false(finish_animation.visible, "終了演出が完了すると非表示になる")
+	_runner.assert_true(panel.visible, "終了演出の完了後にリザルトを表示する")
 	_runner.assert_equal(
 			panel.get_node("ResultCount").text,
 			"%d %s" % [int(complete_question), unit], "成功数と翻訳された単位を表示する"

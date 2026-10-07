@@ -37,7 +37,7 @@ rotation = 0.2617994
 scale = Vector2(0.99999994, 0.99999994)
 visibility_rect = Rect2(-100, -100, 200, 480)
 
-[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_count_down_animation", "_result_panel")]
+[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_count_down_animation", "_finish_animation", "_result_panel")]
 script = ExtResource("2_m6dsl")
 _morse_input = NodePath("../MorseInput")
 _ufo = NodePath("../Ufo")
@@ -47,6 +47,7 @@ _morse_preview = NodePath("../MorsePreview")
 _timer_viewer = NodePath("../TimerViewer")
 _game_timer = NodePath("../GameTimer")
 _count_down_animation = NodePath("../Overlay/CountDownAnimation")
+_finish_animation = NodePath("../Overlay/FinishAnimation")
 _result_panel = NodePath("../Overlay/ResultPanel")
 
 [node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
