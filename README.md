@@ -14,6 +14,6 @@ Released under the MIT License.
 ### `umamusume/` directory
 All files under the `umamusume/` directory are **NOT covered by the MIT License**.
 
-Those files are distributed separately under the terms described in `UMAMUSUME_ASSET_LICENSE.md`.
+Those files are distributed separately under the terms described in `UMAMUSUME_ASSETS_LICENSE.md`.
 
 Please see `UMAMUSUME_ASSETS_LICENSE.md` for details.
