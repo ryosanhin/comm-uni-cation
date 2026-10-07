@@ -21,7 +21,7 @@ func _test_start_animation() -> void:
 	var scene := GameScene.instantiate()
 	var game: MorseGame = scene.get_node("MorseGame")
 	var timer: Timer = scene.get_node("GameTimer")
-	var animation: Control = scene.get_node("Overlay/CountDownAnimation")
+	var animation: Control = scene.get_node("Overlay/StartAnimation")
 	var label: Label = animation.get_node("Label")
 	animation._animation_duration = 0.05
 	animation._pause_duration = 0.2

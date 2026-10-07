@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bl5bvn5ntoh5i"]
 
-[ext_resource type="Script" uid="uid://cfkprgstd28og" path="res://prefabs/ui/result_panel.gd" id="1_result"]
-[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="2_e3hj3"]
+[ext_resource type="Script" uid="uid://cfkprgstd28og" path="res://prefabs/ui/overlays/result_panel.gd" id="1_result"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="2_e3hj3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
 bg_color = Color(0, 0, 0, 0.75000006)

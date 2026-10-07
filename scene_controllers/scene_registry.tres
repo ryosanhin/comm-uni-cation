@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cj45pwnltmtx2" path="res://scene_controllers/scene_entry.gd" id="1_mq74y"]
 [ext_resource type="PackedScene" uid="uid://cckjxf0tp53w3" path="res://scenes/title.tscn" id="2_4u77j"]
 [ext_resource type="Script" uid="uid://b7l1p8ihxm55s" path="res://scene_controllers/scene_registry.gd" id="2_qqkfr"]
-[ext_resource type="PackedScene" uid="uid://cxrfws63aaowk" path="res://scenes/main_scene.tscn" id="3_5i7su"]
+[ext_resource type="PackedScene" uid="uid://cxrfws63aaowk" path="res://scenes/main_game.tscn" id="3_5i7su"]
 
 [sub_resource type="Resource" id="Resource_pvspv"]
 script = ExtResource("1_mq74y")

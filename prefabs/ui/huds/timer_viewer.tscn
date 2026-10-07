@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bc57yj6qhmrl7"]
 
-[ext_resource type="Texture2D" uid="uid://cpmxmifm5fcqh" path="res://textures/ProgressBarBackground.png" id="1_1xplh"]
-[ext_resource type="Texture2D" uid="uid://cninm40fjbp81" path="res://textures/ProgressBarFIll.png" id="2_oqqui"]
-[ext_resource type="Script" uid="uid://xfen1ck2lunc" path="res://prefabs/ui/timer_viewer.gd" id="3_oqqui"]
+[ext_resource type="Texture2D" uid="uid://cpmxmifm5fcqh" path="res://textures/progress_bar_background.png" id="1_1xplh"]
+[ext_resource type="Texture2D" uid="uid://cninm40fjbp81" path="res://textures/progress_bar_fill.png" id="2_oqqui"]
+[ext_resource type="Script" uid="uid://xfen1ck2lunc" path="res://prefabs/ui/huds/timer_viewer.gd" id="3_oqqui"]
 
 [sub_resource type="Gradient" id="Gradient_oqqui"]
 offsets = PackedFloat32Array(0, 0.5, 1)
