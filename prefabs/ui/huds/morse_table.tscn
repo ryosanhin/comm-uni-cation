@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cevvem7pd2v6o"]
 
-[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="1_534hg"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="1_534hg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_534hg"]
 bg_color = Color(0, 0, 0, 0.6)

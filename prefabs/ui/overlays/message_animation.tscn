@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://duan6gdlf7ojk"]
 
-[ext_resource type="Script" uid="uid://tnpsukf44m6b" path="res://prefabs/ui/count_down_animation.gd" id="1_17oxv"]
-[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="2_663nm"]
+[ext_resource type="Script" uid="uid://tnpsukf44m6b" path="res://prefabs/ui/overlays/message_animation.gd" id="1_17oxv"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="2_663nm"]
 
 [sub_resource type="Gradient" id="Gradient_663nm"]
 offsets = PackedFloat32Array(0, 0.5, 1)

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dhulmwgboiadd"]
 
-[ext_resource type="Script" uid="uid://cktfujm0w7a0m" path="res://prefabs/ui/morse_preview.gd" id="1_a3t86"]
-[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/basic_text_theme.tres" id="2_ndewi"]
+[ext_resource type="Script" uid="uid://cktfujm0w7a0m" path="res://prefabs/ui/huds/morse_preview.gd" id="1_a3t86"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="2_ndewi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mnqji"]
 bg_color = Color(0, 0, 0, 1)
