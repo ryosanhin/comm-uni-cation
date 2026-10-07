@@ -10,7 +10,7 @@ colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0)
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_rjevm"]
 gradient = SubResource("Gradient_663nm")
 
-[node name="CountDownAnimation" type="Control" unique_id=1680026068]
+[node name="MessageAnimation" type="Control" unique_id=1680026068]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -48,6 +48,5 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_663nm")
 theme_override_font_sizes/font_size = 72
-text = "START"
 horizontal_alignment = 1
 vertical_alignment = 1

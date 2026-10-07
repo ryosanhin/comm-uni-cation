@@ -5,19 +5,19 @@ const QuestionLoader := preload("res://questions/question_loader.gd")
 
 const Ufo := preload("res://prefabs/ufo/ufo.gd")
 
-const TimerViewer := preload("res://prefabs/ui/timer_viewer.gd")
+const TimerViewer := preload("res://prefabs/ui/huds/timer_viewer.gd")
 
-const QuestionBubble := preload("res://prefabs/ui/question_bubble.gd")
+const QuestionBubble := preload("res://prefabs/ui/huds/question_bubble.gd")
 
-const NeoUniFace := preload("res://prefabs/ui/neo_uni_face.gd")
+const NeoUniFace := preload("res://prefabs/ui/huds/neo_uni_face.gd")
 
-const MorsePreview := preload("res://prefabs/ui/morse_preview.gd")
+const MorsePreview := preload("res://prefabs/ui/huds/morse_preview.gd")
 
 const GameTimer := preload("res://prefabs/game_timer.gd")
 
-const CountDownAnimation := preload("res://prefabs/ui/count_down_animation.gd")
+const MessageAnimation := preload("res://prefabs/ui/overlays/message_animation.gd")
 
-const ResultPanel := preload("res://prefabs/ui/result_panel.gd")
+const ResultPanel := preload("res://prefabs/ui/overlays/result_panel.gd")
 
 const QUESTIONS_PATH := "res://questions/questions.csv"
 
@@ -34,7 +34,7 @@ signal character_failed(index: int, expected: String, actual: String, code: int)
 signal question_succeeded(question: String)
 
 ## プレイヤーが入力する現在の問題文。
-@export var _question := "HELLO"
+var _question: String
 
 ## ノードの準備完了時に問題ファイルからランダムに出題するかどうか。
 @export var start_automatically := true
@@ -74,9 +74,9 @@ var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 
 @export var _game_timer: GameTimer
 
-@export var _count_down_animation: CountDownAnimation
+@export var _start_animation: MessageAnimation
 
-@export var _finish_animation: CountDownAnimation
+@export var _finish_animation: MessageAnimation
 
 @export var _result_panel: ResultPanel
 
@@ -90,9 +90,9 @@ func _ready() -> void:
 	_set_input_enabled(false)
 
 	if start_automatically:
-		if not _count_down_animation.is_node_ready():
-			await _count_down_animation.ready
-		await _count_down_animation.animation_async()
+		if not _start_animation.is_node_ready():
+			await _start_animation.ready
+		await _start_animation.animation_async()
 		start_random_question()
 		_game_timer.start()
 
