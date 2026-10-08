@@ -89,7 +89,7 @@ func _test_result(
 	_runner.assert_false(game._accepting_input, "終了演出中は入力を受け付けない")
 	_runner.assert_equal(
 			finish_animation.tr(finish_animation.get_node("Label").text),
-			"終了" if locale == "ja" else "Finish", "FINISHの翻訳を表示する"
+			"終了！" if locale == "ja" else "Finish!", "FINISHの翻訳を表示する"
 	)
 	# 重複した時間切れ通知で演出を再生しない。
 	game._on_timed_out()

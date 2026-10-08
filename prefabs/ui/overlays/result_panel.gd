@@ -6,13 +6,11 @@ extends Panel
 
 @export_range(0.01, 1.0, 0.01, "suffix:s") var _pause_duration := 0.5
 
-var _scene_controller: SceneController
-var _is_loaded: bool
+signal button_pressed
 
 
-func inject_dependency(scene_controller: SceneController) -> void:
-	_scene_controller = scene_controller
-	_button.pressed.connect(_back_to_title)
+func _ready() -> void:
+	_button.pressed.connect(button_pressed.emit)
 
 
 ## 交信に成功したUFOの数を翻訳された単位とともに表示する。[br]
@@ -30,10 +28,3 @@ func show_result(count: int) -> void:
 	await get_tree().create_timer(_pause_duration).timeout
 
 	_button.show()
-
-
-func _back_to_title() -> void:
-	if _is_loaded:
-		return
-	_scene_controller.change_main_scene(SceneEnums.Id.TITLE, TransitionEnums.Id.NORMAL)
-	_is_loaded = true

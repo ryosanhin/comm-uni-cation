@@ -14,7 +14,8 @@ func inject_dependency(scene_controller: SceneController) -> void:
 	_scene_contoller = scene_controller
 	
 	_checkbox.toggled.connect(_change_language)
-	_checkbox.set_pressed_no_signal(TranslationServer.get_locale() == "en")
+	var language := TranslationServer.get_locale().get_slice("_", 0)
+	_checkbox.set_pressed_no_signal(language == "en")
 	
 	_start_button.pressed.connect(_load_main_scene)
 	_copyrighs_button.pressed.connect(_show_copyrights)

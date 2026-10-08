@@ -33,6 +33,9 @@ signal character_failed(index: int, expected: String, actual: String, code: int)
 ## フレーズ全体の入力に成功したことを通知する。
 signal question_succeeded(question: String)
 
+## 戻るボタンが押されたことを通知する。
+signal quit_requested
+
 ## プレイヤーが入力する現在の問題文。
 var _question: String
 
@@ -81,26 +84,20 @@ var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 @export var _result_panel: ResultPanel
 
 
-func inject_dependency(scene_controller: SceneController) -> void:
-	if not start_automatically:
-		if scene_controller.is_changing:
-			await scene_controller.scene_changed
-		_start_game()
-
-
 ## ゲーム画面のシグナルを接続し、開始演出が終了してからゲームを開始する。
 func _ready() -> void:
 	_connect_game_signals()
 	_connect_input_signals()
 	_connect_ufo_signals()
 	_connect_timer_signals()
+	_connect_result_panel_signals()
 	_set_input_enabled(false)
 
 	if start_automatically:
-		_start_game()
+		start_game()
 
 
-func _start_game() -> void:
+func start_game() -> void:
 	if not _start_animation.is_node_ready():
 		await _start_animation.ready
 	await _start_animation.animation_async()
@@ -110,7 +107,6 @@ func _start_game() -> void:
 ## ゲーム進行シグナルを、対応する画面演出へ接続する。
 func _connect_game_signals() -> void:
 	question_started.connect(_neo_uni_face.set_idle_expression)
-	question_started.connect(_question_bubble.on_phrase_started)
 	question_started.connect(_ufo.enter_anima)
 
 	character_succeeded.connect(_question_bubble.advance_character)
@@ -137,8 +133,10 @@ func _connect_input_signals() -> void:
 ## UFOの入退場完了シグナルをゲーム進行へ接続する。
 func _connect_ufo_signals() -> void:
 	_ufo.entered.connect(_on_ufo_entered)
+	_ufo.entered.connect(_question_bubble.on_phrase_started.bind(_question))
 
 	_ufo.exited.connect(_on_ufo_exited)
+	_ufo.exited.connect(_question_bubble.clear_bubble)
 
 
 ## ゲーム内タイマーとのシグナル接続。
@@ -146,6 +144,11 @@ func _connect_timer_signals() -> void:
 	_game_timer.remained_rate_changed.connect(_timer_viewer.update_progress)
 
 	_game_timer.timeout.connect(_on_timed_out)
+
+
+## リザルト画面とのシグナル接続。
+func _connect_result_panel_signals() -> void:
+	_result_panel.button_pressed.connect(quit_requested.emit)
 
 
 ## 問題文を大文字に正規化し、制限時間と入力状態を初期化してゲームを開始する。
