@@ -1,10 +1,19 @@
 [gd_scene format=3 uid="uid://rfsi4rkc2dw6"]
 
 [ext_resource type="PackedScene" uid="uid://c6ojebng4wh2q" path="res://scene_controllers/scene_controller.tscn" id="1_5634n"]
+[ext_resource type="Script" uid="uid://lykgvhyo3iyy" path="res://scenes/core_container_scope.gd" id="2_hlf4f"]
+[ext_resource type="PackedScene" uid="uid://cckjxf0tp53w3" path="res://scenes/title.tscn" id="3_c8oal"]
 
 [node name="Core" type="Node" unique_id=699256158]
+
+[node name="CoreContainerScope" type="Node" parent="." unique_id=858123166 node_paths=PackedStringArray("scene_controller")]
+script = ExtResource("2_hlf4f")
+scene_controller = NodePath("../SceneController")
+scope_id = &"core"
 
 [node name="SceneController" parent="." unique_id=399287393 node_paths=PackedStringArray("_main_scenes_root") instance=ExtResource("1_5634n")]
 _main_scenes_root = NodePath("../MainScenes")
 
 [node name="MainScenes" type="Node" parent="." unique_id=2103955942]
+
+[node name="Title" parent="MainScenes" unique_id=1042281028 instance=ExtResource("3_c8oal")]

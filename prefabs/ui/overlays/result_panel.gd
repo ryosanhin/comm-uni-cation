@@ -1,10 +1,16 @@
 extends Panel
 
-@onready var _result_title: Label = $ResultTitle
-@onready var _result_count: Label = $ResultCount
-@onready var _button: Button = $Button
+@export var _result_title: Label
+@export var _result_count: Label
+@export var _button: Button
 
 @export_range(0.01, 1.0, 0.01, "suffix:s") var _pause_duration := 0.5
+
+signal button_pressed
+
+
+func _ready() -> void:
+	_button.pressed.connect(button_pressed.emit)
 
 
 ## 交信に成功したUFOの数を翻訳された単位とともに表示する。[br]

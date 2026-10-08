@@ -14,13 +14,24 @@
 [ext_resource type="PackedScene" uid="uid://bl5bvn5ntoh5i" path="res://prefabs/ui/overlays/result_panel.tscn" id="11_result"]
 [ext_resource type="PackedScene" uid="uid://d1h8j26twf6y3" path="res://prefabs/ui/overlays/finish_animation.tscn" id="12_el6ob"]
 
-[node name="Game" type="Control" unique_id=1098155860]
+[node name="Game" type="Control" unique_id=1098155860 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_start_animation", "_finish_animation", "_result_panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_m6dsl")
+_morse_input = NodePath("MorseInput")
+_ufo = NodePath("Ufo")
+_neo_uni_face = NodePath("NeoUniFace")
+_question_bubble = NodePath("QuestionBubble")
+_morse_preview = NodePath("MorsePreview")
+_timer_viewer = NodePath("TimerViewer")
+_game_timer = NodePath("GameTimer")
+_start_animation = NodePath("Overlay/StartAnimation")
+_finish_animation = NodePath("Overlay/FinishAnimation")
+_result_panel = NodePath("Overlay/ResultPanel")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=418659351]
 layout_mode = 1
@@ -36,19 +47,6 @@ position = Vector2(960, -270)
 rotation = 0.2617994
 scale = Vector2(0.99999994, 0.99999994)
 visibility_rect = Rect2(-100, -100, 200, 480)
-
-[node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_start_animation", "_finish_animation", "_result_panel")]
-script = ExtResource("2_m6dsl")
-_morse_input = NodePath("../MorseInput")
-_ufo = NodePath("../Ufo")
-_neo_uni_face = NodePath("../NeoUniFace")
-_question_bubble = NodePath("../QuestionBubble")
-_morse_preview = NodePath("../MorsePreview")
-_timer_viewer = NodePath("../TimerViewer")
-_game_timer = NodePath("../GameTimer")
-_start_animation = NodePath("../Overlay/StartAnimation")
-_finish_animation = NodePath("../Overlay/FinishAnimation")
-_result_panel = NodePath("../Overlay/ResultPanel")
 
 [node name="NeoUniFace" parent="." unique_id=1821434947 instance=ExtResource("3_g0u26")]
 layout_mode = 1
@@ -68,7 +66,7 @@ offset_left = 427.0
 offset_top = 118.0
 offset_right = 979.0
 offset_bottom = 286.0
-game_path = NodePath("../MorseGame")
+game_path = NodePath("..")
 
 [node name="MorseTable" parent="." unique_id=1627944515 instance=ExtResource("5_7sepi")]
 layout_mode = 1
@@ -106,7 +104,7 @@ offset_bottom = 561.0
 scale = Vector2(0.5, 0.5)
 
 [node name="GameTimer" parent="." unique_id=323313515 instance=ExtResource("9_g0u26")]
-wait_time = 30.0
+wait_time = 60.0
 
 [node name="Overlay" type="CanvasLayer" parent="." unique_id=909724856]
 layer = 2

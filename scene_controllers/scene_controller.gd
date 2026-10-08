@@ -1,10 +1,7 @@
 extends Node
 class_name SceneController
 
-const SceneEnums := preload("scene_enums.gd")
-const SceneRegistry := preload("scene_registry.gd")
 const TransitionController := preload("transition_controllers/transition_controller.gd")
-const TransitionEnums := preload("transition_controllers/transition_enums.gd")
 
 signal scene_change_started(scene_id: SceneEnums.Id)
 signal scene_changed(scene_id: SceneEnums.Id)
@@ -16,9 +13,15 @@ signal scene_changed(scene_id: SceneEnums.Id)
 
 @export_range(0.0, 10.0) var _transition_duration := 1.0
 
+@export var init_scene_id: SceneEnums.Id
+
 var current_main_scene_id: SceneEnums.Id = SceneEnums.Id.INVALID
 
 var is_changing := false
+
+
+func _ready() -> void:
+	current_main_scene_id = init_scene_id
 
 
 ## 該当シーンが読み込まれているか[br]

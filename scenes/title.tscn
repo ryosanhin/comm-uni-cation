@@ -1,5 +1,135 @@
 [gd_scene format=3 uid="uid://cckjxf0tp53w3"]
 
-[node name="Title" type="Node" unique_id=1042281028]
+[ext_resource type="Script" uid="uid://m533dflxrwj" path="res://scenes/title.gd" id="1_b3w7a"]
+[ext_resource type="PackedScene" uid="uid://0pcndmf2cb17" path="res://prefabs/background_effects.tscn" id="1_p6dhs"]
+[ext_resource type="Texture2D" uid="uid://ujcxl07f1wov" path="res://textures/title_logo.png" id="1_wosw1"]
+[ext_resource type="PackedScene" uid="uid://dpht84vkq6s1x" path="res://prefabs/ui/overlays/copy_rights_viewer.tscn" id="2_4rr2b"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="2_p6dhs"]
+[ext_resource type="Script" uid="uid://dg50yljfj7dd2" path="res://addons/katamusubi/runtime/scope/container_scope.gd" id="4_pyl7j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3k3ei"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+
+[node name="Title" type="Node" unique_id=1042281028 node_paths=PackedStringArray("_checkbox", "_start_button", "_copyrighs_button")]
+script = ExtResource("1_b3w7a")
+_checkbox = NodePath("CanvasLayer/Control/PanelContainer/HBoxContainer/Control/CheckBox")
+_start_button = NodePath("CanvasLayer/Control/HBoxContainer/StartButton")
+_copyrighs_button = NodePath("CanvasLayer/Control/HBoxContainer/CopyrightsButton")
+_copyrights_viewer = ExtResource("2_4rr2b")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1452276002]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1103481944]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control" unique_id=1826585659]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.065, 0.076666676, 0.1, 1)
+
+[node name="BackgroundEffects" parent="CanvasLayer/Control" unique_id=1314752437 instance=ExtResource("1_p6dhs")]
+position = Vector2(960, -270)
+rotation = 0.26179937
+scale = Vector2(0.9999999, 0.9999999)
+visibility_rect = Rect2(-100, -100, 200, 480)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control" unique_id=2070696268]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -380.0
+offset_right = 600.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_wosw1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control" unique_id=660790443]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -283.0
+offset_bottom = -135.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="StartButton" type="Button" parent="CanvasLayer/Control/HBoxContainer" unique_id=1007683591]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_p6dhs")
+theme_override_font_sizes/font_size = 96
+text = "START"
+flat = true
+
+[node name="CopyrightsButton" type="Button" parent="CanvasLayer/Control/HBoxContainer" unique_id=83366704]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_p6dhs")
+theme_override_font_sizes/font_size = 96
+text = "COPYRIGHTS"
+flat = true
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Control" unique_id=1372221615]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -307.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 96.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3k3ei")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/PanelContainer" unique_id=199345547]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="CanvasLayer/Control/PanelContainer/HBoxContainer" unique_id=399185090]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CheckBox" type="CheckBox" parent="CanvasLayer/Control/PanelContainer/HBoxContainer/Control" unique_id=1930280525]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+theme = ExtResource("2_p6dhs")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+flat = true
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/PanelContainer/HBoxContainer" unique_id=1824762127]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_p6dhs")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "English ver."
+
+[node name="ContainerScope" type="Node" parent="." unique_id=314638011 node_paths=PackedStringArray("_inject_targets")]
+script = ExtResource("4_pyl7j")
+parent_scope_id = &"core"
+_inject_targets = [NodePath("..")]
+metadata/_custom_type_script = "uid://dg50yljfj7dd2"

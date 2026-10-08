@@ -10,7 +10,7 @@ corner_radius_top_right = 64
 corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
-[node name="ResultPanel" type="Panel" unique_id=510784712]
+[node name="ResultPanel" type="Panel" unique_id=510784712 node_paths=PackedStringArray("_result_title", "_result_count", "_button")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +19,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rjevm")
 script = ExtResource("1_result")
+_result_title = NodePath("ResultTitle")
+_result_count = NodePath("ResultCount")
+_button = NodePath("Button")
 
 [node name="ResultTitle" type="Label" parent="." unique_id=49320732]
 layout_mode = 1
@@ -65,5 +68,5 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("2_e3hj3")
 theme_override_font_sizes/font_size = 96
-text = "BACK"
+text = "QUIT"
 flat = true

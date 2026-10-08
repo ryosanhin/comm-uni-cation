@@ -1,9 +1,20 @@
 [gd_scene format=3 uid="uid://cxrfws63aaowk"]
 
+[ext_resource type="Script" uid="uid://brxwb8lgdmsen" path="res://scenes/main_game.gd" id="1_d2op2"]
 [ext_resource type="PackedScene" uid="uid://dfr0rerref50d" path="res://scenes/games/game.tscn" id="1_w2twt"]
+[ext_resource type="Script" uid="uid://dg50yljfj7dd2" path="res://addons/katamusubi/runtime/scope/container_scope.gd" id="3_0rdsr"]
 
-[node name="MainGame" type="Node" unique_id=773206886]
+[node name="MainGame" type="Node" unique_id=773206886 node_paths=PackedStringArray("_morse_game")]
+script = ExtResource("1_d2op2")
+_morse_game = NodePath("CanvasLayer/Game")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=526228632]
 
 [node name="Game" parent="CanvasLayer" unique_id=1098155860 instance=ExtResource("1_w2twt")]
+start_automatically = false
+
+[node name="ContainerScope" type="Node" parent="." unique_id=452361954 node_paths=PackedStringArray("_inject_targets")]
+script = ExtResource("3_0rdsr")
+parent_scope_id = &"core"
+_inject_targets = [NodePath("..")]
+metadata/_custom_type_script = "uid://dg50yljfj7dd2"
