@@ -28,6 +28,10 @@ func advance_character(
 	call_deferred("_refresh_from_game")
 
 
+func clear_bubble() -> void:
+	_label.text = ""
+
+
 func _refresh_from_game() -> void:
 	_render_phrase(_game._question, _game._current_character_index)
 
