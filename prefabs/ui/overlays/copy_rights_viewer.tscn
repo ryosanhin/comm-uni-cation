@@ -8,6 +8,9 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
 bg_color = Color(0, 0, 0, 0.75000006)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e5hat"]
+bg_color = Color(0, 0, 0, 0.749)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
 atlas = ExtResource("4_7eqny")
 region = Rect2(256, 0, 128, 128)
@@ -17,6 +20,14 @@ script = ExtResource("1_0sfwm")
 _button = NodePath("CanvasLayer/Button")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1643669136]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=480771676]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=962304722]
 anchors_preset = -1
@@ -78,4 +89,9 @@ offset_bottom = 136.0
 grow_horizontal = 0
 scale = Vector2(0.5, 0.5)
 pivot_offset_ratio = Vector2(1, 0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_e5hat")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_e5hat")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e5hat")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_e5hat")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e5hat")
 icon = SubResource("AtlasTexture_rjevm")

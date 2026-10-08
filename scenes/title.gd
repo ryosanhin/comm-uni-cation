@@ -12,7 +12,10 @@ var _is_loaded: bool
 
 func inject_dependency(scene_controller: SceneController) -> void:
 	_scene_contoller = scene_controller
+	
 	_checkbox.toggled.connect(_change_language)
+	_checkbox.set_pressed_no_signal(TranslationServer.get_locale() == "en")
+	
 	_start_button.pressed.connect(_load_main_scene)
 	_copyrighs_button.pressed.connect(_show_copyrights)
 

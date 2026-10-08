@@ -81,6 +81,15 @@ var _question_loader := QuestionLoader.new(QUESTIONS_PATH)
 @export var _result_panel: ResultPanel
 
 
+func inject_dependency(scene_controller: SceneController) -> void:
+	if not start_automatically:
+		if scene_controller.is_changing:
+			await scene_controller.scene_changed
+		_start_game()
+
+
+
+
 ## ゲーム画面のシグナルを接続し、開始演出が終了してからゲームを開始する。
 func _ready() -> void:
 	_connect_game_signals()
@@ -90,12 +99,15 @@ func _ready() -> void:
 	_set_input_enabled(false)
 
 	if start_automatically:
-		if not _start_animation.is_node_ready():
-			await _start_animation.ready
-		await _start_animation.animation_async()
-		start_random_question()
-		_game_timer.start()
+		_start_game()
 
+
+func _start_game() -> void:
+	if not _start_animation.is_node_ready():
+		await _start_animation.ready
+	await _start_animation.animation_async()
+	start_random_question()
+	_game_timer.start()
 
 ## ゲーム進行シグナルを、対応する画面演出へ接続する。
 func _connect_game_signals() -> void:

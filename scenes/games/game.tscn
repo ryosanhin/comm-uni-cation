@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cb0nj0klx4fvq" path="res://prefabs/ui/overlays/start_animation.tscn" id="11_el6ob"]
 [ext_resource type="PackedScene" uid="uid://bl5bvn5ntoh5i" path="res://prefabs/ui/overlays/result_panel.tscn" id="11_result"]
 [ext_resource type="PackedScene" uid="uid://d1h8j26twf6y3" path="res://prefabs/ui/overlays/finish_animation.tscn" id="12_el6ob"]
+[ext_resource type="Script" uid="uid://dg50yljfj7dd2" path="res://addons/katamusubi/runtime/scope/container_scope.gd" id="14_c5rmg"]
 
 [node name="Game" type="Control" unique_id=1098155860]
 layout_mode = 3
@@ -39,6 +40,7 @@ visibility_rect = Rect2(-100, -100, 200, 480)
 
 [node name="MorseGame" type="Node" parent="." unique_id=849013333 node_paths=PackedStringArray("_morse_input", "_ufo", "_neo_uni_face", "_question_bubble", "_morse_preview", "_timer_viewer", "_game_timer", "_start_animation", "_finish_animation", "_result_panel")]
 script = ExtResource("2_m6dsl")
+start_automatically = false
 _morse_input = NodePath("../MorseInput")
 _ufo = NodePath("../Ufo")
 _neo_uni_face = NodePath("../NeoUniFace")
@@ -106,7 +108,7 @@ offset_bottom = 561.0
 scale = Vector2(0.5, 0.5)
 
 [node name="GameTimer" parent="." unique_id=323313515 instance=ExtResource("9_g0u26")]
-wait_time = 30.0
+wait_time = 60.0
 
 [node name="Overlay" type="CanvasLayer" parent="." unique_id=909724856]
 layer = 2
@@ -116,3 +118,9 @@ layer = 2
 [node name="FinishAnimation" parent="Overlay" unique_id=1716260563 instance=ExtResource("12_el6ob")]
 
 [node name="ResultPanel" parent="Overlay" unique_id=1827263328 instance=ExtResource("11_result")]
+
+[node name="ContainerScope" type="Node" parent="." unique_id=1331844934 node_paths=PackedStringArray("_inject_targets")]
+script = ExtResource("14_c5rmg")
+parent_scope_id = &"core"
+_inject_targets = [NodePath("../MorseGame")]
+metadata/_custom_type_script = "uid://dg50yljfj7dd2"
