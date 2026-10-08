@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cfkprgstd28og" path="res://prefabs/ui/overlays/result_panel.gd" id="1_result"]
 [ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="2_e3hj3"]
+[ext_resource type="Script" uid="uid://dg50yljfj7dd2" path="res://addons/katamusubi/runtime/scope/container_scope.gd" id="3_dk17n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
 bg_color = Color(0, 0, 0, 0.75000006)
@@ -10,7 +11,7 @@ corner_radius_top_right = 64
 corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
-[node name="ResultPanel" type="Panel" unique_id=510784712]
+[node name="ResultPanel" type="Panel" unique_id=510784712 node_paths=PackedStringArray("_result_title", "_result_count", "_button")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +20,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rjevm")
 script = ExtResource("1_result")
+_result_title = NodePath("ResultTitle")
+_result_count = NodePath("ResultCount")
+_button = NodePath("Button")
 
 [node name="ResultTitle" type="Label" parent="." unique_id=49320732]
 layout_mode = 1
@@ -67,3 +71,9 @@ theme = ExtResource("2_e3hj3")
 theme_override_font_sizes/font_size = 96
 text = "BACK"
 flat = true
+
+[node name="ContainerScope" type="Node" parent="." unique_id=1044639326 node_paths=PackedStringArray("_inject_targets")]
+script = ExtResource("3_dk17n")
+parent_scope_id = &"core"
+_inject_targets = [NodePath("..")]
+metadata/_custom_type_script = "uid://dg50yljfj7dd2"

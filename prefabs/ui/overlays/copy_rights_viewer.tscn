@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://dpht84vkq6s1x"]
+
+[ext_resource type="Script" uid="uid://dt756ys8akn8" path="res://prefabs/ui/overlays/copy_rights_viewer.gd" id="1_0sfwm"]
+[ext_resource type="Theme" uid="uid://xho4udjdfqj1" path="res://prefabs/ui/themes/basic_text_theme.tres" id="1_geo8f"]
+[ext_resource type="Script" uid="uid://cusemppqh1ojs" path="res://prefabs/ui/overlays/copyrights_label.gd" id="2_d2xlf"]
+[ext_resource type="Texture2D" uid="uid://cixrajcrglvkc" path="res://textures/utilities.png" id="4_7eqny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjevm"]
+bg_color = Color(0, 0, 0, 0.75000006)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjevm"]
+atlas = ExtResource("4_7eqny")
+region = Rect2(256, 0, 128, 128)
+
+[node name="CopyRightsViewer" type="Node" unique_id=1820683964 node_paths=PackedStringArray("_button")]
+script = ExtResource("1_0sfwm")
+_button = NodePath("CanvasLayer/Button")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1643669136]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=962304722]
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.1
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rjevm")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PanelContainer" unique_id=266385983]
+layout_mode = 2
+offset_transform_enabled = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer/ScrollContainer" unique_id=1947419541]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/ScrollContainer/MarginContainer" unique_id=816341311]
+layout_mode = 2
+
+[node name="UmaLabel" type="Label" parent="CanvasLayer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=980168561]
+layout_mode = 2
+theme = ExtResource("1_geo8f")
+theme_override_font_sizes/font_size = 32
+text = "Text"
+script = ExtResource("2_d2xlf")
+license_path = "res://licenses/umamusume.txt"
+
+[node name="FontLabel" type="Label" parent="CanvasLayer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1070967499]
+layout_mode = 2
+theme = ExtResource("1_geo8f")
+theme_override_font_sizes/font_size = 32
+text = "Text"
+script = ExtResource("2_d2xlf")
+license_path = "res://licenses/font.txt"
+
+[node name="GodotLabel" type="Label" parent="CanvasLayer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1721775388]
+layout_mode = 2
+theme = ExtResource("1_geo8f")
+theme_override_font_sizes/font_size = 32
+text = "Text"
+script = ExtResource("2_d2xlf")
+license_path = "res://licenses/godot.txt"
+
+[node name="Button" type="Button" parent="CanvasLayer" unique_id=1228389843]
+anchors_preset = -1
+anchor_left = 0.95
+anchor_top = 0.025
+anchor_right = 0.95
+anchor_bottom = 0.025
+offset_left = -136.0
+offset_bottom = 136.0
+grow_horizontal = 0
+scale = Vector2(0.5, 0.5)
+pivot_offset_ratio = Vector2(1, 0)
+icon = SubResource("AtlasTexture_rjevm")

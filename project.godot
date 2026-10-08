@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CommUniCation"
-run/main_scene="res://scenes/games/game.tscn"
+run/main_scene="uid://rfsi4rkc2dw6"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
@@ -20,6 +20,14 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/katamusubi/plugin.cfg")
+
+[global_group]
+
+katamusubi_scope="Scope group"
 
 [internationalization]
 

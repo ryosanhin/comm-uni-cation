@@ -1,8 +1,5 @@
 extends CanvasLayer
 
-const TransitionEnums := preload("transition_enums.gd")
-const TransitionRegistry := preload("transition_registry.gd")
-
 @export var _transition_registry: TransitionRegistry
 
 @export var _transition_rect: ColorRect
