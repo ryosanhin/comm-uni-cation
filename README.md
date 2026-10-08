@@ -5,6 +5,21 @@
 
 *English is not my first language so there may be some mistakes. Suggestions or corrections are always welcome. Thank you for your understanding!*
 
+## Setup
+
+The font and DI plugin used by this game are not included in this repository.
+
+### Font
+
+This game uses **Noto Sans JP Bold**.
+Get the font from [Google Fonts](https://fonts.google.com/specimen/Noto+Sans+JP) and place the Bold font file at `third_party/fonts/NotoSansJP-Bold.ttf`.
+See [licenses/font.txt](licenses/font.txt) for the font license.
+
+### DI plugin
+
+This game uses [katamusubi](https://github.com/ryosanhin/katamusubi), my DI plugin for Godot, to pass node references between scenes.
+Copy its `addons/katamusubi` folder into this project's `addons` folder, then enable the plugin in **Project > Project Settings > Plugins**.
+
 ## License
 The files in this repository are licensed under different terms depending on the directory.
 
