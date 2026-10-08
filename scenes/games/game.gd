@@ -88,8 +88,6 @@ func inject_dependency(scene_controller: SceneController) -> void:
 		_start_game()
 
 
-
-
 ## ゲーム画面のシグナルを接続し、開始演出が終了してからゲームを開始する。
 func _ready() -> void:
 	_connect_game_signals()
