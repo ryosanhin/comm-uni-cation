@@ -5,6 +5,7 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	_button.grab_focus()
 	_button.pressed.connect(_delete)
 
 
