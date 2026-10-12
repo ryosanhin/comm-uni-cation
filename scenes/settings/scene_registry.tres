@@ -8,18 +8,16 @@
 [sub_resource type="Resource" id="Resource_pvspv"]
 script = ExtResource("1_mq74y")
 scene = ExtResource("2_4u77j")
-scene_type = 1
 metadata/_custom_type_script = "uid://cj45pwnltmtx2"
 
 [sub_resource type="Resource" id="Resource_wosw1"]
 script = ExtResource("1_mq74y")
 scene = ExtResource("3_5i7su")
-scene_type = 1
 metadata/_custom_type_script = "uid://cj45pwnltmtx2"
 
 [resource]
 script = ExtResource("2_qqkfr")
-_data_dict = Dictionary[int, ExtResource("1_mq74y")]({
-0: SubResource("Resource_pvspv"),
-1: SubResource("Resource_wosw1")
+_data_dict = Dictionary[StringName, ExtResource("1_mq74y")]({
+&"title": SubResource("Resource_pvspv"),
+&"main_game": SubResource("Resource_wosw1")
 })

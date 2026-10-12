@@ -3,19 +3,26 @@ class_name SceneController
 
 const TransitionController := preload("transition_controllers/transition_controller.gd")
 
-signal scene_change_started(scene_id: SceneEnums.Id)
-signal scene_changed(scene_id: SceneEnums.Id)
+## シーン切り替えと画面を覆う演出の開始を通知する。
+signal scene_change_started(scene_id: StringName)
+## 新シーンの追加とID更新後、画面を戻す演出の前に通知する。
+## シーン独自の非同期初期化や受信側の非同期処理の完了は待たない。
+signal scene_replaced(scene_id: StringName)
+## 画面を戻す演出を含むシーン切り替え全体の完了を通知する。
+signal scene_changed(scene_id: StringName)
 
 @export var _scene_registry: SceneRegistry
 
 @export var _transition_controller: TransitionController
+## 交換対象のシーンだけを子に配置する専用ルート。
 @export var _main_scenes_root: Node
 
 @export_range(0.0, 10.0) var _transition_duration := 1.0
 
-@export var init_scene_id: SceneEnums.Id
+## 外部で専用ルートに配置した初期シーンのID。
+@export var init_scene_id: StringName = &""
 
-var current_main_scene_id: SceneEnums.Id = SceneEnums.Id.INVALID
+var current_main_scene_id: StringName = &""
 
 var is_changing := false
 
@@ -25,8 +32,8 @@ func _ready() -> void:
 
 
 ## 該当シーンが読み込まれているか[br]
-##[param scene_id]: シーンのID
-func is_loaded(scene_id: SceneEnums.Id) -> bool:
+## [param scene_id]: シーンのID
+func is_loaded(scene_id: StringName) -> bool:
 	var entry := _scene_registry.get_scene_data(scene_id)
 
 	if entry == null or entry.scene == null:
@@ -41,11 +48,11 @@ func is_loaded(scene_id: SceneEnums.Id) -> bool:
 
 ## シーン切り替え[br]
 ## [param scene_id]: シーンのID[br]
-## [param transitino_id]: 遷移エフェクトのID[br]
+## [param transition_id]: 遷移エフェクトのID[br]
 ## returns: await 可能
 func change_main_scene(
-	scene_id: SceneEnums.Id,
-	transition_id: TransitionEnums.Id
+	scene_id: StringName,
+	transition_id: StringName
 ) -> void:
 	var entry := _resolve_scene_entry(scene_id)
 	if entry == null:
@@ -71,6 +78,7 @@ func change_main_scene(
 		return
 
 	await _replace_main_scene(scene_id, next_scene)
+	scene_replaced.emit(scene_id)
 
 	await _transition_controller.fade_out(
 		transition_id,
@@ -82,7 +90,7 @@ func change_main_scene(
 
 
 ## シーン切り替えリクエストを検証し、切り替え先のエントリーを返す。
-func _resolve_scene_entry(scene_id: SceneEnums.Id) -> SceneEntry:
+func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 	if is_changing or scene_id == current_main_scene_id:
 		return null
 
@@ -107,7 +115,7 @@ func _instantiate_scene(entry: SceneEntry) -> Node:
 
 
 ## 現在のメインシーンを解放し、切り替え先のノードに入れ替える。
-func _replace_main_scene(next_scene_id: SceneEnums.Id, next_scene: Node) -> void:
+func _replace_main_scene(next_scene_id: StringName, next_scene: Node) -> void:
 	for current_scene: Node in _main_scenes_root.get_children():
 		_main_scenes_root.remove_child(current_scene)
 		current_scene.queue_free()
@@ -120,7 +128,7 @@ func _replace_main_scene(next_scene_id: SceneEnums.Id, next_scene: Node) -> void
 
 
 ## シーン切り替えの完了を記録し、通知する。
-func _complete_scene_change(scene_id: SceneEnums.Id) -> void:
+func _complete_scene_change(scene_id: StringName) -> void:
 	scene_changed.emit(scene_id)
 
 

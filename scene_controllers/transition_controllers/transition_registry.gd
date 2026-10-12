@@ -1,10 +1,10 @@
 extends Resource
 class_name TransitionRegistry
 
-@export var _entries: Dictionary[TransitionEnums.Id, TransitionEntry] = {}
+@export var _entries: Dictionary[StringName, TransitionEntry] = {}
 
 
-func get_entry(id: TransitionEnums.Id) -> TransitionEntry:
+func get_entry(id: StringName) -> TransitionEntry:
 	if not _entries.has(id):
 		push_error("TransitionEntryが登録されていません:", id)
 		return null
