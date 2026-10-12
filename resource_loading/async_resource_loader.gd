@@ -1,4 +1,4 @@
-extends Node
+extends RefCounted
 
 enum ErrorCode {
 	OK,
@@ -24,11 +24,19 @@ class LoadResult extends RefCounted:
 		return error_code == ErrorCode.OK
 
 
+var _check_requested: Signal
 var _loading_paths: Dictionary[String, bool] = {}
 
 
+## 読み込み状況の再確認を知らせるシグナルを設定する。[br]
+## [param check_requested]: 読み込み中も繰り返し発火する有効なシグナル。
+## シグナルの発行元は、読み込みが完了するまで維持すること。
+func _init(check_requested: Signal) -> void:
+	_check_requested = check_requested
+
+
 ## Resourceをバックグラウンドで読み込み、完了後に結果を返す。[br]
-## 同じインスタンスへの同じパスの重複要求は拒否する。読み込み中はツリーに残すこと。[br]
+## 同じインスタンスへの同じパスの重複要求は拒否する。[br]
 ## [param resource_path]: 読み込むリソースのパス[br]
 ## [param type_hint]: ResourceLoaderへ渡す型のヒント。結果の型を保証するものではない
 func load_resource(resource_path: String, type_hint: String = "") -> LoadResult:
@@ -63,7 +71,7 @@ func load_resource(resource_path: String, type_hint: String = "") -> LoadResult:
 					result.error_code = ErrorCode.LOAD_FAILED
 				return result
 			ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-				await get_tree().process_frame
+				await _check_requested
 			_:
 				if status == ResourceLoader.THREAD_LOAD_FAILED:
 					# 完了済みの失敗要求も回収し、ローダー内部の参照を残さない。

@@ -14,7 +14,6 @@ signal scene_changed(scene_id: StringName)
 
 @export var _scene_registry: SceneRegistry
 
-@export var _resource_loader: AsyncResourceLoader
 @export var _transition_controller: TransitionController
 ## 交換対象のシーンだけを子に配置する専用ルート。
 @export var _main_scenes_root: Node
@@ -24,12 +23,15 @@ signal scene_changed(scene_id: StringName)
 ## 外部で専用ルートに配置した初期シーンのID。
 @export var init_scene_id: StringName = &""
 
+var _resource_loader: AsyncResourceLoader
+
 var current_main_scene_id: StringName = &""
 
 var is_changing := false
 
 
 func _ready() -> void:
+	_resource_loader = AsyncResourceLoader.new(get_tree().process_frame)
 	current_main_scene_id = init_scene_id
 
 

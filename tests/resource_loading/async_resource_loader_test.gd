@@ -8,7 +8,7 @@ const RESOURCE_PATH := "res://tests/resource_loading/example.tres"
 var _runner := Runner.new(true)
 
 
-## ツリーへローダーを追加してから読み込みを確認する。
+## フレーム通知を受け取るローダーで読み込みを確認する。
 func _initialize() -> void:
 	call_deferred("_run_tests")
 
@@ -16,8 +16,7 @@ func _initialize() -> void:
 ## シーン以外も読み込めることと、失敗後も再利用できることを確認する。
 func _run_tests() -> void:
 	_runner.change_test_name("async_resource_loader")
-	var loader := Loader.new()
-	root.add_child(loader)
+	var loader := Loader.new(process_frame)
 	var scene := await loader.load_resource(SCENE_PATH, "PackedScene")
 	_runner.assert_true(scene.resource is PackedScene, "パスからPackedSceneを取得できる")
 	_runner.assert_true(scene.is_success(), "読み込み成功を判別できる")
@@ -36,5 +35,19 @@ func _run_tests() -> void:
 	_runner.assert_null(failed.resource, "読み込み失敗時もResourceを持たない")
 	var reloaded := await loader.load_resource(SCENE_PATH, "PackedScene")
 	_runner.assert_true(reloaded.resource is PackedScene, "読み込み完了・失敗後も同じローダーを再利用できる")
-	loader.queue_free()
+	await _test_timer_signal()
 	await _runner.finish(self, "async_resource_loader")
+
+
+## SceneTree以外の発行元のシグナルでも再確認できる。
+func _test_timer_signal() -> void:
+	_runner.change_test_name("timer_signal")
+	var timer := Timer.new()
+	timer.wait_time = 0.01
+	root.add_child(timer)
+	timer.start()
+	var loader := Loader.new(timer.timeout)
+	var result := await loader.load_resource("res://tests/resource_loading/timer_resource.tres")
+	_runner.assert_true(result.is_success(), "Timerのtimeoutを渡して読み込める")
+	_runner.assert_true(result.resource is Resource, "読み込んだResourceを受け取れる")
+	timer.queue_free()
