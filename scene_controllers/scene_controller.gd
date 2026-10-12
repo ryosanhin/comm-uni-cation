@@ -43,8 +43,12 @@ func is_loaded(scene_id: StringName) -> bool:
 	if entry == null or entry.scene_path.is_empty():
 		return false
 
+	var scene_path := AsyncResourceLoader.resolve_resource_path(entry.scene_path)
+	if scene_path.is_empty():
+		return false
+
 	for scene in _main_scenes_root.get_children():
-		if scene.scene_file_path == entry.scene_path:
+		if scene.scene_file_path == scene_path:
 			return true
 
 	return false
@@ -103,14 +107,14 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 		return null
 
 	if entry.scene_path.is_empty():
-		push_error("切り替え先のシーンパスが設定されていません")
+		push_error("切り替え先のシーンのUIDまたはパスが設定されていません")
 		return null
 
 	return entry
 
 
 ## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
-## [param entry]: 切り替え先のシーンパスを持つエントリー
+## [param entry]: 切り替え先のシーンのUIDまたはパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
 	var resource_loader := AsyncResourceLoader.new(get_tree().process_frame)
 	var result := await resource_loader.load_resource_async(entry.scene_path, "PackedScene")

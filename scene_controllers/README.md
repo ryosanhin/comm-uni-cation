@@ -1,14 +1,14 @@
 # シーン切り替え
 
 このディレクトリは、専用ルート配下のシーン交換と画面遷移を管理します。
-読み込みには `resource_loading/async_resource_loader.gd` を利用します。
+読み込みには `async_resource_loaders/async_resource_loader.gd` を利用します。
 ゲーム固有のIDは `scenes/scene_ids.gd` と `scenes/transition_ids.gd`、
 登録内容は `scenes/settings/` に置き、`scenes/core.tscn` で設定します。
 
 ## 設定
 
 - `SceneRegistry` は `StringName` のIDと `SceneEntry` を対応付けます。
-  `SceneEntry.scene_path` にシーンのパスを設定します。登録だけではシーンを読み込みません。
+  `SceneEntry.scene_path` にシーンのUIDを設定します。通常のリソースパスも利用できます。登録だけではシーンを読み込みません。
 - `TransitionRegistry` は `StringName` のIDと `TransitionEntry` を対応付けます。
 - `SceneController` の `_scene_registry` と、子の `TransitionController` の
   `_transition_registry` は、利用するプロジェクト側で設定します。
@@ -30,10 +30,12 @@
 
 ## 読み込み
 
-ローダーはRefCountedとして `_ready()` で生成し、`get_tree().process_frame` を渡します。
+ローダーはRefCountedとしてシーン読み込み時に生成し、`get_tree().process_frame` を渡します。
 子ノードの配置やローダーのNodePath設定は不要です。
 
-画面を覆った後、汎用ローダーの `load_resource(path, "PackedScene")` をawaitします。
+`is_loaded()` はUIDを現在のパスへ解決し、ノードの `scene_file_path` と比較します。
+
+画面を覆った後、汎用ローダーの `load_resource_async(entry.scene_path, "PackedScene")` をawaitします。
 SceneControllerが渡す `process_frame` シグナルで完了状態を確認し、読み込んだResourceを取得してからメインスレッドで
 シーンを生成・追加します。生成や `_ready()` 自体はバックグラウンド処理ではありません。
 読み込みや生成に失敗した場合は旧シーンを残し、画面を戻して遷移中状態を解除します。

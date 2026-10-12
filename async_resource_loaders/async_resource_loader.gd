@@ -15,6 +15,7 @@ enum ErrorCode {
 class LoadResult extends RefCounted:
 	var error_code: ErrorCode = ErrorCode.OK
 	var resource: Resource
+	## 呼び出し元が指定したUIDまたはパス。エラー説明に利用する。
 	var resource_path: String
 	var request_error: Error = OK
 
@@ -36,17 +37,18 @@ func _init(init_check_requested: Signal) -> void:
 
 
 ## Resourceをバックグラウンドで読み込み、完了後に結果を返す。[br]
-## 同じインスタンスへの同じパスの重複要求は拒否する。[br]
-## [param resource_path]: 読み込むリソースのパス[br]
+## 同じインスタンスへの同じリソースの重複要求は、UIDとパスの違いにかかわらず拒否する。[br]
+## [param resource_reference]: 読み込むリソースのUID。通常のリソースパスも指定できる[br]
 ## [param type_hint]: ResourceLoaderへ渡す型のヒント。結果の型を保証するものではない
-func load_resource_async(resource_path: String, type_hint: String = "") -> LoadResult:
+func load_resource_async(resource_reference: String, type_hint: String = "") -> LoadResult:
 	var result := LoadResult.new()
-	result.resource_path = resource_path
-	if resource_path.is_empty():
+	result.resource_path = resource_reference
+	if resource_reference.is_empty():
 		result.error_code = ErrorCode.EMPTY_PATH
 		return result
 
-	if not ResourceLoader.exists(resource_path):
+	var resource_path := resolve_resource_path(resource_reference)
+	if resource_path.is_empty() or not ResourceLoader.exists(resource_path):
 		result.error_code = ErrorCode.RESOURCE_NOT_FOUND
 		return result
 
@@ -88,6 +90,23 @@ func load_resource_async(resource_path: String, type_hint: String = "") -> LoadR
 	return result
 
 
+## UIDを現在のリソースパスへ解決する。通常のパスは整理して返す。[br]
+## 解決できないUIDでは空文字列を返し、リソース自体は読み込まない。[br]
+## [param resource_reference]: リソースのUIDまたはパス
+static func resolve_resource_path(resource_reference: String) -> String:
+	if resource_reference.is_empty():
+		return ""
+	if resource_reference.begins_with("uid://"):
+		var uid := ResourceUID.text_to_id(resource_reference)
+		if uid == ResourceUID.INVALID_ID or not ResourceUID.has_id(uid):
+			return ""
+		return ResourceUID.get_id_path(uid).simplify_path()
+
+	if resource_reference.is_relative_path():
+		return ("res://" + resource_reference).simplify_path()
+	return resource_reference.simplify_path()
+
+
 ## 読み込み結果を人間向けの説明文へ変換する。[br]
 ## [param result]: 読み込み結果
 static func format_error(result: LoadResult) -> String:
@@ -95,11 +114,11 @@ static func format_error(result: LoadResult) -> String:
 		ErrorCode.OK:
 			return ""
 		ErrorCode.EMPTY_PATH:
-			return "リソースパスが指定されていません。"
+			return "リソースのUIDまたはパスが指定されていません。"
 		ErrorCode.RESOURCE_NOT_FOUND:
 			return "リソースが存在しません: %s" % result.resource_path
 		ErrorCode.ALREADY_LOADING:
-			return "同じパスを読み込み中です: %s" % result.resource_path
+			return "同じリソースを読み込み中です: %s" % result.resource_path
 		ErrorCode.REQUEST_FAILED:
 			return "読み込み要求に失敗しました: %s (%s)" % [result.resource_path, result.request_error]
 		ErrorCode.LOAD_FAILED:

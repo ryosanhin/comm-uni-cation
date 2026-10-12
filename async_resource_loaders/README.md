@@ -4,24 +4,26 @@
 コンストラクタへ渡し、次のように呼び出します。
 
 ```gdscript
-const AsyncResourceLoader := preload("res://resource_loading/async_resource_loader.gd")
+const AsyncResourceLoader := preload("res://async_resource_loaders/async_resource_loader.gd")
 
 var loader := AsyncResourceLoader.new(get_tree().process_frame)
-var result := await loader.load_resource(resource_path, "PackedScene")
+var result := await loader.load_resource_async(resource_reference, "PackedScene")
 if not result.is_success():
 	push_error(AsyncResourceLoader.format_error(result))
 	return
 var resource := result.resource
 ```
 
+- `resource_reference` には `uid://...` のUIDを基本として指定します。既存設定やコードからの `res://...` パスも利用できます。
+- `resolve_resource_path()` でUIDを現在のパスへ解決し、重複判定・要求・状態確認・結果取得には同じパスを使います。解決できないUIDは `RESOURCE_NOT_FOUND` になります。
 - `ResourceLoader.load_threaded_request()` で読み込みを開始し、未完了なら渡されたシグナルを待ち、発火時に状態を再確認します。
-- 結果は `LoadResult` です。`error_code`、`resource`、`resource_path`、要求失敗時の `request_error` を保持します。
+- 結果は `LoadResult` です。`error_code`、`resource`、呼び出し元が指定したUIDまたはパスを保持する `resource_path`、要求失敗時の `request_error` を保持します。
 - `is_success()` で成否を判定します。成功時だけ `resource` を取得でき、型の確認は呼び出し側で行います。
 - `format_error()` で説明文へ変換できます。ローダー自身はpush_errorを呼ばず、表示は呼び出し側で行います（Godot内部のエラーログは出る場合があります）。
 - エラーコードは `EMPTY_PATH`、`RESOURCE_NOT_FOUND`、`ALREADY_LOADING`、`REQUEST_FAILED`、`LOAD_FAILED`、`INVALID_REQUEST` です。成功は `OK` です。
 - シーン以外のResourceにも利用できます。生成・ツリーへの追加は呼び出し側の責務です。
-- 同じローダーへの異なるパスの要求は並行して待機できます。同じパスの読み込み中の重複要求は拒否します。
-- 同じパスの読み込みはこのローダーへ集約してください。読み込み中はローダーとシグナルの発行元を維持してください。
+- 同じローダーへの異なるパスの要求は並行して待機できます。同じリソースの読み込み中の重複要求は、UIDとパスの違いにかかわらず拒否します。
+- 同じリソースの読み込みはこのローダーへ集約してください。読み込み中はローダーとシグナルの発行元を維持してください。
 - 結果をキャッシュする独自の保持処理や完了シグナルはありません。呼び出し側はawaitで結果を受け取ります。
 - エンジンの標準キャッシュを利用します。パス方式でも他のノードやResourceの参照があるアセットは保持されます。
 

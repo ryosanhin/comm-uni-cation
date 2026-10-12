@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Runner := preload("res://tests/test_runner.gd")
+const NEXT_SCENE_UID := "uid://dqw1q4y2w3h6a"
 const NEXT_SCENE_PATH := "res://tests/scene_controller/fixtures/next_scene.tscn"
 
 const ControllerScene := preload("res://scene_controllers/scene_controller.tscn")
@@ -30,7 +31,7 @@ func _test_scene_replacement() -> void:
 	root.add_child(scenes_root)
 
 	var entry := SceneEntry.new()
-	entry.scene_path = NEXT_SCENE_PATH
+	entry.scene_path = NEXT_SCENE_UID
 	var registry := SceneRegistry.new()
 	registry._data_dict[&"other_project_level"] = entry
 
@@ -55,7 +56,7 @@ func _test_scene_replacement() -> void:
 		_runner.assert_equal(controller.current_main_scene_id, id, "交換通知前に現在IDを更新する")
 		_runner.assert_equal(scenes_root.get_child_count(), 1, "専用ルートには新シーンだけを置く")
 		_runner.assert_equal(scenes_root.get_child(0).name, &"NextScene", "新シーンが追加済みである")
-		_runner.assert_true(controller.is_loaded(id), "パスで追加済みシーンを判定できる")
+		_runner.assert_true(controller.is_loaded(id), "UIDで追加済みシーンを判定できる")
 		_runner.assert_true(controller.is_changing, "交換通知時には遷移中である")
 		_runner.assert_true(transition._transition_rect.visible, "交換通知時には画面を覆っている")
 		_runner.assert_equal(transition._material.get_shader_parameter(&"Value"), 1.0, "画面を戻す演出は未開始である")
@@ -73,6 +74,11 @@ func _test_scene_replacement() -> void:
 	controller.change_main_scene(&"other_project_level", &"other_project_effect")
 	await controller.scene_changed
 	_runner.assert_array(events, [&"started", &"replaced", &"changed"], "通知順序を守り、重複要求を拒否する")
+	entry.scene_path = NEXT_SCENE_PATH
+	_runner.assert_true(controller.is_loaded(&"other_project_level"), "通常のパスでも同じ追加済みシーンを判定できる")
+	entry.scene_path = "uid://invalid"
+	_runner.assert_false(controller.is_loaded(&"other_project_level"), "無効なUIDを追加済みと判定しない")
+	entry.scene_path = NEXT_SCENE_UID
 	await controller.change_main_scene(&"other_project_level", &"other_project_effect")
 	_runner.assert_equal(events.size(), 3, "現在のシーンへの再要求では通知しない")
 	controller.queue_free()
@@ -105,6 +111,7 @@ func _test_loading_failure() -> void:
 	root.add_child(controller)
 
 	for path: String in [
+		"uid://invalid",
 		"res://tests/scene_controller/fixtures/missing.tscn",
 		"res://tests/resource_loading/example.tres",
 	]:
@@ -115,9 +122,9 @@ func _test_loading_failure() -> void:
 		_runner.assert_false(controller.is_changing, "失敗時も遷移中状態を解除する")
 		_runner.assert_false(transition._transition_rect.visible, "失敗時も画面を戻す")
 	_runner.assert_equal(completed[0], 0, "失敗時は交換・全体完了を通知しない")
-	entry.scene_path = NEXT_SCENE_PATH
+	entry.scene_path = NEXT_SCENE_UID
 	await controller.change_main_scene(&"failed_level", &"effect")
-	_runner.assert_equal(controller.current_main_scene_id, &"failed_level", "失敗後に正しいパスで再試行できる")
+	_runner.assert_equal(controller.current_main_scene_id, &"failed_level", "失敗後に正しいUIDで再試行できる")
 	controller.queue_free()
 	scenes_root.queue_free()
 	await process_frame
