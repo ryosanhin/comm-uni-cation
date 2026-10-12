@@ -110,7 +110,12 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 ## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
 ## [param entry]: 切り替え先のシーンパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
-	var packed_scene := await _resource_loader.load_resource(entry.scene_path, "PackedScene") as PackedScene
+	var result := await _resource_loader.load_resource(entry.scene_path, "PackedScene")
+	if not result.is_success():
+		push_error(AsyncResourceLoader.format_error(result))
+		return null
+
+	var packed_scene := result.resource as PackedScene
 	if packed_scene == null:
 		push_error("切り替え先のPackedSceneを読み込めませんでした: %s" % entry.scene_path)
 		return null
