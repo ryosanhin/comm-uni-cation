@@ -1,12 +1,14 @@
 # シーン切り替え
 
 このディレクトリは、専用ルート配下のシーン交換と画面遷移を管理します。
+読み込みには `resource_loading/async_resource_loader.gd` を利用します。
 ゲーム固有のIDは `scenes/scene_ids.gd` と `scenes/transition_ids.gd`、
 登録内容は `scenes/settings/` に置き、`scenes/core.tscn` で設定します。
 
 ## 設定
 
 - `SceneRegistry` は `StringName` のIDと `SceneEntry` を対応付けます。
+  `SceneEntry.scene_path` にシーンのパスを設定します。登録だけではシーンを読み込みません。
 - `TransitionRegistry` は `StringName` のIDと `TransitionEntry` を対応付けます。
 - `SceneController` の `_scene_registry` と、子の `TransitionController` の
   `_transition_registry` は、利用するプロジェクト側で設定します。
@@ -25,3 +27,15 @@
 
 各通知には切り替え先のIDを渡します。`scene_replaced` はBGMの変更や表示前の設定に使えます。
 シーン独自の非同期初期化や、通知を受けた処理の非同期完了を待つものではありません。
+
+## 読み込み
+
+画面を覆った後、汎用ローダーの `load_resource(path, "PackedScene")` をawaitします。
+完了状態をフレームごとに確認し、読み込んだResourceを取得してからメインスレッドで
+シーンを生成・追加します。生成や `_ready()` 自体はバックグラウンド処理ではありません。
+読み込みや生成に失敗した場合は旧シーンを残し、画面を戻して遷移中状態を解除します。
+成功した交換・全体完了の通知は送りません。
+
+ローダーは読み込み結果を保持しません。生成したノードや他のResourceが参照する
+アセットは、その参照が残っている間は保持されます。
+パス指定だけのシーンもエクスポート対象に含めてください。

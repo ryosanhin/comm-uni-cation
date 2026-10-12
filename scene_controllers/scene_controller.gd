@@ -1,6 +1,7 @@
 extends Node
 class_name SceneController
 
+const AsyncResourceLoader := preload("res://resource_loading/async_resource_loader.gd")
 const TransitionController := preload("transition_controllers/transition_controller.gd")
 
 ## シーン切り替えと画面を覆う演出の開始を通知する。
@@ -13,6 +14,7 @@ signal scene_changed(scene_id: StringName)
 
 @export var _scene_registry: SceneRegistry
 
+@export var _resource_loader: AsyncResourceLoader
 @export var _transition_controller: TransitionController
 ## 交換対象のシーンだけを子に配置する専用ルート。
 @export var _main_scenes_root: Node
@@ -36,11 +38,11 @@ func _ready() -> void:
 func is_loaded(scene_id: StringName) -> bool:
 	var entry := _scene_registry.get_scene_data(scene_id)
 
-	if entry == null or entry.scene == null:
+	if entry == null or entry.scene_path.is_empty():
 		return false
 
 	for scene in _main_scenes_root.get_children():
-		if scene.scene_file_path == entry.scene.resource_path:
+		if scene.scene_file_path == entry.scene_path:
 			return true
 
 	return false
@@ -66,7 +68,7 @@ func change_main_scene(
 		_transition_duration
 	)
 
-	var next_scene := _instantiate_scene(entry)
+	var next_scene := await _instantiate_scene(entry)
 
 	if next_scene == null:
 		await _transition_controller.fade_out(
@@ -98,16 +100,22 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 	if entry == null:
 		return null
 
-	if entry.scene == null:
-		push_error("切り替え先のPackedSceneが設定されていません")
+	if entry.scene_path.is_empty():
+		push_error("切り替え先のシーンパスが設定されていません")
 		return null
 
 	return entry
 
 
-## PackedSceneから切り替え先のノードを生成する。
+## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
+## [param entry]: 切り替え先のシーンパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
-	var next_scene := entry.scene.instantiate()
+	var packed_scene := await _resource_loader.load_resource(entry.scene_path, "PackedScene") as PackedScene
+	if packed_scene == null:
+		push_error("切り替え先のPackedSceneを読み込めませんでした: %s" % entry.scene_path)
+		return null
+
+	var next_scene := packed_scene.instantiate()
 	if next_scene == null:
 		push_error("シーンの生成に失敗しました")
 
