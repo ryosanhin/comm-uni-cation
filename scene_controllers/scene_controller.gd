@@ -6,15 +6,18 @@ const TransitionController := preload("transition_controllers/transition_control
 
 ## シーン切り替えと画面を覆う演出の開始を通知する。
 signal scene_change_started(scene_id: StringName)
+
 ## 新シーンの追加とID更新後、画面を戻す演出の前に通知する。
 ## シーン独自の非同期初期化や受信側の非同期処理の完了は待たない。
 signal scene_replaced(scene_id: StringName)
+
 ## 画面を戻す演出を含むシーン切り替え全体の完了を通知する。
 signal scene_changed(scene_id: StringName)
 
 @export var _scene_registry: SceneRegistry
 
 @export var _transition_controller: TransitionController
+
 ## 交換対象のシーンだけを子に配置する専用ルート。
 @export var _main_scenes_root: Node
 
@@ -23,15 +26,12 @@ signal scene_changed(scene_id: StringName)
 ## 外部で専用ルートに配置した初期シーンのID。
 @export var init_scene_id: StringName = &""
 
-var _resource_loader: AsyncResourceLoader
-
 var current_main_scene_id: StringName = &""
 
 var is_changing := false
 
 
 func _ready() -> void:
-	_resource_loader = AsyncResourceLoader.new(get_tree().process_frame)
 	current_main_scene_id = init_scene_id
 
 
@@ -112,7 +112,8 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 ## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
 ## [param entry]: 切り替え先のシーンパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
-	var result := await _resource_loader.load_resource_async(entry.scene_path, "PackedScene")
+	var resource_loader := AsyncResourceLoader.new(get_tree().process_frame)
+	var result := await resource_loader.load_resource_async(entry.scene_path, "PackedScene")
 	if not result.is_success():
 		push_error(AsyncResourceLoader.format_error(result))
 		return null
