@@ -14,11 +14,11 @@ scene_controller = NodePath("../SceneController")
 scope_id = &"core"
 
 [node name="SceneController" parent="." unique_id=399287393 node_paths=PackedStringArray("_main_scenes_root") instance=ExtResource("1_5634n")]
-_main_scenes_root = NodePath("../MainScenes")
 _scene_registry = ExtResource("4_scenes")
+_main_scenes_root = NodePath("../MainScenes")
 init_scene_id = &"title"
 
-[node name="TransitionController" parent="SceneController" index="0"]
+[node name="TransitionController" parent="SceneController" index="0" unique_id=864892429]
 _transition_registry = ExtResource("5_transitions")
 
 [node name="MainScenes" type="Node" parent="." unique_id=2103955942]

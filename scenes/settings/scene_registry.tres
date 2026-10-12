@@ -5,17 +5,17 @@
 
 [sub_resource type="Resource" id="Resource_pvspv"]
 script = ExtResource("1_mq74y")
-scene_path = "res://scenes/title.tscn"
+scene_path = "uid://cckjxf0tp53w3"
 metadata/_custom_type_script = "uid://cj45pwnltmtx2"
 
 [sub_resource type="Resource" id="Resource_wosw1"]
 script = ExtResource("1_mq74y")
-scene_path = "res://scenes/main_game.tscn"
+scene_path = "uid://cxrfws63aaowk"
 metadata/_custom_type_script = "uid://cj45pwnltmtx2"
 
 [resource]
 script = ExtResource("2_qqkfr")
 _data_dict = Dictionary[StringName, ExtResource("1_mq74y")]({
-&"title": SubResource("Resource_pvspv"),
-&"main_game": SubResource("Resource_wosw1")
+&"main_game": SubResource("Resource_wosw1"),
+&"title": SubResource("Resource_pvspv")
 })

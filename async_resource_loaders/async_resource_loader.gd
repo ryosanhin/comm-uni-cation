@@ -29,17 +29,17 @@ var _loading_paths: Dictionary[String, bool] = {}
 
 
 ## 読み込み状況の再確認を知らせるシグナルを設定する。[br]
-## [param check_requested]: 読み込み中も繰り返し発火する有効なシグナル。
+## [param init_check_requested]: 読み込み中も繰り返し発火する有効なシグナル。
 ## シグナルの発行元は、読み込みが完了するまで維持すること。
-func _init(check_requested: Signal) -> void:
-	_check_requested = check_requested
+func _init(init_check_requested: Signal) -> void:
+	_check_requested = init_check_requested
 
 
 ## Resourceをバックグラウンドで読み込み、完了後に結果を返す。[br]
 ## 同じインスタンスへの同じパスの重複要求は拒否する。[br]
 ## [param resource_path]: 読み込むリソースのパス[br]
 ## [param type_hint]: ResourceLoaderへ渡す型のヒント。結果の型を保証するものではない
-func load_resource(resource_path: String, type_hint: String = "") -> LoadResult:
+func load_resource_async(resource_path: String, type_hint: String = "") -> LoadResult:
 	var result := LoadResult.new()
 	result.resource_path = resource_path
 	if resource_path.is_empty():
@@ -61,6 +61,7 @@ func load_resource(resource_path: String, type_hint: String = "") -> LoadResult:
 		return result
 
 	_loading_paths[resource_path] = true
+	
 	while true:
 		var status := ResourceLoader.load_threaded_get_status(resource_path)
 		match status:

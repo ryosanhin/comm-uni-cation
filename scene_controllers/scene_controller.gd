@@ -1,7 +1,7 @@
 extends Node
 class_name SceneController
 
-const AsyncResourceLoader := preload("res://resource_loading/async_resource_loader.gd")
+const AsyncResourceLoader := preload("res://async_resource_loaders/async_resource_loader.gd")
 const TransitionController := preload("transition_controllers/transition_controller.gd")
 
 ## シーン切り替えと画面を覆う演出の開始を通知する。
@@ -112,7 +112,7 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 ## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
 ## [param entry]: 切り替え先のシーンパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
-	var result := await _resource_loader.load_resource(entry.scene_path, "PackedScene")
+	var result := await _resource_loader.load_resource_async(entry.scene_path, "PackedScene")
 	if not result.is_success():
 		push_error(AsyncResourceLoader.format_error(result))
 		return null
