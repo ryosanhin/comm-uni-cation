@@ -11,7 +11,6 @@ const TransitionIds := preload("transition_ids.gd")
 
 var _scene_contoller: SceneController
 
-var _is_loaded: bool
 
 func inject_dependency(scene_controller: SceneController) -> void:
 	_scene_contoller = scene_controller
@@ -33,10 +32,7 @@ func _change_language(is_english: bool) -> void:
 
 
 func _load_main_scene() -> void:
-	if _is_loaded:
-		return
 	_scene_contoller.change_main_scene(SceneIds.MAIN_GAME, TransitionIds.NORMAL)
-	_is_loaded =true
 
 
 func _show_copyrights() -> void:

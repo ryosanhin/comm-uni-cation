@@ -62,6 +62,9 @@ func change_main_scene(
 	scene_id: StringName,
 	transition_id: StringName
 ) -> void:
+	if is_changing:
+		return
+
 	var entry := _resolve_scene_entry(scene_id)
 	if entry == null:
 		return
