@@ -35,14 +35,14 @@
 
 `is_loaded()` はUIDを現在のパスへ解決し、ノードの `scene_file_path` と比較します。
 
-画面を覆った後、汎用ローダーの `create_request(entry.scene_path, "PackedScene")` でリクエストを生成します。
+画面を覆った後、`AsyncResourceLoader.new(entry.scene_path, get_tree().process_frame, "PackedScene")` でリクエストを生成します。
 未完了なら `completed` をawaitします。即時完了の場合はそのまま結果を利用します。
 SceneControllerが渡す `process_frame` シグナルで完了状態を確認し、読み込んだResourceを取得してからメインスレッドで
 シーンを生成・追加します。生成や `_ready()` 自体はバックグラウンド処理ではありません。
 読み込みや生成に失敗した場合は旧シーンを残し、画面を戻して遷移中状態を解除します。
 成功した交換・全体完了の通知は送りません。
 
-ローダーは読み込み結果を保持せず、リクエストが保持します。生成したノードや他のResourceが参照する
+生成したローダー自身が1件のリクエストとして読み込み結果を保持します。生成したノードや他のResourceが参照する
 アセットは、その参照が残っている間は保持されます。
 パス指定だけのシーンもエクスポート対象に含めてください。
 
