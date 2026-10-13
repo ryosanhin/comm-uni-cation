@@ -136,7 +136,7 @@ func _instantiate_scene(entry: SceneEntry) -> Node:
 	)
 	if not request.is_completed():
 		await request.completed
-	if not request.is_success():
+	if not request.is_successful():
 		push_error(request.format_error())
 		return null
 

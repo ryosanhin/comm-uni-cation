@@ -14,7 +14,7 @@ var request := AsyncResourceLoader.new(
 )
 if not request.is_completed():
 	await request.completed
-if not request.is_success():
+if not request.is_successful():
 	push_error(request.format_error())
 	return
 var resource := request.resource
@@ -28,7 +28,7 @@ var resource := request.resource
 - 同じリソースへの複数要求も受け付けます。各呼び出しは別のリクエストを返し、実際の読み込みや標準キャッシュの共有はGodotに任せます。用途上の重複要求の抑制は呼び出し側で行います。
 - リクエストは `error_code`、`resource`、呼び出し元が指定したUIDまたはパスを保持する `resource_reference`、要求失敗時の `request_error` を保持します。
 - `completed` は成功・失敗にかかわらず、結果と完了状態の確定後に一度だけ発火します。即時失敗やキャッシュ済みリソースでは、生成から戻る前に完了する場合があります。待機前に `is_completed()` を確認してください。完了通知は蓄積されません。
-- `is_success()` は完了して成功した場合だけtrueを返します。読み込み中はfalseです。結果の型は呼び出し側で確認します。
+- `is_successful()` は完了して成功した場合だけtrueを返します。読み込み中はfalseです。結果の型は呼び出し側で確認します。
 - `format_error()` で説明文へ変換できます。表示は呼び出し側で行います（Godot内部のエラーログは出る場合があります）。
 - エラーコードは `EMPTY_PATH`、`RESOURCE_NOT_FOUND`、`REQUEST_FAILED`、`LOAD_FAILED`、`INVALID_REQUEST` です。成功は `OK` です。
 - 読み込み中はリクエストとシグナルの発行元を維持してください。読み込みを開始したインスタンス自身がリクエストです。
