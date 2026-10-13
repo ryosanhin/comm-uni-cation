@@ -14,6 +14,15 @@ signal scene_replaced(scene_id: StringName)
 ## 画面を戻す演出を含むシーン切り替え全体の完了を通知する。
 signal scene_changed(scene_id: StringName)
 
+## シーン切り替え要求の結果。
+enum ChangeResult {
+	SUCCESS,
+	BUSY,
+	ALREADY_CURRENT,
+	INVALID_SCENE,
+	LOAD_FAILED,
+}
+
 @export var _scene_registry: SceneRegistry
 
 @export var _transition_controller: TransitionController
@@ -54,20 +63,23 @@ func is_loaded(scene_id: StringName) -> bool:
 	return false
 
 
-## シーン切り替え[br]
+## シーンを切り替え、要求の結果を返す。[br]
+## awaitで待つと、成功時は演出完了後、読み込み失敗時は復帰後に結果を受け取れる。[br]
 ## [param scene_id]: シーンのID[br]
 ## [param transition_id]: 遷移エフェクトのID[br]
-## returns: await 可能
+## 処理中・現在シーンへの要求・無効な設定では、切り替えずに結果を返す。
 func change_main_scene(
 	scene_id: StringName,
 	transition_id: StringName
-) -> void:
+) -> ChangeResult:
 	if is_changing:
-		return
+		return ChangeResult.BUSY
+	if scene_id == current_main_scene_id:
+		return ChangeResult.ALREADY_CURRENT
 
 	var entry := _resolve_scene_entry(scene_id)
 	if entry == null:
-		return
+		return ChangeResult.INVALID_SCENE
 
 	is_changing = true
 	scene_change_started.emit(scene_id)
@@ -86,7 +98,7 @@ func change_main_scene(
 		)
 
 		_reset_change_state()
-		return
+		return ChangeResult.LOAD_FAILED
 
 	await _replace_main_scene(scene_id, next_scene)
 	scene_replaced.emit(scene_id)
@@ -98,13 +110,11 @@ func change_main_scene(
 
 	_reset_change_state()
 	_complete_scene_change(scene_id)
+	return ChangeResult.SUCCESS
 
 
 ## シーン切り替えリクエストを検証し、切り替え先のエントリーを返す。
 func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
-	if is_changing or scene_id == current_main_scene_id:
-		return null
-
 	var entry := _scene_registry.get_scene_data(scene_id)
 	if entry == null:
 		return null

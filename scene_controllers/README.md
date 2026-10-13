@@ -46,3 +46,26 @@ SceneControllerが渡す `process_frame` シグナルで完了状態を確認し
 アセットは、その参照が残っている間は保持されます。
 パス指定だけのシーンもエクスポート対象に含めてください。
 
+
+## 要求の結果
+
+`change_main_scene()` は `ChangeResult` を返します。結果が必要な呼び出し側は
+`await` で待ちます。既存の通知シグナルも引き続き利用できます。
+
+```gdscript
+var result := await scene_controller.change_main_scene(scene_id, transition_id)
+if result == SceneController.ChangeResult.LOAD_FAILED:
+	# 必要に応じて失敗を表示する。
+	pass
+```
+
+| 結果 | 意味 |
+|---|---|
+| `SUCCESS` | シーン交換、画面を戻す演出、遷移中状態の解除、完了通知が済んだ |
+| `BUSY` | 別の切り替えが処理中で、要求を受理しなかった |
+| `ALREADY_CURRENT` | 現在のシーンへの要求で、切り替えなかった |
+| `INVALID_SCENE` | IDが未登録、エントリーがnull、またはシーン参照が未設定だった |
+| `LOAD_FAILED` | 読み込み・型確認・生成に失敗し、画面を戻して遷移中状態を解除した |
+
+要求を受理しない場合は開始通知を送りません。失敗の詳細は既存のエラーログで確認できます。
+遷移エフェクトが未登録の場合は、従来どおりログを出し、演出を省略してシーン交換を続けます。
