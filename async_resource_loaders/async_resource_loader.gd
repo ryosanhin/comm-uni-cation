@@ -64,7 +64,7 @@ func is_completed() -> bool:
 
 
 ## 読み込みが完了し、成功したか。
-func is_success() -> bool:
+func is_successful() -> bool:
 	return _is_completed and error_code == ErrorCode.OK
 
 

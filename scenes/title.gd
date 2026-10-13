@@ -32,7 +32,7 @@ func _change_language(is_english: bool) -> void:
 
 
 func _load_main_scene() -> void:
-	_scene_contoller.change_main_scene(SceneIds.MAIN_GAME, TransitionIds.NORMAL)
+	_scene_contoller.change_main_scene_async(SceneIds.MAIN_GAME, TransitionIds.NORMAL)
 
 
 func _show_copyrights() -> void:
