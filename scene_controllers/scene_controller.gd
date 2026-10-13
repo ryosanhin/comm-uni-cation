@@ -100,7 +100,7 @@ func change_main_scene_async(
 		_reset_change_state()
 		return ChangeResult.LOAD_FAILED
 
-	await _replace_main_scene(scene_id, next_scene)
+	_replace_main_scene(scene_id, next_scene)
 	scene_replaced.emit(scene_id)
 
 	await _transition_controller.fade_out(
@@ -158,11 +158,8 @@ func _replace_main_scene(next_scene_id: StringName, next_scene: Node) -> void:
 		_main_scenes_root.remove_child(current_scene)
 		current_scene.queue_free()
 
-	_main_scenes_root.add_child(next_scene)
-
-	# add_child()によって_readyまで完了した後、次のフレームまで待って遷移を再開する。
-	await get_tree().process_frame
 	current_main_scene_id = next_scene_id
+	_main_scenes_root.add_child(next_scene)
 
 
 ## シーン切り替えの完了を記録し、通知する。
