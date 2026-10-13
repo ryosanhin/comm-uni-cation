@@ -16,4 +16,4 @@ func inject_dependency(scene_controller: SceneController) -> void:
 
 
 func _back_to_title() -> void:
-	_scene_controller.change_main_scene(SceneIds.TITLE, TransitionIds.NORMAL)
+	_scene_controller.change_main_scene_async(SceneIds.TITLE, TransitionIds.NORMAL)

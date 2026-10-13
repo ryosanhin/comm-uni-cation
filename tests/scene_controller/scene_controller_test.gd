@@ -49,7 +49,7 @@ func _test_scene_replacement() -> void:
 		events.append(&"started")
 		_runner.assert_equal(id, &"other_project_level", "開始通知に要求IDを渡す")
 		_runner.assert_same(scenes_root.get_child(0), old_scene, "開始時には旧シーンが残る")
-		var busy_result := await controller.change_main_scene(id, &"other_project_effect")
+		var busy_result := await controller.change_main_scene_async(id, &"other_project_effect")
 		_runner.assert_equal(busy_result, SceneController.ChangeResult.BUSY, "処理中の要求はBUSYを返す")
 	)
 	controller.scene_replaced.connect(func(id: StringName) -> void:
@@ -72,7 +72,7 @@ func _test_scene_replacement() -> void:
 	root.add_child(controller)
 	_runner.assert_equal(controller.current_main_scene_id, &"initial_level", "外部指定の初期IDを使用する")
 
-	var result := await controller.change_main_scene(&"other_project_level", &"other_project_effect")
+	var result := await controller.change_main_scene_async(&"other_project_level", &"other_project_effect")
 	_runner.assert_equal(result, SceneController.ChangeResult.SUCCESS, "演出完了後にSUCCESSを返す")
 	_runner.assert_false(controller.is_changing, "結果を返す前に遷移中状態を解除する")
 	_runner.assert_false(transition._transition_rect.visible, "結果を返す前に画面を戻す")
@@ -82,7 +82,7 @@ func _test_scene_replacement() -> void:
 	entry.scene_path = "uid://invalid"
 	_runner.assert_false(controller.is_loaded(&"other_project_level"), "無効なUIDを追加済みと判定しない")
 	entry.scene_path = NEXT_SCENE_UID
-	result = await controller.change_main_scene(&"other_project_level", &"other_project_effect")
+	result = await controller.change_main_scene_async(&"other_project_level", &"other_project_effect")
 	_runner.assert_equal(result, SceneController.ChangeResult.ALREADY_CURRENT, "現在のシーンへの要求を区別する")
 	_runner.assert_equal(events.size(), 3, "現在のシーンへの再要求では通知しない")
 	controller.queue_free()
@@ -116,9 +116,9 @@ func _test_loading_failure() -> void:
 	controller.scene_changed.connect(func(_id: StringName) -> void: completed[0] += 1)
 	root.add_child(controller)
 
-	var result := await controller.change_main_scene(&"unregistered_level", &"effect")
+	var result := await controller.change_main_scene_async(&"unregistered_level", &"effect")
 	_runner.assert_equal(result, SceneController.ChangeResult.INVALID_SCENE, "未登録のIDはINVALID_SCENEを返す")
-	result = await controller.change_main_scene(&"failed_level", &"effect")
+	result = await controller.change_main_scene_async(&"failed_level", &"effect")
 	_runner.assert_equal(result, SceneController.ChangeResult.INVALID_SCENE, "未設定の参照はINVALID_SCENEを返す")
 	_runner.assert_equal(started[0], 0, "無効な設定では遷移を開始しない")
 	_runner.assert_false(controller.is_changing, "無効な設定では遷移中にならない")
@@ -130,7 +130,7 @@ func _test_loading_failure() -> void:
 		"res://tests/resource_loading/example.tres",
 	]:
 		entry.scene_path = path
-		result = await controller.change_main_scene(&"failed_level", &"effect")
+		result = await controller.change_main_scene_async(&"failed_level", &"effect")
 		_runner.assert_equal(result, SceneController.ChangeResult.LOAD_FAILED, "読み込み失敗はLOAD_FAILEDを返す")
 		_runner.assert_same(scenes_root.get_child(0), old_scene, "失敗時は旧シーンを残す")
 		_runner.assert_equal(controller.current_main_scene_id, &"initial_level", "失敗時は現在IDを維持する")
@@ -138,7 +138,7 @@ func _test_loading_failure() -> void:
 		_runner.assert_false(transition._transition_rect.visible, "失敗時も画面を戻す")
 	_runner.assert_equal(completed[0], 0, "失敗時は交換・全体完了を通知しない")
 	entry.scene_path = NEXT_SCENE_UID
-	result = await controller.change_main_scene(&"failed_level", &"effect")
+	result = await controller.change_main_scene_async(&"failed_level", &"effect")
 	_runner.assert_equal(result, SceneController.ChangeResult.SUCCESS, "失敗後の再試行も成功結果を返す")
 	_runner.assert_equal(controller.current_main_scene_id, &"failed_level", "失敗後に正しいUIDで再試行できる")
 	controller.queue_free()

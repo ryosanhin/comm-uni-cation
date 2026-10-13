@@ -68,7 +68,7 @@ func is_loaded(scene_id: StringName) -> bool:
 ## [param scene_id]: シーンのID[br]
 ## [param transition_id]: 遷移エフェクトのID[br]
 ## 処理中・現在シーンへの要求・無効な設定では、切り替えずに結果を返す。
-func change_main_scene(
+func change_main_scene_async(
 	scene_id: StringName,
 	transition_id: StringName
 ) -> ChangeResult:

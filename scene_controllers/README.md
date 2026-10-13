@@ -49,11 +49,11 @@ SceneControllerが渡す `process_frame` シグナルで完了状態を確認し
 
 ## 要求の結果
 
-`change_main_scene()` は `ChangeResult` を返します。結果が必要な呼び出し側は
+`change_main_scene_async()` は `ChangeResult` を返します。結果が必要な呼び出し側は
 `await` で待ちます。既存の通知シグナルも引き続き利用できます。
 
 ```gdscript
-var result := await scene_controller.change_main_scene(scene_id, transition_id)
+var result := await scene_controller.change_main_scene_async(scene_id, transition_id)
 if result == SceneController.ChangeResult.LOAD_FAILED:
 	# 必要に応じて失敗を表示する。
 	pass
