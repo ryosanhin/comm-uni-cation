@@ -35,25 +35,27 @@ func _init(
 ) -> void:
 	resource_reference = init_resource_reference
 	_load_resource_async(
-		resolve_resource_path(resource_reference), type_hint, check_requested
+			resolve_resource_path(resource_reference),
+			type_hint,
+			check_requested,
 	)
 
 
 ## UIDを現在のリソースパスへ解決する。通常のパスは整理して返す。[br]
 ## 解決できないUIDでは空文字列を返し、リソース自体は読み込まない。[br]
-## [param reference]: リソースのUIDまたはパス
-static func resolve_resource_path(reference: String) -> String:
-	if reference.is_empty():
+## [param uid_or_path]: リソースのUIDまたはパス
+static func resolve_resource_path(uid_or_path: String) -> String:
+	if uid_or_path.is_empty():
 		return ""
-	if reference.begins_with("uid://"):
-		var id := ResourceUID.text_to_id(reference)
+	if uid_or_path.begins_with("uid://"):
+		var id := ResourceUID.text_to_id(uid_or_path)
 		if id == ResourceUID.INVALID_ID or not ResourceUID.has_id(id):
 			return ""
 		return ResourceUID.get_id_path(id).simplify_path()
 
-	if reference.is_relative_path():
-		return ("res://" + reference).simplify_path()
-	return reference.simplify_path()
+	if uid_or_path.is_relative_path():
+		return ("res://" + uid_or_path).simplify_path()
+	return uid_or_path.simplify_path()
 
 
 ## 読み込みが成功または失敗で完了したか。
@@ -91,7 +93,7 @@ func format_error() -> String:
 ## [param type_hint]: ResourceLoaderへ渡す型のヒント[br]
 ## [param check_requested]: 読み込み状況の再確認を知らせるシグナル
 func _load_resource_async(
-	resolved_path: String,
+	path: String,
 	type_hint: String,
 	check_requested: Signal
 ) -> void:
@@ -100,22 +102,22 @@ func _load_resource_async(
 		_complete()
 		return
 
-	if resolved_path.is_empty() or not ResourceLoader.exists(resolved_path):
+	if path.is_empty() or not ResourceLoader.exists(path):
 		error_code = ErrorCode.RESOURCE_NOT_FOUND
 		_complete()
 		return
 
-	request_error = ResourceLoader.load_threaded_request(resolved_path, type_hint)
+	request_error = ResourceLoader.load_threaded_request(path, type_hint)
 	if request_error != OK:
 		error_code = ErrorCode.REQUEST_FAILED
 		_complete()
 		return
 
 	while true:
-		var status := ResourceLoader.load_threaded_get_status(resolved_path)
+		var status := ResourceLoader.load_threaded_get_status(path)
 		match status:
 			ResourceLoader.THREAD_LOAD_LOADED:
-				resource = ResourceLoader.load_threaded_get(resolved_path)
+				resource = ResourceLoader.load_threaded_get(path)
 				if resource == null:
 					error_code = ErrorCode.LOAD_FAILED
 				_complete()
@@ -125,7 +127,7 @@ func _load_resource_async(
 			_:
 				if status == ResourceLoader.THREAD_LOAD_FAILED:
 					# 完了済みの失敗要求も回収し、ローダー内部の参照を残さない。
-					ResourceLoader.load_threaded_get(resolved_path)
+					ResourceLoader.load_threaded_get(path)
 				error_code = (
 					ErrorCode.LOAD_FAILED
 					if status == ResourceLoader.THREAD_LOAD_FAILED
