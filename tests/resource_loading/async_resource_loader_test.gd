@@ -11,12 +11,14 @@ var _runner := Runner.new(true)
 
 ## フレーム通知を受け取るリクエストで読み込みを確認する。
 func _initialize() -> void:
-	call_deferred("_run_tests")
+	await _test_parallel_requests()
+	await _run_tests()
+	await _test_timer_signal()
+	await _runner.finish(self, "async_resource_loader")
 
 
 ## シーン以外も読み込めることと、失敗後も新しいリクエストで読み込めることを確認する。
 func _run_tests() -> void:
-	await _test_parallel_requests()
 	_runner.change_test_name("async_resource_loader")
 	var scene := Loader.new(SCENE_UID, process_frame, "PackedScene")
 	await _wait_for_request(scene)
@@ -25,36 +27,41 @@ func _run_tests() -> void:
 	_runner.assert_equal(scene.error_code, Loader.ErrorCode.OK, "成功コードを返す")
 	_runner.assert_equal(Loader.resolve_resource_path(SCENE_UID), SCENE_PATH, "UIDを現在のパスへ解決できる")
 	_runner.assert_equal(Loader.resolve_resource_path(SCENE_PATH), SCENE_PATH, "UIDと通常のパスを同じパスへ統一する")
+
 	var invalid := Loader.new("uid://invalid", process_frame)
 	await _wait_for_request(invalid)
 	_runner.assert_equal(invalid.error_code, Loader.ErrorCode.RESOURCE_NOT_FOUND, "無効なUIDはリソース未検出として返す")
 	_runner.assert_equal(invalid.resource_reference, "uid://invalid", "失敗したUIDを保持する")
+
 	var unknown_uid := ResourceUID.create_id()
 	var unknown := Loader.new(ResourceUID.id_to_text(unknown_uid), process_frame)
 	await _wait_for_request(unknown)
 	_runner.assert_equal(unknown.error_code, Loader.ErrorCode.RESOURCE_NOT_FOUND, "未登録のUIDも安全に失敗する")
+
 	var resource := Loader.new(RESOURCE_PATH, process_frame)
 	await _wait_for_request(resource)
 	_runner.assert_true(resource.resource is Resource, "シーン以外のResourceも取得できる")
+
 	var missing := Loader.new("res://tests/resource_loading/missing.tres", process_frame)
 	await _wait_for_request(missing)
 	_runner.assert_equal(missing.error_code, Loader.ErrorCode.RESOURCE_NOT_FOUND, "存在しないパスのエラーコードを返す")
 	_runner.assert_false(missing.is_success(), "失敗結果を判別できる")
 	_runner.assert_null(missing.resource, "失敗時はResourceを持たない")
 	_runner.assert_equal(missing.resource_reference, "res://tests/resource_loading/missing.tres", "失敗したパスを保持する")
+
 	var empty := Loader.new("", process_frame)
 	await _wait_for_request(empty)
 	_runner.assert_true(empty.is_completed(), "即時失敗でも完了状態を保持する")
 	_runner.assert_equal(empty.error_code, Loader.ErrorCode.EMPTY_PATH, "空のパスは未指定として区別する")
+	
 	var failed := Loader.new("res://tests/resource_loading/non_scene.tres", process_frame, "PackedScene")
 	await _wait_for_request(failed)
 	_runner.assert_equal(failed.error_code, Loader.ErrorCode.LOAD_FAILED, "読み込み開始後の失敗をコードで返す")
 	_runner.assert_null(failed.resource, "読み込み失敗時もResourceを持たない")
+	
 	var reloaded := Loader.new(SCENE_PATH, process_frame, "PackedScene")
 	await _wait_for_request(reloaded)
 	_runner.assert_true(reloaded.resource is PackedScene, "読み込み完了・失敗後も新しいリクエストで読み込める")
-	await _test_timer_signal()
-	await _runner.finish(self, "async_resource_loader")
 
 
 ## SceneTree以外の発行元のシグナルでも再確認できる。
