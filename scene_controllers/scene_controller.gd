@@ -116,13 +116,18 @@ func _resolve_scene_entry(scene_id: StringName) -> SceneEntry:
 ## シーンをバックグラウンドで読み込み、切り替え先のノードを生成する。[br]
 ## [param entry]: 切り替え先のシーンのUIDまたはパスを持つエントリー
 func _instantiate_scene(entry: SceneEntry) -> Node:
-	var resource_loader := AsyncResourceLoader.new(get_tree().process_frame)
-	var result := await resource_loader.load_resource_async(entry.scene_path, "PackedScene")
-	if not result.is_success():
-		push_error(AsyncResourceLoader.format_error(result))
+	var request := AsyncResourceLoader.new(
+			entry.scene_path,
+			get_tree().process_frame,
+			"PackedScene",
+	)
+	if not request.is_completed():
+		await request.completed
+	if not request.is_success():
+		push_error(request.format_error())
 		return null
 
-	var packed_scene := result.resource as PackedScene
+	var packed_scene := request.resource as PackedScene
 	if packed_scene == null:
 		push_error("切り替え先のPackedSceneを読み込めませんでした: %s" % entry.scene_path)
 		return null
@@ -155,3 +160,4 @@ func _complete_scene_change(scene_id: StringName) -> void:
 ## シーン切り替え中の状態を解除する。
 func _reset_change_state() -> void:
 	is_changing = false
+

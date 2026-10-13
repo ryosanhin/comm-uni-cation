@@ -1,31 +1,39 @@
 # 非同期Resourceローダー
 
-`async_resource_loader.gd` はRefCountedです。読み込み状況の再確認を知らせるSignalを
-コンストラクタへ渡し、次のように呼び出します。
+`async_resource_loader.gd` は1件の非同期読み込みリクエストを表すRefCountedです。
+リソースのUIDまたはパスと、読み込み状況の再確認を知らせるSignalを
+コンストラクタへ渡すと、読み込みを開始します。
 
 ```gdscript
 const AsyncResourceLoader := preload("res://async_resource_loaders/async_resource_loader.gd")
 
-var loader := AsyncResourceLoader.new(get_tree().process_frame)
-var result := await loader.load_resource_async(resource_reference, "PackedScene")
-if not result.is_success():
-	push_error(AsyncResourceLoader.format_error(result))
+var request := AsyncResourceLoader.new(
+	resource_reference,
+	get_tree().process_frame,
+	"PackedScene",
+)
+if not request.is_completed():
+	await request.completed
+if not request.is_success():
+	push_error(request.format_error())
 	return
-var resource := result.resource
+var resource := request.resource
 ```
 
-- `resource_reference` には `uid://...` のUIDを基本として指定します。既存設定やコードからの `res://...` パスも利用できます。
-- `resolve_resource_path()` でUIDを現在のパスへ解決し、重複判定・要求・状態確認・結果取得には同じパスを使います。解決できないUIDは `RESOURCE_NOT_FOUND` になります。
-- `ResourceLoader.load_threaded_request()` で読み込みを開始し、未完了なら渡されたシグナルを待ち、発火時に状態を再確認します。
-- 結果は `LoadResult` です。`error_code`、`resource`、呼び出し元が指定したUIDまたはパスを保持する `resource_path`、要求失敗時の `request_error` を保持します。
-- `is_success()` で成否を判定します。成功時だけ `resource` を取得でき、型の確認は呼び出し側で行います。
-- `format_error()` で説明文へ変換できます。ローダー自身はpush_errorを呼ばず、表示は呼び出し側で行います（Godot内部のエラーログは出る場合があります）。
-- エラーコードは `EMPTY_PATH`、`RESOURCE_NOT_FOUND`、`ALREADY_LOADING`、`REQUEST_FAILED`、`LOAD_FAILED`、`INVALID_REQUEST` です。成功は `OK` です。
+- `AsyncResourceLoader.new()` は読み込みを開始して直ちにリクエストを返します。リクエスト一覧や読み込み中のパスは管理しません。
+- 各インスタンスは1回の読み込み処理、完了状態、結果を保持します。読み込み処理は生成時に一度だけ開始し、再実行しません。
+- `resource_reference` には `uid://...` のUIDを基本として指定します。`res://...` パスも利用できます。
+- `resolve_resource_path()` でUIDを現在のパスへ解決し、要求・状態確認・結果取得には同じパスを使います。解決できないUIDは `RESOURCE_NOT_FOUND` になります。
+- 各リクエストは `ResourceLoader.load_threaded_request()` で要求し、未完了なら渡されたシグナルを待ち、発火時に状態を再確認します。成功した要求は失敗時も含めて結果を一度回収します。
+- 同じリソースへの複数要求も受け付けます。各呼び出しは別のリクエストを返し、実際の読み込みや標準キャッシュの共有はGodotに任せます。用途上の重複要求の抑制は呼び出し側で行います。
+- リクエストは `error_code`、`resource`、呼び出し元が指定したUIDまたはパスを保持する `resource_reference`、要求失敗時の `request_error` を保持します。
+- `completed` は成功・失敗にかかわらず、結果と完了状態の確定後に一度だけ発火します。即時失敗やキャッシュ済みリソースでは、生成から戻る前に完了する場合があります。待機前に `is_completed()` を確認してください。完了通知は蓄積されません。
+- `is_success()` は完了して成功した場合だけtrueを返します。読み込み中はfalseです。結果の型は呼び出し側で確認します。
+- `format_error()` で説明文へ変換できます。表示は呼び出し側で行います（Godot内部のエラーログは出る場合があります）。
+- エラーコードは `EMPTY_PATH`、`RESOURCE_NOT_FOUND`、`REQUEST_FAILED`、`LOAD_FAILED`、`INVALID_REQUEST` です。成功は `OK` です。
+- 読み込み中はリクエストとシグナルの発行元を維持してください。読み込みを開始したインスタンス自身がリクエストです。
+- 完了後もリクエストは結果のResourceを保持します。不要になったリクエストへの参照を外すと、その保持も終了します。他のノードやResourceが参照するアセットは、その参照が残っている間は保持されます。
 - シーン以外のResourceにも利用できます。生成・ツリーへの追加は呼び出し側の責務です。
-- 同じローダーへの異なるパスの要求は並行して待機できます。同じリソースの読み込み中の重複要求は、UIDとパスの違いにかかわらず拒否します。
-- 同じリソースの読み込みはこのローダーへ集約してください。読み込み中はローダーとシグナルの発行元を維持してください。
-- 結果をキャッシュする独自の保持処理や完了シグナルはありません。呼び出し側はawaitで結果を受け取ります。
-- エンジンの標準キャッシュを利用します。パス方式でも他のノードやResourceの参照があるアセットは保持されます。
 
 ## 確認タイミング
 
@@ -33,4 +41,4 @@ var resource := result.resource
 有効なシグナルを渡し、読み込み中も発火し続けるようにしてください。
 待機前の発火は蓄積されません。バックグラウンド側で読み込みが終わっても、
 次の通知がなければ待機中の処理は再開しません。
-ローダー自身はNodeやSceneTreeを取得せず、ツリーへの配置も不要です。
+リクエスト自身はNodeやSceneTreeを取得せず、ツリーへの配置も不要です。
