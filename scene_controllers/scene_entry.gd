@@ -1,6 +1,5 @@
 extends Resource
 class_name SceneEntry
 
-@export var scene: PackedScene
-
-@export var scene_type: SceneEnums.Type
+## シーンのUID。既存設定やコードからの指定では通常のリソースパスも利用できる。
+@export_file("*.tscn") var scene_path: String

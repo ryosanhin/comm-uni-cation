@@ -11,6 +11,6 @@ metadata/_custom_type_script = "uid://dp3l4t1cd1kto"
 
 [resource]
 script = ExtResource("2_br8o3")
-_entries = Dictionary[int, ExtResource("1_2fd48")]({
-0: SubResource("Resource_p613q")
+_entries = Dictionary[StringName, ExtResource("1_2fd48")]({
+&"normal": SubResource("Resource_p613q")
 })

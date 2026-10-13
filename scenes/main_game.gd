@@ -1,5 +1,8 @@
 extends Node
 
+const SceneIds := preload("scene_ids.gd")
+const TransitionIds := preload("transition_ids.gd")
+
 @export var _morse_game: MorseGame
 var _scene_controller: SceneController
 
@@ -13,4 +16,4 @@ func inject_dependency(scene_controller: SceneController) -> void:
 
 
 func _back_to_title() -> void:
-	_scene_controller.change_main_scene(SceneEnums.Id.TITLE, TransitionEnums.Id.NORMAL)
+	_scene_controller.change_main_scene(SceneIds.TITLE, TransitionIds.NORMAL)

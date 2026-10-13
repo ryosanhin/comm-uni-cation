@@ -1,5 +1,8 @@
 extends Node
 
+const SceneIds := preload("scene_ids.gd")
+const TransitionIds := preload("transition_ids.gd")
+
 @export var _checkbox: CheckBox
 @export var _start_button: Button
 @export var _copyrighs_button: Button
@@ -8,7 +11,6 @@ extends Node
 
 var _scene_contoller: SceneController
 
-var _is_loaded: bool
 
 func inject_dependency(scene_controller: SceneController) -> void:
 	_scene_contoller = scene_controller
@@ -30,10 +32,7 @@ func _change_language(is_english: bool) -> void:
 
 
 func _load_main_scene() -> void:
-	if _is_loaded:
-		return
-	_scene_contoller.change_main_scene(SceneEnums.Id.MAIN_GAME, TransitionEnums.Id.NORMAL)
-	_is_loaded =true
+	_scene_contoller.change_main_scene(SceneIds.MAIN_GAME, TransitionIds.NORMAL)
 
 
 func _show_copyrights() -> void:

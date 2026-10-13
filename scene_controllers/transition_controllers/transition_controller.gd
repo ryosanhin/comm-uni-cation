@@ -21,9 +21,11 @@ func _ready() -> void:
 	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-## 画面を覆う
+## 画面を覆う。[br]
+## [param transition_id]: 遷移エフェクトのID[br]
+## [param duration]: 演出の秒数
 func fade_in(
-		transition_id: TransitionEnums.Id,
+		transition_id: StringName,
 		duration: float,
 ) -> void:
 	if not _try_apply_transition(transition_id):
@@ -35,9 +37,11 @@ func fade_in(
 	await _animate(0.0, 1.0, duration)
 
 
-## 画面を表示状態へ戻す
+## 画面を表示状態へ戻す。[br]
+## [param transition_id]: 遷移エフェクトのID[br]
+## [param duration]: 演出の秒数
 func fade_out(
-		transition_id: TransitionEnums.Id,
+		transition_id: StringName,
 		duration: float,
 ) -> void:
 	if not _try_apply_transition(transition_id):
@@ -49,7 +53,7 @@ func fade_out(
 	_transition_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func _try_apply_transition(transition_id: TransitionEnums.Id) -> bool:
+func _try_apply_transition(transition_id: StringName) -> bool:
 	var entry := _transition_registry.get_entry(transition_id)
 
 	if entry == null:
